@@ -1,8 +1,3 @@
-# Title     : TODO
-# Objective : TODO
-# Created by: thorhildur
-# Created on: 27/04/2021
-
 #' QQ Plot
 #'
 #' @param df dataframe with required data
@@ -15,26 +10,6 @@
 #' @import ggplot2
 #' @import showtext
 #'
-#'
-#'
-# Title     : TODO
-# Objective : TODO
-# Created by: thorhildur
-# Created on: 27/04/2021
-
-#' QQ Plot
-#'
-#' @param df dataframe with required data
-#' @param scale plot elements scale, default: 1
-#' @param n_variants number of total variants used in the study
-#' @param fontfamily font
-#'
-#' @return ggplot
-#' @export
-#' @import ggplot2
-#' @import showtext
-#'
-
 qqplot <- function(df, scale = 1, n_variants = 0, fontfamily = "", breaks = 15) {
   bonf_thres <- if (n_variants > 0) -log10(0.05 / n_variants) else 0
 
