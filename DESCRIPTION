@@ -1,5 +1,5 @@
 Package: topR
-Title: What the Package Does (One Line, Title Case)
+Title: topR title
 Version: 0.1.0
 Authors@R: c(
     person("Genuity", "Science", role = c("aut", "cre","cph"), email = "support@genuitysci.com"),
