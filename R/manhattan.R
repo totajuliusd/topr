@@ -19,7 +19,7 @@ manhattan=function(df, annotation_thresh=1e-09, ntop=3, title="", color=c("darkb
                    sign_thresh=5e-09,label_size=3, size=1,shape=19,alpha=1,highlight_genes_color="green",
                    variants_size=1.2,variants_alpha=1,variants_shape=19,axis_text_size=11,axis_title_size=12, title_text_size=13, legend_title_size=12,legend_text_size=12, rect=NULL,
                    variant_list=NULL, variants=NULL,plot_order=NULL,legend_labels=NULL,legend_name=NULL,
-                   ymin=NULL,ymax=NULL,variants_color=NULL,highlight_genes=NULL,legend_position=NULL){
+                   ymin=NULL,ymax=NULL,variants_color=NULL,highlight_genes=NULL,highlight_genes_ypos=NULL,legend_position=NULL){
   #do a dataframe colname check here!!
   dat=df
   if(is.data.frame(dat)) dat=list(dat)
@@ -79,6 +79,15 @@ manhattan=function(df, annotation_thresh=1e-09, ntop=3, title="", color=c("darkb
   p1=p1+theme(legend.background=element_blank(),legend.key=element_rect(fill="white"),legend.position = legend_position,
               legend.text=element_text(size=12),panel.grid.major.x = element_blank(),panel.grid.minor.x=element_blank())
 
+  if(length(variants) == "1" & is.null(legend_labels)){
+    p1=p1 + theme(legend.position = "none")
+  }
+  else{
+    p1=p1+theme(legend.background=element_blank(),legend.key=element_rect(fill="white"),legend.position = legend_position,
+                legend.text=element_text(size=12),panel.grid.major.x = element_blank(),panel.grid.minor.x=element_blank())
+  }
+
+
   thresh=as.numeric(sign_thresh)
   # TODO add_sign_thresh_to_plot
   # p1=add_sign_thresh_to_plot(p1,df, sign_thresh, sign_thresh_color,xmin,xmax,ymin,ymax)
@@ -92,9 +101,9 @@ manhattan=function(df, annotation_thresh=1e-09, ntop=3, title="", color=c("darkb
 
   p1=p1+scale_x_continuous(breaks=ticks$pos, labels=ticks$names,expand=c(.01,.01))
 
-
-  p1=color_genes(p1,dat, highlight_genes, highlight_genes_color)
-
+  if(! is.null(highlight_genes)){
+    p1=add_genes2manhattan(p1,dat, offsets,highlight_genes, highlight_genes_color,highlight_genes_ypos)
+  }
   if(! is.null(ymin) & is.null(ymax))
     p1=p1+coord_cartesian(ylim=c(ymin, get_ymax(ntop,dat)))
   if(! is.null(ymin) & (! is.null(ymax)))

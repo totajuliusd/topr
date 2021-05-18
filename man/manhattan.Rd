@@ -34,6 +34,7 @@ manhattan(
   ymax = NULL,
   variants_color = NULL,
   highlight_genes = NULL,
+  highlight_genes_ypos = NULL,
   legend_position = NULL
 )
 }

@@ -76,7 +76,7 @@ is_df_empty=function(df, type){
   }
 }
 
-color_genes=function(p1,dat,genes,genes_color){
+color_genes=function(p1,dat,genes,genes_color,genes_ypos){
   gcol="green"
   if(! is.null(genes_color))
     gcol=genes_color[1]
@@ -111,38 +111,26 @@ color_genes=function(p1,dat,genes,genes_color){
 }
 
 
-color_genes2=function(p1,dat,genes,genes_color){
+add_genes2manhattan=function(p1,dat,offsets,genes,genes_color,genes_ypos){
   gcol="green"
-  if(! is.null(genes_color))
-    gcol=genes_color[1]
-  if(! is.null(genes)){
-    for(i in 1:length(genes)){
-      gene=genes[i]
-
-      if(! is.null(genes_color[i]) & length(genes_color) >= i)
-        gcol=genes_color[i]
-      for(j in 1:length(dat)){
-        df_gene=dat[[j]] %>% filter(Gene_Symbol == gene)
-        if(length(df_gene$POS) < 1){
-          warning(paste("NO datapoints in the dataframe for gene ",gene , sep=""))
-        }
-        else{
-          if(j==1 & (!"log10p" %in% colnames(df_gene))){
-            df_gene$log10p=-log10(df_gene$P)
-          }
-          if(j==1 & (!"pos_adj" %in% colnames(df_gene))){ #function called from chromplot
-            df_gene$pos_adj=df_gene$POS
-          }
-          p1=p1+geom_point(data=df_gene, aes(x=pos_adj, y=log10p),color=gcol, size=2, shape=df_gene$shape)
-          df_gene_label=df_gene %>% arrange(P) %>% head(n=1)
-          if(j==1){
-            p1=p1+geom_text_repel(data=df_gene_label, aes(x=pos_adj,y=log10p,label=Gene_Symbol), color="black",size=3,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5)
-            #p1=p1+geom_text_repel(data=df_gene_label, aes(x=pos_adj,y=2.5,label=Gene_Symbol), force_pull=0,color="black",size=3,direction="x",angle=75,hjust=0,nudge_y =0.05,max.iter = 1e4, max.time = 1,segment.size=0.2,segment.alpha =.5)
-          }
-        }
-      }
-    }
+  if (! (is.data.frame(genes) & ("CHROM" %in% colnames(genes)))){
+    genes=get_genes_by_Gene_Symbol(genes)
   }
+  #returns the genes like this:
+  #CHROM,POS,Gene_Symbol
+print(paste("THIIS IS THE YPOS ",genes_ypos,sep=""))
+  genes=genes %>% dplyr::mutate(CHROM=gsub('chr','',CHROM))
+  genes[genes$CHROM=='X', 'CHROM']="23"
+  genes$CHROM = as.integer(genes$CHROM)
+  genes=genes%>% dplyr::mutate(pos_adj=POS+offsets[CHROM])
+  if(is.null(genes_ypos)){
+    genes_ypos=1
+  }
+  p1=p1+geom_point(data=genes, aes(x=pos_adj, y=genes_ypos),color=gcol, size=2, shape=15)
+
+  p1=p1+geom_text_repel(data=genes, aes(x=pos_adj,y=genes_ypos,label=Gene_Symbol), color="black",size=3,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5)
+  #p1=p1+geom_text_repel(data=df_gene_label, aes(x=pos_adj,y=2.5,label=Gene_Symbol), force_pull=0,color="black",size=3,direction="x",angle=75,hjust=0,nudge_y =0.05,max.iter = 1e4, max.time = 1,segment.size=0.2,segment.alpha =.5)
+
   return(p1)
 }
 
@@ -207,4 +195,23 @@ tidy_plot=function(p1,axis_text_size=12,axis_title_size=12, title_text_size=14,l
               legend.text=element_text(size=legend_text_size))
 
   return(p1)
+}
+
+format_table=function(dat, digits_colnames, sci_colnames){
+  dat=format_digits(dat,digits_colnames)
+  dat=format_sci(dat,sci_colnames)
+  return(dat)
+}
+
+format_digits=function(dat, colnames, ndigits=3){
+  for (cname in colnames){
+    dat[,cname]=as.numeric(formatC(unlist(dat[,cname]), digits=ndigits))
+  }
+  return(dat)
+}
+format_sci=function(dat, colnames,ndigits=1){
+  for (cname in colnames){
+    dat[,cname]=as.numeric(formatC(unlist(dat[,cname]), format="e", digits=ndigits))
+  }
+  return(dat)
 }

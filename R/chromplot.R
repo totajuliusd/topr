@@ -161,5 +161,10 @@ chromplot=function(dat, annotation_thresh=NULL, title="",label_all=0, variant_li
   if(is.null(legend_labels)) legend_labels=color[1:length(dat)]
   p1=p1+scale_color_identity(guide = "legend", name=legend_name,  breaks=color[1:length(dat)],labels=legend_labels)
   p1=p1+theme(legend.position =legend_position)
+
+  #Dont include a legend if there is only one dataset and no legend label
+  if((length(dat)<2) & legend_labels==color[1:length(dat)]){
+    p1=p1+theme(legend.position ="none")
+  }
   return(p1)
 }
