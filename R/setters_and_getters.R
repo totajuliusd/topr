@@ -128,8 +128,16 @@ get_genes=function(chr,xmin,xmax){
   return(genes)
 }
 
-get_multiple_genes=function(){
- # gor ref/ensgenes/ensgenes.gorz | where gene_symbol in ("NOD2","THADA") | select chrom,gene_start,gene_end,gene_symbol | calc POS gene_start+ round((gene_end-gene_start)/2) | rename chrom CHROM |rename gene_symbol Gene_Symbol | select CHROM,POS,Gene_Symbol
+get_genes_by_Gene_Symbol=function(genes){
+  gene_string=paste(genes, collapse = '","')
+  genes=query(paste("gor ref/ensgenes/ensgenes.gorz | where gene_symbol in (\"",gene_string,"\") | select chrom,gene_start,gene_end,gene_symbol | calc POS gene_start+ round((gene_end-gene_start)/2) | rename chrom CHROM |rename gene_symbol Gene_Symbol | select CHROM,POS,Gene_Symbol",sep=""))
+  return(genes)
+}
+
+get_snps_by_ID=function(snps, file=NULL, id_col_name="ID"){
+  snps_string=paste(snps, collapse = '","')
+  snps_df=query(paste("gor ",file,"| where ",id_col_name," in (\"",snps_string,"\") ",sep=""))
+  return(snps_df)
 }
 
 get_chr_from_df=function(df){
@@ -145,16 +153,16 @@ get_chr_from_df=function(df){
 get_shades=function(offsets,dat,ntop,include_chrX){
   n_offsets=11
   if(!(include_chrX)) n_offsets=10
-  
+
   y1=c(rep(0, n_offsets))  #if there is no bottom plot
   ymin=get_ymin(ntop,dat)
-  
+
   if(length(dat) > ntop){
     y1=c(rep(ymin, n_offsets))
   }
   ymax=get_ymax(ntop,dat)
   gene_label_size=2
- 
+
   ##### here we need to accoutn for whether we have chr X or not
   if(include_chrX){
     shades=data.frame(x1=c(offsets[[2]],offsets[[4]],offsets[[6]],offsets[[8]],offsets[[10]],offsets[[12]],offsets[[14]],offsets[[16]],offsets[[18]],offsets[[20]],offsets[[22]]),
@@ -229,23 +237,34 @@ get_ticknames=function(df){
   return(list(names=ticknames, pos=tickpos))
 }
 
-get_best_snp_per_MB=function(df,thresh=1e-09){
+get_best_snp_per_MB=function(df,thresh=1e-09,region=1000000){
   if(! "CHROM" %in% colnames(df) || (! "POS" %in% colnames(df)) || (! "P" %in% colnames(df))){
-    if(is.data.frame(dat)) dat=list(df)
+    if(is.data.frame(df)) dat=list(df)
     dat=dat_column_check_and_set(dat)
     dat=dat_chr_check(dat)
     df=dat[[1]]
   }
+  df$CHROM=gsub("chr","", df$CHROM)
   df=df %>% filter(P<thresh)
   df$tmp=NA
   for(row in 1:nrow(df)){
-    df$tmp=round(df$POS/1000000)
+    df$tmp=round(df$POS/region)
   }
   lead_snps=df %>% group_by(CHROM,tmp) %>% arrange(P) %>% filter(P== min(P))
   if(length(lead_snps)== 0){
     print(paste("There are no SNPs with a p-value below ",thresh, " in the input. Use the [thresh] argument to adjust the threshold.",sep=""))
   }
-  return(ungroup(lead_snps))
+
+  return(ungroup(lead_snps)%>% distinct(CHROM,POS, .keep_all = T))
+}
+
+
+get_legend<-function(p1){
+  tmp <- ggplot_gtable(ggplot_build(p1))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  p1=p1+theme(legend.position="none")
+  return(legend)
 }
 
 
