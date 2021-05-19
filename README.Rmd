@@ -15,40 +15,68 @@ knitr::opts_chunk$set(
 
 # topR
 
-<!-- badges: start -->
-<!-- badges: end -->
+See full documentation at [https://wuxi-nextcode.github.io/topR/](https://wuxi-nextcode.github.io/topR/)
 
-The goal of topR is to ...
+### Installing from github using `devtools`
 
-## Installation
-
-You can install the released version of topR from [CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("topR")
+```{r}
+devtools::install_github("wuxi-nextcode/gorr")
 ```
 
 ## Example
+In this example, we're going to demonstrate the basic usage of the topR library. 
 
-This is a basic example which shows you how to solve a common problem:
+### Load packages
 
-```{r example}
+First load the `gorr` package, the `tidyverse` package is recommended in general, but not required for this example
+
+``` {r}
 library(topR)
-## basic example code
+library(tidyverse)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+### Loading and exploring prebuilt datasets 
 
-```{r cars}
-summary(cars)
+Load the `gwas_CD` and checking how many variants are in the datasets, since we do not want to plot with too many datapoints
+
+```{r}
+data(gwas_CD)
+paste("Number of SNPs in rhw dataset: [", length(gwas_CD$POS),"]", sep = "")
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/master/examples>.
+### Manhattan plots
 
-You can also embed plots, for example:
+Get an overview of the crohn's disease (CD) results in a Manhattan plot
 
-```{r pressure, echo = FALSE}
-plot(pressure)
+```{r}
+manhattan(gwas_CD)
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+get the top SNP per 10 MB
+
+```{r}
+snps_CD <- get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region = 10000000)
+manhattan(gwas_CD, variants=snps_CD, annotation_thresh = 1e-09)
+```
+
+### Chromplot
+
+Take a closer look at the results by chromosome
+
+```{r}
+CHR="chr16"
+chromplot(gwas_CD,chr=CHR, variants = snps_CD, annotation_thresh = 5e-09)
+```
+
+### Regionplot
+
+Currently the regionplot uses the `gorr` library to fetch genes from Genuity Science' API to get the genes, so platform connection is needed, see Article `Regionplot Example` for an example.
+
+### Manhattan Multi
+
+Display the output from more than one GWAS on the same manhattan plot
+
+```{r}
+data(gwas_CD_IIBD)
+manhattan(list(gwas_CD_IIBD,gwas_CD), legend_labels=  c("Crohns IIBD", "Crohns UKBB"), alpha = c(1, 0.5))
+```
