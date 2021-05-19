@@ -122,5 +122,7 @@ Required parameter is at least one dataset (dataframe) containing the associatio
 All other input parameters are optional
 }
 \examples{
-  regionplot(df,xmin=xmin,xmax=xmax)
+\dontrun{
+regionplot(df,xmin=xmin,xmax=xmax)
+}
 }

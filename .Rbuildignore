@@ -1,4 +1,15 @@
-^topr\.Rproj$
+^.*\.Rproj$
 ^\.Rproj\.user$
+^revdep$
+^_pkgdown\.yml$
+^docs$
+Dockerfile.*
+Makefile
 ^LICENSE\.md$
-^README\.Rmd$
+^\.git*
+.Renviron
+.Rhistory
+.gitignore
+vignettes/.gitignore
+..Rcheck
+pkgdown

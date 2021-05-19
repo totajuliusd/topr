@@ -237,6 +237,25 @@ get_ticknames=function(df){
   return(list(names=ticknames, pos=tickpos))
 }
 
+#' Get the top SNP per 10 MB
+#'
+#' @description
+#'
+#' \code{get_best_snp_per_MB()} Get the top SNP per 10 MB
+#' All other input parameters are optional
+#'
+#' @param df Dataframe
+#' @param thresh Threshold
+#' @param region region
+
+#' @return numeric vector
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' data(gwas_CD)
+#' get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region = 10000000)
+#' }
 get_best_snp_per_MB=function(df,thresh=1e-09,region=1000000){
   if(! "CHROM" %in% colnames(df) || (! "POS" %in% colnames(df)) || (! "P" %in% colnames(df))){
     if(is.data.frame(df)) dat=list(df)

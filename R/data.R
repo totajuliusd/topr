@@ -10,4 +10,4 @@
 #'   ...
 #' }
 #' @source \url{http://www.diamondse.info/}
-"diamonds"
+"gwas_CD"

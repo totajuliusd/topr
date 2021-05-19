@@ -39,5 +39,7 @@ Required parameter one dataset (dataframe) containing the association data (with
 All other input parameters are optional
 }
 \examples{
-  locuszoomt(df,xmin=xmin,xmax=xmax)
+\dontrun{
+locuszoomt(df,xmin=xmin,xmax=xmax)
+}
 }

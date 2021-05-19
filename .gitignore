@@ -1,3 +1,10 @@
+.Rhistory
+.Renviron
+.RData
 .Rproj.user
+*Rcheck
+*.tar.gz
+.DS_Store
 inst/doc
-*.Rproj
+testscript.R
+pkgdown

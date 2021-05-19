@@ -3,8 +3,8 @@ Title: Create custom plots for viewing genetic association results using ggplot
 Version: 0.1.0
 Authors@R: c(
     person("Genuity", "Science", role = c("aut", "cre","cph"), email = "support@genuitysci.com"),
-    person("Thorhildur", "Juliusdottir", role = "aut", "cre", email = "thorhildur@genuitysci.com"),
-    person("Andri", "Stefansson", role = "cre", email = "andri@genuitysci.com")
+    person("Thorhildur", "Juliusdottir", role = "aut", email = "thorhildur@genuitysci.com"),
+    person("Andri", "Stefansson", role = "ctb", email = "andri@genuitysci.com")
     )
 URL: https://github.com/wuxi-nextcode/topr
 BugReports: https://github.com/wuxi-nextcode/topr/issues

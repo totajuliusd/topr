@@ -125,6 +125,10 @@ chromosome can be used as input if provided with the \code{chr parameter}.
 E.g. \code{chromplot(multi_chr_dataset,chr = "chr15")}
 }
 \examples{
-
-
+\dontrun{
+data(gwas_CD)
+snps_CD <- get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region = 10000000)
+CHR="chr16"
+chromplot(gwas_CD,chr=CHR, variants = snps_CD, annotation_thresh = 5e-09)
+}
 }

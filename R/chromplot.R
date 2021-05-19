@@ -50,9 +50,16 @@
 #' @param show_xaxis
 #'
 #' @return a chromosome plot (ggplot object)
+#' @export
+#'
 #' @examples
-#'
-#'
+#' \dontrun{
+#' data(gwas_CD)
+#' snps_CD <- get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region = 10000000)
+#' CHR="chr16"
+#' chromplot(gwas_CD,chr=CHR, variants = snps_CD, annotation_thresh = 5e-09)
+#' }
+
 
 chromplot=function(dat, annotation_thresh=NULL, title="",label_all=0, variant_list=NULL, size=1.2, shape=19, alpha=1,
                    color=c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"),

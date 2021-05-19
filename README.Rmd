@@ -19,8 +19,8 @@ See full documentation at [https://wuxi-nextcode.github.io/topR/](https://wuxi-n
 
 ### Installing from github using `devtools`
 
-```{r}
-devtools::install_github("wuxi-nextcode/gorr")
+```{r, eval=FALSE}
+devtools::install_github("wuxi-nextcode/topR")
 ```
 
 ## Example
@@ -41,9 +41,12 @@ Load the `gwas_CD` and checking how many variants are in the datasets, since we 
 
 ```{r}
 data(gwas_CD)
-paste("Number of SNPs in rhw dataset: [", length(gwas_CD$POS),"]", sep = "")
+head(gwas_CD)
 ```
 
+```{r}
+paste("Number of SNPs in rhw dataset: [", length(gwas_CD$POS),"]", sep = "")
+```
 ### Manhattan plots
 
 Get an overview of the crohn's disease (CD) results in a Manhattan plot

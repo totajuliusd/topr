@@ -8,10 +8,14 @@
 #' All other input parameters are optional
 #'
 #' @inheritParams regionplot
-
+#'
 #' @return ggplot object
+#' @export
+#'
 #' @examples
-#'   locuszoomt(df,xmin=xmin,xmax=xmax)
+#' \dontrun{
+#' locuszoomt(df,xmin=xmin,xmax=xmax)
+#' }
 
 #guides(colour = guide_colourbar(order = 1),
 #http://www.sthda.com/english/wiki/ggplot2-legend-easy-steps-to-change-the-position-and-the-appearance-of-a-graph-legend-in-r-software

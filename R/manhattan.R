@@ -12,8 +12,13 @@
 #' @inheritParams chromplot
 
 #' @return plots using egg (https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html)
+#' @export
+#'
 #' @examples
-#'   manhattan(df)
+#' \dontrun{
+#' data(gwas_CD)
+#' manhattan(gwas_CD)
+#' }
 
 manhattan=function(df, annotation_thresh=1e-09, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"),
                    sign_thresh=5e-09,label_size=3, size=1,shape=19,alpha=1,highlight_genes_color="green",

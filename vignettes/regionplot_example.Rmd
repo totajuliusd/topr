@@ -23,6 +23,7 @@ Currently the regionplot uses gor to get the genes, so platform connection is ne
 ```{r setup}
 library(topR)
 library(gorr)
+library(tidyverse)
 ```
 
 ### Connect to a Genuity Science APIs
@@ -60,7 +61,7 @@ data(gwas_CD)
 
 Zoom into a 1 MB region centered on the top variant on the chromosome
 
-```{r}
+```{r, eval=FALSE}
 top_snp <- gwas_CD %>%
   filter(CHROM == CHR) %>% 
   arrange(P) %>% 
@@ -69,7 +70,7 @@ top_snp <- gwas_CD %>%
 
 set the 1 MB range centered on the top snp
 
-```{r}
+```{r, eval=FALSE}
 xmin <- top_snp$POS - 500000
 xmax <- top_snp$POS + 500000
 xmin <- ifelse(xmin < 0, 0, xmin)
@@ -77,7 +78,7 @@ xmin <- ifelse(xmin < 0, 0, xmin)
 
 ### Plot
 
-```{r}
+```{r, eval=FALSE}
 regionplot(gwas_results,
            chr = CHR,
            xmin = xmin,

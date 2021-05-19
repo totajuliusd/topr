@@ -15,10 +15,14 @@
 #' @param show_genes Show genes instead of exons (default show_genes=FALSE)
 #' @param show_exons Show exons instead of genees (default show_exons=FALSE)#'
 #' @inheritParams chromplot
-
+#'
 #' @return ggplot object
+#' @export
+#'
 #' @examples
-#'   regionplot(df,xmin=xmin,xmax=xmax)
+#' \dontrun{
+#' regionplot(df,xmin=xmin,xmax=xmax)
+#' }
 
 
 regionplot=function(dat, annotation_thresh=NULL, title="",label_all=0,xmin=0, size=2, shape=19, alpha=1,label_size=4,gene_label_size=3,

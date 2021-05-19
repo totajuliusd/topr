@@ -2,6 +2,6 @@ pandoc: 2.11.2
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  my-vignette: my-vignette.html
-last_built: 2021-05-04T15:07Z
+  regionplot_example: regionplot_example.html
+last_built: 2021-05-19T11:35Z
 
