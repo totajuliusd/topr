@@ -110,7 +110,7 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
 <span class="co">#&gt; ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</span>
 <span class="co">#&gt; ✓ ggplot2 3.3.3     ✓ purrr   0.3.4</span>
-<span class="co">#&gt; ✓ tibble  3.0.6     ✓ dplyr   1.0.4</span>
+<span class="co">#&gt; ✓ tibble  3.1.2     ✓ dplyr   1.0.4</span>
 <span class="co">#&gt; ✓ tidyr   1.1.2     ✓ stringr 1.4.0</span>
 <span class="co">#&gt; ✓ readr   1.4.0     ✓ forcats 0.5.1</span>
 <span class="co">#&gt; ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──</span>
@@ -125,13 +125,6 @@
 <code class="sourceCode R"><span class="va">api_key</span> <span class="op">&lt;-</span> <span class="st">"your_api_key_here"</span>
 <span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gorr/man/platform_connect.html">platform_connect</a></span><span class="op">(</span><span class="va">api_key</span>, project <span class="op">=</span> <span class="st">"ukbb_hg38"</span><span class="op">)</span>
 <span class="va">conn</span></code></pre></div>
-<pre><code>#&gt; ── GOR API service connection ──────────────────────────────────────────────────
-#&gt; ● Service Root/s: https://platform.wuxinextcodedev.com/api/query, https://platform.wuxinextcodedev.com/api/phenotype-catalog
-#&gt; ● Project: ukbb_hg38
-#&gt; ● API key issued at: 2021-03-25 18:42:08
-#&gt; ● API key expires at: Never
-#&gt; ● Access token issued at: 2021-05-19 11:35:40
-#&gt; ● Access token expires at: 2021-05-19 12:35:40</code></pre>
 <p>If everything goes as planned, we’ll have a <code>conn</code> object ready to be used for fetching genes.</p>
 </div>
 <div id="regionplot" class="section level3">
@@ -146,16 +139,16 @@
 <div id="load-data" class="section level4">
 <h4 class="hasAnchor">
 <a href="#load-data" class="anchor"></a>Load data</h4>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">gwas_CD</span><span class="op">)</span> </code></pre></div>
 <p>Zoom into a 1 MB region centered on the top variant on the chromosome</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">top_snp</span> <span class="op">&lt;-</span> <span class="va">gwas_CD</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">CHROM</span> <span class="op">==</span> <span class="va">CHR</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">arrange</span><span class="op">(</span><span class="va">P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p>set the 1 MB range centered on the top snp</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">xmin</span> <span class="op">&lt;-</span> <span class="va">top_snp</span><span class="op">$</span><span class="va">POS</span> <span class="op">-</span> <span class="fl">500000</span>
 <span class="va">xmax</span> <span class="op">&lt;-</span> <span class="va">top_snp</span><span class="op">$</span><span class="va">POS</span> <span class="op">+</span> <span class="fl">500000</span>
 <span class="va">xmin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">xmin</span> <span class="op">&lt;</span> <span class="fl">0</span>, <span class="fl">0</span>, <span class="va">xmin</span><span class="op">)</span></code></pre></div>
@@ -163,7 +156,7 @@
 <div id="plot" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plot" class="anchor"></a>Plot</h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/regionplot.html">regionplot</a></span><span class="op">(</span><span class="va">gwas_results</span>,
            chr <span class="op">=</span> <span class="va">CHR</span>,
            xmin <span class="op">=</span> <span class="va">xmin</span>,

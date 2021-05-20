@@ -204,8 +204,7 @@ get_ymin=function(ntop,dat){
 }
 
 get_chr_offsets=function(include_chrX=1){
-  #create the offsets from the crh lenghts file
-  chr_lengths=read.table(file=chr_lengths_file,as.is=T)
+  #create the offsets from the internal chr_lengths data
   chr_lengths$CHROM=gsub("chr","", chr_lengths$V1)
   chr_lengths=chr_lengths %>% filter(! V1 %in% c("chrM") )
   chr_lengths[chr_lengths$CHROM=="X",'CHROM']="23"
