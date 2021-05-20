@@ -4,7 +4,7 @@ Version: 0.1.0
 Authors@R: c(
     person("Genuity", "Science", role = c("aut", "cre","cph"), email = "support@genuitysci.com"),
     person("Thorhildur", "Juliusdottir", role = "aut", email = "thorhildur@genuitysci.com"),
-    person("Andri", "Stefansson", role = "ctb", email = "andri@genuitysci.com")
+    person("Andri", "Stefansson", role = "aut", email = "andri@genuitysci.com")
     )
 URL: https://github.com/wuxi-nextcode/topr
 BugReports: https://github.com/wuxi-nextcode/topr/issues
@@ -31,6 +31,7 @@ Imports:
     data.table (>= 1.13.2),
     scales (>= 1.1.1),
     crayon (>= 1.3.4),
-    fs (>= 1.5.0)
+    fs (>= 1.5.0),
+    ggrepel
 Depends: 
     R (>= 2.10)

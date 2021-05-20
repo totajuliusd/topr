@@ -66,10 +66,10 @@ locuszoom_plot2=function(df, ids2label,xmin=0, xmax=max(df$POS),label_size=3.5, 
   zoom_tmp=df[FALSE,]
   for(i in ids2label){
     zoom2 = df %>%  filter(ID==i) %>% arrange(P) %>% head(1)
-    p1=p1+geom_text_repel(data=unique(zoom2), aes(x=POS,y=-log10(P),label=ID), color="grey40",size=label_size,direction="both",nudge_x = 0.5,nudge_y = 0.5,segment.size=0.2,segment.alpha =.5)
+    p1=p1+ggrepel::geom_text_repel(data=unique(zoom2), aes(x=POS,y=-log10(P),label=ID), color="grey40",size=label_size,direction="both",nudge_x = 0.5,nudge_y = 0.5,segment.size=0.2,segment.alpha =.5)
     zoom_tmp=rbind(zoom_tmp, zoom2) %>% distinct(ID,POS, .keep_all = T)
   }
-  p1=p1+geom_text_repel(data=unique(zoom_tmp), aes(x=POS,y=-log10(P),label=ID), color="grey40",size=label_size,direction="both",nudge_x = 0.5,nudge_y = 0.5,segment.size=0.2,segment.alpha =.5)
+  p1=p1+ggrepel::geom_text_repel(data=unique(zoom_tmp), aes(x=POS,y=-log10(P),label=ID), color="grey40",size=label_size,direction="both",nudge_x = 0.5,nudge_y = 0.5,segment.size=0.2,segment.alpha =.5)
 
   #if(!is.null(sign_thresh))
   #  p1=p1+geom_hline(yintercept = -log10(sign_thresh), colour="red", linetype="dashed")
@@ -132,14 +132,14 @@ locuszoom_plot=function(df, ids2label,xmin=0, xmax=max(df$POS),label_size=3.5, v
   zoom_tmp=df[FALSE,]
   for(i in ids2label){
     zoom2 = df %>%  filter(ID==i) %>% arrange(P) %>% head(1)
-    p1=p1+geom_text_repel(data=unique(zoom2), aes(x=POS,y=-log10(P),label=ID), color="grey40",size=label_size,direction="both",nudge_x = 0.5,nudge_y = 0.5,segment.size=0.2,segment.alpha =.5)
+    p1=p1+ggrepel::geom_text_repel(data=unique(zoom2), aes(x=POS,y=-log10(P),label=ID), color="grey40",size=label_size,direction="both",nudge_x = 0.5,nudge_y = 0.5,segment.size=0.2,segment.alpha =.5)
 
     if("p" %in% colnames(zoom2)){
       zoom2$P=zoom2$p
     }
     zoom_tmp=rbind(zoom_tmp, zoom2) %>% distinct(ID,POS, .keep_all = T)
   }
-  p1=p1+geom_text_repel(data=unique(zoom_tmp), aes(x=POS,y=-log10(P),label=ID), color="grey40",size=label_size,direction="both",nudge_x = 0.5,nudge_y = 0.5,segment.size=0.2,segment.alpha =.5)
+  p1=p1+ggrepel::geom_text_repel(data=unique(zoom_tmp), aes(x=POS,y=-log10(P),label=ID), color="grey40",size=label_size,direction="both",nudge_x = 0.5,nudge_y = 0.5,segment.size=0.2,segment.alpha =.5)
 
   if(!is.null(sign_thresh))
     p1=p1+geom_hline(yintercept = -log10(sign_thresh), colour="red", linetype="dashed")

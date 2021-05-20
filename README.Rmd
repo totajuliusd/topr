@@ -34,6 +34,9 @@ First load the `gorr` package, the `tidyverse` package is recommended in general
 library(topR)
 library(tidyverse)
 ```
+``` {r, echo=FALSE}
+library(ggrepel)
+```
 
 ### Loading and exploring prebuilt datasets 
 

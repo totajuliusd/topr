@@ -136,7 +136,7 @@ manhattan_multi=function(dat, ntop=2, shades=shades, label_size=3, ymax=NULL,ymi
         nudge_y=4
         if(i>ntop)
           nudge_y=-4
-        p1=p1+geom_text_repel(data=dat_labels, aes(x=pos_adj, y=log10p, label=Gene_Symbol),nudge_y=nudge_y,size=label_size,
+        p1=p1+ggrepel::geom_text_repel(data=dat_labels, aes(x=pos_adj, y=log10p, label=Gene_Symbol),nudge_y=nudge_y,size=label_size,
                               segment.size=0.2, color=dat_labels$color,segment.color = "black",
                               direction="both",angle=0, vjust=0, max.iter=5000) # fontface=gene_labels_top$fontface,
       }
@@ -170,7 +170,7 @@ manhattan_single=function(df, variants=variants,  variant_list=variant_list,labe
     if(length(variants)> 0){
 
       for(i in 1:length(variants)){
-        p1=p1+suppressWarnings(geom_text_repel(data=variants[[i]], aes(x=pos_adj,y=-log10(P),label=ifelse(P<annotation_thresh, Gene_Symbol,"")), color="grey40",size=3,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
+        p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants[[i]], aes(x=pos_adj,y=-log10(P),label=ifelse(P<annotation_thresh, Gene_Symbol,"")), color="grey40",size=3,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
         p1=p1+geom_point(data=variants[[i]], aes(x=pos_adj, y=-log10(P),color=color), size=variants[[i]]$size, shape=variants[[i]]$shape)
       }
     }

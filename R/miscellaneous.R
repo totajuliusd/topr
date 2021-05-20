@@ -100,8 +100,8 @@ color_genes=function(p1,dat,genes,genes_color,genes_ypos){
           p1=p1+geom_point(data=df_gene, aes(x=pos_adj, y=log10p),color=gcol, size=2, shape=df_gene$shape)
           df_gene_label=df_gene %>% arrange(P) %>% head(n=1)
           if(j==1){
-            p1=p1+geom_text_repel(data=df_gene_label, aes(x=pos_adj,y=log10p,label=Gene_Symbol), color="black",size=3,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5)
-            #p1=p1+geom_text_repel(data=df_gene_label, aes(x=pos_adj,y=2.5,label=Gene_Symbol), force_pull=0,color="black",size=3,direction="x",angle=75,hjust=0,nudge_y =0.05,max.iter = 1e4, max.time = 1,segment.size=0.2,segment.alpha =.5)
+            p1=p1+ggrepel::geom_text_repel(data=df_gene_label, aes(x=pos_adj,y=log10p,label=Gene_Symbol), color="black",size=3,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5)
+            #p1=p1+ggrepel::geom_text_repel(data=df_gene_label, aes(x=pos_adj,y=2.5,label=Gene_Symbol), force_pull=0,color="black",size=3,direction="x",angle=75,hjust=0,nudge_y =0.05,max.iter = 1e4, max.time = 1,segment.size=0.2,segment.alpha =.5)
           }
         }
       }
@@ -128,8 +128,8 @@ print(paste("THIIS IS THE YPOS ",genes_ypos,sep=""))
   }
   p1=p1+geom_point(data=genes, aes(x=pos_adj, y=genes_ypos),color=gcol, size=2, shape=15)
 
-  p1=p1+geom_text_repel(data=genes, aes(x=pos_adj,y=genes_ypos,label=Gene_Symbol), color="black",size=3,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5)
-  #p1=p1+geom_text_repel(data=df_gene_label, aes(x=pos_adj,y=2.5,label=Gene_Symbol), force_pull=0,color="black",size=3,direction="x",angle=75,hjust=0,nudge_y =0.05,max.iter = 1e4, max.time = 1,segment.size=0.2,segment.alpha =.5)
+  p1=p1+ggrepel::geom_text_repel(data=genes, aes(x=pos_adj,y=genes_ypos,label=Gene_Symbol), color="black",size=3,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5)
+  #p1=p1+ggrepel::geom_text_repel(data=df_gene_label, aes(x=pos_adj,y=2.5,label=Gene_Symbol), force_pull=0,color="black",size=3,direction="x",angle=75,hjust=0,nudge_y =0.05,max.iter = 1e4, max.time = 1,segment.size=0.2,segment.alpha =.5)
 
   return(p1)
 }
@@ -149,7 +149,7 @@ add_variants_from_variant_list=function(p1,variant_list,annotation_thresh,rectr,
 
       if(i == 1){
 
-        p1=p1+suppressWarnings(geom_text_repel(data=variants, aes(x=pos_adj,y=log10p,label=ifelse(P<annotation_thresh, Gene_Symbol,"")), color="grey40",size=3,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
+        p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants, aes(x=pos_adj,y=log10p,label=ifelse(P<annotation_thresh, Gene_Symbol,"")), color="grey40",size=3,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
 
       }
     }
@@ -159,10 +159,10 @@ add_variants_from_variant_list=function(p1,variant_list,annotation_thresh,rectr,
       if(i==1){
 
         if(show_xaxis){
-          p1=p1+suppressWarnings(geom_text_repel(data=variants, aes(x=POS,y=log10p,label=ifelse(P<annotation_thresh, Gene_Symbol,"")), color="grey40",size=3.5,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
+          p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants, aes(x=POS,y=log10p,label=ifelse(P<annotation_thresh, Gene_Symbol,"")), color="grey40",size=3.5,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
         }
         else{
-          p1=p1+suppressWarnings(geom_text_repel(data=variants, aes(x=POS,y=log10p,label=ifelse(P<annotation_thresh, ID,"")), color="grey40",size=3.5,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
+          p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants, aes(x=POS,y=log10p,label=ifelse(P<annotation_thresh, ID,"")), color="grey40",size=3.5,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
         }
       }
     }

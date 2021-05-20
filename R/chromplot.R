@@ -61,28 +61,33 @@
 #' }
 
 
-chromplot=function(dat, annotation_thresh=NULL, title="",label_all=0, variant_list=NULL, size=1.2, shape=19, alpha=1,
-                   color=c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"),
-                   label_size=3.5,sign_thresh=5.1e-9, sign_thresh_color="red", legend_position="right",.checked=FALSE, show_xaxis=TRUE,
-                   axis_text_size=11,title_text_size=12,axis_title_size=13,legend_title_size=12,legend_text_size=12,
-                   variant_ids_color="red", legend_labels=NULL,legend_name="Data",xmin=0,highlight_genes=NULL,highlight_genes_color=NULL,variants=NULL,xmax=NULL,ymin=NULL,ymax=NULL,chr=NULL,vline=NULL,variant_ids=NULL){
+chromplot=function(dat, annotation_thresh = NULL, title = "",label_all=0, variant_list = NULL, size = 1.2, shape = 19, alpha = 1,
+                   color = c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"),
+                   label_size=3.5,sign_thresh=5.1e-9, sign_thresh_color="red", legend_position="right",.checked = FALSE, show_xaxis = TRUE,
+                   axis_text_size=11,title_text_size=12,axis_title_size=13,legend_title_size=12, legend_text_size = 12,
+                   variant_ids_color=  "red", legend_labels = NULL, legend_name="Data",xmin=0, highlight_genes=NULL,highlight_genes_color=NULL,variants=NULL,xmax=NULL,ymin=NULL,ymax=NULL,chr=NULL,vline=NULL,variant_ids=NULL){
 
 
 
-  if(! .checked){ # if input data has not already been checked
+  if (! .checked) { # if input data has not already been checked
     #check and set data
-    is_df_empty(dat,"main dat")
-    if(is.data.frame(dat)) dat=list(dat)
-    dat=dat_column_check_and_set(dat)
-    if(is.null(chr)) chr=get_chr_from_df(dat[[1]])
-    dat=dat_chr_check(dat)
-    dat=filter_on_chr(dat,chr)
-    dat=filter_on_xmin_xmax(dat,xmin,xmax)
-    dat=set_size_shape_alpha(dat,size,shape,alpha)
-    dat=set_color(dat,color)
+    is_df_empty(dat, "main dat")
+
+    if (is.data.frame(dat)) {
+    dat <- list(dat) %>%
+      dat_column_check_and_set()
+    } else if (is.null(chr)) {
+      chr <- get_chr_from_df(dat[[1]])
+    }
+
+    dat <- dat_chr_check(dat) %>%
+      filter_on_chr(chr) %>%
+      filter_on_xmin_xmax(xmin, xmax) %>%
+      set_size_shape_alpha(size, shape, alpha) %>%
+      set_color(color)
 
     #check and set variants
-    if(! is.null(variants)){
+    if (! is.null(variants)) {
       is_df_empty(variants, "variants")
       if(is.data.frame(variants)) variants=list(variants)
       variants=dat_column_check_and_set(variants)
@@ -132,9 +137,9 @@ chromplot=function(dat, annotation_thresh=NULL, title="",label_all=0, variant_li
           varcol=variants[[i]]$color
         }
         if(show_xaxis) { #we are in whole chromosome view and want to display the Gene_Symbol for the variant
-          p1=p1+suppressWarnings(geom_text_repel(data=variants[[i]], aes(x=POS,y=-log10(P),label=ifelse(P<annotation_thresh, Gene_Symbol,"")), color=varcol,size=label_size,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
+          p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants[[i]], aes(x=POS,y=-log10(P),label=ifelse(P<annotation_thresh, Gene_Symbol,"")), color=varcol,size=label_size,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
         }else{ #in region view, display the variant ID instead of the gene_symbol
-          p1=p1+suppressWarnings(geom_text_repel(data=variants[[i]], aes(x=POS,y=-log10(P),label=ifelse(P<annotation_thresh, ID,"")), color=varcol,size=label_size,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
+          p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants[[i]], aes(x=POS,y=-log10(P),label=ifelse(P<annotation_thresh, ID,"")), color=varcol,size=label_size,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
         }
       }
     }
