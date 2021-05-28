@@ -24,23 +24,27 @@ devtools::install_github("wuxi-nextcode/topR")
 ```
 
 ## Example
-In this example, we're going to demonstrate the basic usage of the topR library. 
+In this example we demonstrate the basic usage of the topR library.
 
 ### Load packages
 
-First load the `gorr` package, the `tidyverse` package is recommended in general, but not required for this example
+First load the `topr` package, the `tidyverse` package is recommended in general, but not required for this example
 
-``` {r}
+```{r}
 library(topR)
 library(tidyverse)
 ```
-``` {r, echo=FALSE}
+```{r}
 library(ggrepel)
 ```
 
+
 ### Loading and exploring prebuilt datasets 
 
-Load the `gwas_CD` and checking how many variants are in the datasets, since we do not want to plot with too many datapoints
+Load the `gwas_CD` dataset, which is a subset of GWAS results on Crohn´s from the UK biobank.
+
+It is highly recommended to theck the number of datapoints in your dataset before you plot, since a very large dataset will take a long time to plot.
+
 
 ```{r}
 data(gwas_CD)
@@ -48,17 +52,17 @@ head(gwas_CD)
 ```
 
 ```{r}
-paste("Number of SNPs in rhw dataset: [", length(gwas_CD$POS),"]", sep = "")
+paste("Number of SNPs in the dataset: [", length(gwas_CD$POS),"]", sep = "")
 ```
 ### Manhattan plots
 
-Get an overview of the crohn's disease (CD) results in a Manhattan plot
+Get an overview of association results for crohn's disease (CD) in a Manhattan plot
 
-```{r}
+```{r fig.width=12, fig.height=5}
 manhattan(gwas_CD)
 ```
 
-get the top SNP per 10 MB
+To label the lead SNPs on the manhattan plot, first use the get_best_snp_per_MB to extract them from the crohns dataset. Then include them in the manhattan call function with the variants arguments.
 
 ```{r}
 snps_CD <- get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region = 10000000)
@@ -67,7 +71,7 @@ manhattan(gwas_CD, variants=snps_CD, annotation_thresh = 1e-09)
 
 ### Chromplot
 
-Take a closer look at the results by chromosome
+Take a closer look at the results by chromosome. Here we plot the results on chromosome 16 only.
 
 ```{r}
 CHR="chr16"
