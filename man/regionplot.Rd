@@ -14,7 +14,6 @@ regionplot(
   shape = 19,
   alpha = 1,
   label_size = 4,
-  gene_label_size = 3,
   color = c("darkblue", "#E69F00", "#00AFBB", "#999999", "#FC4E07", "darkorange1"),
   axis_text_size = 11,
   axis_title_size = 12,

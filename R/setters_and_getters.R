@@ -103,14 +103,14 @@ set_log10p=function(dat,ntop){
 
 ## Getters
 
-get_exons=function(chr,xmin,xmax){
+get_exons_gor=function(chr,xmin,xmax){
   chr=gsub("chr", "", chr)
   cand_region=paste("chr",chr,":",xmin,"-",xmax,sep="")
   exons=query(paste("gor -p ",cand_region," ref/ensgenes/ensgenes.gorz | map -c gene_symbol <(nor -h ref/ensgenes/ensgenes_exons.gorz | select gene_symbol,chromstart,chromend,exon | rename chromstart exon_chromstart | rename chromend exon_chromend)",sep=""))
   return(exons)
 }
 
-get_gene_coords=function(gene_symbol,chr=NULL){
+get_gene_coords_gor=function(gene_symbol,chr=NULL){
   if(! is.null(chr)){
     chr=gsub("chr", "", chr)
     gene=query(paste("gor -p chr",chr," ref/ensgenes/ensgenes.gorz | where gene_symbol= \"",gene_symbol,"\" | select chrom,gene_start,gene_end,gene_symbol", sep=""))
@@ -121,14 +121,44 @@ get_gene_coords=function(gene_symbol,chr=NULL){
   return(gene)
 }
 
-get_genes=function(chr,xmin,xmax){
+get_gene_coords=function(gene_name,chr=NULL){
+  if(! is.null(chr)){
+    chr=gsub("chr", "", chr)
+    chr=paste("chr",chr,sep="")
+    gene=ENSGENES %>% dplyr::filter(chrom == chr) %>% dplyr::filter(gene_symbol == gene_name)
+  }
+  else{
+    gene=ENSGENES %>% dplyr::filter(gene_symbol == gene_name)
+  }
+  return(gene)
+}
+
+get_genes_gor=function(chr,xmin,xmax){
   chr=gsub("chr", "", chr)
   cand_region=paste("chr",chr,":",xmin,"-",xmax,sep="")
   genes=query(paste("gor -p ",cand_region," ref/ensgenes/ensgenes.gorz | select chrom,gene_start,gene_end,gene_symbol,gene_stable_id,biotype,strand", sep=""))
   return(genes)
 }
 
-get_genes_by_Gene_Symbol=function(genes){
+
+get_genes=function(chr,xmin,xmax){
+  chr=gsub("chr", "", chr)
+  chr=paste("chr",chr,sep="")
+  genes=ENSGENES %>% filter(chrom==chr) %>% filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax)
+  return(genes)
+}
+get_exons=function(chr,xmin,xmax){
+  genes=get_genes(chr,xmin,xmax)
+  exons=merge(ENSEXONS, genes %>% select(gene_symbol,biotype))
+    #rename chromstart exon_chromstart | rename chromend exon_chromend)",sep=""))
+  return(exons)
+}
+
+
+
+
+
+get_genes_by_Gene_Symbol_gor=function(genes){
   gene_string=paste(genes, collapse = '","')
   genes=query(paste("gor ref/ensgenes/ensgenes.gorz | where gene_symbol in (\"",gene_string,"\") | select chrom,gene_start,gene_end,gene_symbol | calc POS gene_start+ round((gene_end-gene_start)/2) | rename chrom CHROM |rename gene_symbol Gene_Symbol | select CHROM,POS,Gene_Symbol",sep=""))
   return(genes)
@@ -276,6 +306,31 @@ get_best_snp_per_MB=function(df,thresh=1e-09,region=1000000){
   return(ungroup(lead_snps)%>% distinct(CHROM,POS, .keep_all = T))
 }
 
+#' Get the genetic position of a gene or genes by their gene name
+#'
+#' @description
+#'
+#' \code{get_genes_by_Gene_Symbol()} Get genes by their gene symbol/name
+#' Required parameters is on gene name or a vector of gene names
+#'
+#' @param genes A gene name (e.g. "FTO") or a vector of gene names ( c("FTO","NOD2"))
+#' @return Dataframe of genes
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' get_genes_by_Gene_Symbol(c("FTO","THADA"))
+#' }
+get_genes_by_Gene_Symbol=function(genes){
+  gene_df=ENSGENES %>% filter(gene_symbol == genes[1]) %>% mutate(POS = gene_start + round((gene_end-gene_start)/2)) %>% rename(Gene_Symbol=gene_symbol,CHROM=chrom)
+  for(i in 2:length(genes)){
+    gene=ENSGENES %>% filter(gene_symbol == genes[i]) %>% mutate(POS = gene_start + round((gene_end-gene_start)/2)) %>% rename(Gene_Symbol=gene_symbol,CHROM=chrom)
+    gene_df=rbind(gene_df,gene)
+  }
+  dist_genes=gene_df %>% distinct(CHROM,gene_start,gene_end, .keep_all = T)
+  return(dist_genes)
+}
+
 
 get_legend<-function(p1){
   tmp <- ggplot_gtable(ggplot_build(p1))
@@ -286,25 +341,29 @@ get_legend<-function(p1){
 }
 
 
-thin_data=function(df, breaks=100000){
-  if(! "CHROM" %in% colnames(df) || (! "POS" %in% colnames(df)) || (! "P" %in% colnames(df))){
-    if(is.data.frame(dat)) dat=list(df)
-    dat=dat_column_check_and_set(dat)
-    dat=dat_chr_check(dat)
-    df=dat[[1]]
-  }
-  rowcount=length(df$POS)
-  dat1=df %>% filter(P <= 1e-07)
-  dat2=df %>% filter(P > 1e-07)
-   dat2$tmp=NA
-   dat1$tmp=NA
-   for(row in 1:nrow(dat2)){
-     dat2$tmp=round(dat2$POS/breaks)
-   }
-   dat_filt1=dat2 %>% group_by(CHROM,tmp) %>% arrange(P) %>% filter(P== min(P))
-   #dat_filt2=dat2 %>% group_by(CHROM,tmp) %>% arrange(P) %>% filter(P== max(P))
-   dat_filt=rbind(dat1,dat_filt1)
-   #dat_filt=rbind(dat0,dat_filt2)
-   print(paste("Data set was reduced from ",rowcount, " lines, to ",length(dat_filt$POS),sep=""))
-  return(dat_filt)
+
+#' Get the top hit from the dataframe
+#'
+#' @description
+#'
+#' \code{get_top_hit()} Get the top hit from the dataframe
+#' All other input parameters are optional
+#'
+#' @param df Dataframe containing association results
+#' @param chr Get the top hit in the data frame for this chromosome. If chromosome is not provided, the top hit from the entire dataset is returned.
+
+#' @return Dataframe containing the top hit
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' data(gwas_CD)
+#' get_top_hit(gwas_CD, chr="chr1")
+#' }
+#'
+get_top_hit=function(df, chr=NULL){
+  if(! is.null(chr))
+    df=df %>% filter(CHROM ==chr)
+  top_hit=df %>% dplyr::arrange(P) %>% head(n=1)
+  return(top_hit)
 }

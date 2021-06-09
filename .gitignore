@@ -8,3 +8,5 @@
 inst/doc
 testscript.R
 pkgdown
+.
+*.Rproj

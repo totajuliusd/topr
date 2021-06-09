@@ -8,8 +8,6 @@ chromplot(
   dat,
   annotation_thresh = NULL,
   title = "",
-  label_all = 0,
-  variant_list = NULL,
   size = 1.2,
   shape = 19,
   alpha = 1,
@@ -30,6 +28,7 @@ chromplot(
   legend_name = "Data",
   xmin = 0,
   highlight_genes = NULL,
+  highlight_genes_ypos = NULL,
   highlight_genes_color = NULL,
   variants = NULL,
   xmax = NULL,
@@ -61,7 +60,7 @@ chromplot(
 
 \item{legend_position}{Top,bottom,left or right}
 
-\item{show_xaxis}{}
+\item{show_xaxis}{show the xaxis}
 
 \item{axis_text_size}{Text size of the x and y axes tick labels (default: 12)}
 
@@ -82,6 +81,8 @@ chromplot(
 \item{xmin, xmax}{Parameters setting the chromosomal range to display on the x-axis}
 
 \item{highlight_genes}{A vector of genes or genes to highlight the datapoints for on the plot}
+
+\item{highlight_genes_ypos}{Display the genes at this position on the y-axis (default value is 1)}
 
 \item{highlight_genes_color}{Colors for the hihglighted genes (default: green)}
 

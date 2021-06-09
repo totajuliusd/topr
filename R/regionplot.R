@@ -25,18 +25,19 @@
 #' }
 
 
-regionplot=function(dat, annotation_thresh=NULL, title="",label_all=0,xmin=0, size=2, shape=19, alpha=1,label_size=4,gene_label_size=3,
+regionplot=function(dat, annotation_thresh=NULL, title="",label_all=0,xmin=0, size=2, shape=19, alpha=1,label_size=4,
                     color=c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"),
                     axis_text_size=11,axis_title_size=12,title_text_size=13,legend_title_size=12,legend_text_size=12,
-                    show_genes=FALSE, show_overview=TRUE, show_exons=FALSE,sign_thresh=5.1e-9,sign_thresh_color="red", variant_list=NULL,genes=NULL,variants=NULL,variant_ids=NULL, variant_ids_color=NULL,xmax=NULL,ymin=NULL,ymax=NULL,
+                    show_genes=FALSE, show_overview=TRUE, show_exons=FALSE,sign_thresh=5.1e-9,sign_thresh_color="red", variant_list=NULL,genes=NULL,variants=NULL,variant_ids=NULL,
+                    variant_ids_color=NULL,xmax=NULL,ymin=NULL,ymax=NULL,
                     chr=NULL,vline=NULL,legend_name="Data:",legend_position="right",legend_labels=NULL,gene=NULL,highlight_genes=NULL,highlight_genes_color=NULL){
   # three plots, overview_plot, main_plot and gene_plot
   #only include overview plot if df region is larger than the region between xmin and xmax
   #dat=list(gwas_ukbb,gwas_abbvie)
 
-  is_df_empty(dat,"main dat")
+  #is_df_empty(dat,"main dat")
 
-  is_df_empty(variants, "variants")
+  #is_df_empty(variants, "variants")
 
   if(! is.null(gene)){
     gene_df=get_gene_coords(gene,chr)
@@ -118,6 +119,8 @@ regionplot=function(dat, annotation_thresh=NULL, title="",label_all=0,xmin=0, si
     gene_plot=geneplot(genes, xmin, as.numeric(xmax),label_size=label_size,vline=vline)
   }
   gene_plot=tidy_plot(gene_plot,axis_text_size=axis_text_size,axis_title_size=axis_title_size,title_text_size=title_text_size,legend_title_size=legend_title_size,legend_text_size=legend_text_size)
+  gene_plot=gene_plot+scale_x_continuous(expand=c(.01,.01),labels = scales::comma )
+
   print(paste("Zoomed to region: ",chr,":",xmin,"-",xmax,sep=""))
 
   #and plot using egg
@@ -125,17 +128,17 @@ regionplot=function(dat, annotation_thresh=NULL, title="",label_all=0,xmin=0, si
 
   g2=ggplotGrob(main_plot)
   g3=ggplotGrob(gene_plot)
-  fg2=gtable_frame(g2, height=unit(7, "null"),debug=F)
-  fg3=gtable_frame(g3, height=unit(2, "null"),debug=F)
+  fg2=egg::gtable_frame(g2, height=unit(7, "null"),debug=F)
+  fg3=egg::gtable_frame(g3, height=unit(2, "null"),debug=F)
 
   if(show_overview){
     g1=ggplotGrob(overview_plot)
-    fg1=gtable_frame(g1, height=unit(1.25, "null"), debug=F)
-    fg12=gtable_frame(gtable_rbind(fg1,fg2,fg3),debug=FALSE)
+    fg1=egg::gtable_frame(g1, height=unit(1.25, "null"), debug=F)
+    fg12=egg::gtable_frame(gridExtra::gtable_rbind(fg1,fg2,fg3),debug=FALSE)
   }else{
-    fg12=gtable_frame(gtable_rbind(fg2,fg3),debug=FALSE)
+    fg12=egg::gtable_frame(gridExtra::gtable_rbind(fg2,fg3),debug=FALSE)
   }
-  grid.newpage()
-  grid.draw(fg12)
+  grid::grid.newpage()
+  grid::grid.draw(fg12)
   #return(grid.draw(fg12))
 }

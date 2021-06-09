@@ -20,14 +20,14 @@
 #guides(colour = guide_colourbar(order = 1),
 #http://www.sthda.com/english/wiki/ggplot2-legend-easy-steps-to-change-the-position-and-the-appearance-of-a-graph-legend-in-r-software
 
-locuszoom=function(df,ids2label,xmin=0,xmax=max(df$POS),label_size=3.5, gene_label_size=3.5, genes=NULL,vline=NULL,sign_thresh=NULL){
+locuszoom=function(df,ids2label,xmin=0,xmax=max(df$POS),label_size=3.5, genes=NULL,vline=NULL,sign_thresh=NULL){
 
   lz_plot=locuszoom_plot2(df, ids2label,xmin=xmin,xmax=xmax, label_size=label_size, sign_thresh=sign_thresh,vline=vline)
 
   if("exon_chromstart" %in% colnames(genes))
-    gene_plot=exonplot(genes, xmin, as.numeric(xmax),gene_label_size=gene_label_size,vline=vline)
+    gene_plot=exonplot(genes, xmin, as.numeric(xmax),label_size=label_size,vline=vline)
   else
-    gene_plot=geneplot(genes, xmin, as.numeric(xmax),gene_label_size=gene_label_size,vline=vline)
+    gene_plot=geneplot(genes, xmin, as.numeric(xmax),label_size=label_size,vline=vline)
   g1=ggplotGrob(lz_plot)
   g2=ggplotGrob(gene_plot)
   fg1=gtable_frame(g1, height=unit(7, "null"), debug=F)
@@ -39,7 +39,7 @@ locuszoom=function(df,ids2label,xmin=0,xmax=max(df$POS),label_size=3.5, gene_lab
 
 
 
-locuszoom_plot2=function(df, ids2label,xmin=0, xmax=max(df$POS),label_size=3.5, vline=NULL,sign_thresh=NULL,axis_text_size=10,axis_title_size=12,title_text_size=13,legend_title_size=12,legend_text_size=12){
+locuszoom_plot2=function(df, ids2label,xmin=0, xmax=max(df$POS),label_size=3.5, vline=NULL,axis_text_size=10,axis_title_size=12,title_text_size=13,legend_title_size=12,legend_text_size=12){
   colors=c("darkblue","turquoise","green","orange","red")
   # 0.2, 0.4, 0.6, 0.8
   if(!is.null(xmin)){

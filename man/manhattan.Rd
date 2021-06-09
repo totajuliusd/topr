@@ -25,9 +25,7 @@ manhattan(
   legend_title_size = 12,
   legend_text_size = 12,
   rect = NULL,
-  variant_list = NULL,
   variants = NULL,
-  plot_order = NULL,
   legend_labels = NULL,
   legend_name = NULL,
   ymin = NULL,
@@ -93,6 +91,8 @@ Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise
 \item{variants_color}{One color or a vector of colors in case multiple variant dataframes are provided}
 
 \item{highlight_genes}{A vector of genes or genes to highlight the datapoints for on the plot}
+
+\item{highlight_genes_ypos}{Display the genes at this position on the y-axis (default value is 1)}
 
 \item{legend_position}{Top,bottom,left or right}
 }
