@@ -76,7 +76,7 @@ E.g. chromplot(multi_chr_dataset,chr = &quot;chr15&quot;)" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">topR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -90,18 +90,6 @@ E.g. chromplot(multi_chr_dataset,chr = &quot;chr15&quot;)" />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/regionplot_example.html">Regionplot Example</a>
-    </li>
-  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -144,8 +132,6 @@ chromosome can be used as input if provided with the <code>chr parameter</code>.
   <span class='va'>dat</span>,
   annotation_thresh <span class='op'>=</span> <span class='cn'>NULL</span>,
   title <span class='op'>=</span> <span class='st'>""</span>,
-  label_all <span class='op'>=</span> <span class='fl'>0</span>,
-  variant_list <span class='op'>=</span> <span class='cn'>NULL</span>,
   size <span class='op'>=</span> <span class='fl'>1.2</span>,
   shape <span class='op'>=</span> <span class='fl'>19</span>,
   alpha <span class='op'>=</span> <span class='fl'>1</span>,
@@ -166,6 +152,7 @@ chromosome can be used as input if provided with the <code>chr parameter</code>.
   legend_name <span class='op'>=</span> <span class='st'>"Data"</span>,
   xmin <span class='op'>=</span> <span class='fl'>0</span>,
   highlight_genes <span class='op'>=</span> <span class='cn'>NULL</span>,
+  highlight_genes_ypos <span class='op'>=</span> <span class='cn'>NULL</span>,
   highlight_genes_color <span class='op'>=</span> <span class='cn'>NULL</span>,
   variants <span class='op'>=</span> <span class='cn'>NULL</span>,
   xmax <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -221,7 +208,7 @@ chromosome can be used as input if provided with the <code>chr parameter</code>.
     </tr>
     <tr>
       <th>show_xaxis</th>
-      <td></td>
+      <td><p>show the xaxis</p></td>
     </tr>
     <tr>
       <th>axis_text_size</th>
@@ -262,6 +249,10 @@ chromosome can be used as input if provided with the <code>chr parameter</code>.
     <tr>
       <th>highlight_genes</th>
       <td><p>A vector of genes or genes to highlight the datapoints for on the plot</p></td>
+    </tr>
+    <tr>
+      <th>highlight_genes_ypos</th>
+      <td><p>Display the genes at this position on the y-axis (default value is 1)</p></td>
     </tr>
     <tr>
       <th>highlight_genes_color</th>
@@ -345,7 +336,7 @@ Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise
 
       <footer>
       <div class="copyright">
-  <p>Developed by Genuity Science, Thorhildur Juliusdottir.</p>
+  <p>Developed by Genuity Science, Thorhildur Juliusdottir, Andri Stefansson.</p>
 </div>
 
 <div class="pkgdown">

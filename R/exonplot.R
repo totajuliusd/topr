@@ -64,7 +64,7 @@ exonplot=function(df, xmin, xmax, label_size=3.5,vline=NULL){
   p1=p1+geom_text(data=df, aes(x=gene_start,y=as.numeric(y),label=gene_symbol),hjust=0, vjust=0, size=label_size)
   p1=p1+theme(axis.text.y=element_blank(), axis.title.y=element_blank(),axis.ticks.y=element_blank())
   p1=p1+xlab(paste("Position on chr",chr, sep=""))
-  p1=p1+scale_y_discrete(breaks=NULL)
+  #p1=p1+scale_y_discrete(breaks=NULL)
 
   p1=p1+geom_segment(data=genes, aes(x=x1,y=y1,xend=x2,yend=y2))
   p1=p1+geom_rect(data=exons, mapping=aes(ymax=y2,xmin=x1, xmax=x2, ymin=y1,fill=biotype))+labs(fill="Biotype")

@@ -1,7 +1,6 @@
 pandoc: 2.11.2
 pkgdown: 1.6.1
 pkgdown_sha: ~
-articles:
-  regionplot_example: regionplot_example.html
-last_built: 2021-05-19T23:48Z
+articles: {}
+last_built: 2021-06-09T16:58Z
 

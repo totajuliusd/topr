@@ -9,7 +9,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "120%"
 )
 ```
 
@@ -20,7 +20,7 @@ See full documentation at [https://wuxi-nextcode.github.io/topR/](https://wuxi-n
 ### Installing from github using `devtools`
 
 ```{r, eval=FALSE}
-devtools::install_github("wuxi-nextcode/topR")
+#devtools::install_github("wuxi-nextcode/topR")
 ```
 
 ## Example
@@ -41,7 +41,7 @@ library(ggrepel)
 
 ### Loading and exploring prebuilt datasets 
 
-Load the `gwas_CD` dataset, which is a subset of GWAS results on Crohn´s from the UK biobank.
+Load the `gwas_CD` dataset, which is a subset of association results (SNPs with P<1e-03) for Crohn´s disease from the UK biobank.
 
 It is highly recommended to theck the number of datapoints in your dataset before you plot, since a very large dataset will take a long time to plot.
 
@@ -58,35 +58,85 @@ paste("Number of SNPs in the dataset: [", length(gwas_CD$POS),"]", sep = "")
 
 Get an overview of association results for crohn's disease (CD) in a Manhattan plot
 
-```{r fig.width=12, fig.height=5}
+```{r fig.width=10, fig.height=4.5}
 manhattan(gwas_CD)
 ```
 
-To label the lead SNPs on the manhattan plot, first use the get_best_snp_per_MB to extract them from the crohns dataset. Then include them in the manhattan call function with the variants arguments.
+### Label the top SNPs with the name of the nearest gene
 
-```{r}
+Use the `get_best_snp_per_MB` function to extract the top/lead SNPs from the crohns dataset. Then include them in the manhattan call function with the variants argument.
+
+```{r fig.width=10, fig.height=4.5}
 snps_CD <- get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region = 10000000)
 manhattan(gwas_CD, variants=snps_CD, annotation_thresh = 1e-09)
+```
+## Label the position of genes of interest
+
+```{r fig.width=10, fig.height=4.5}
+genes=get_genes_by_Gene_Symbol(c("NOD2","ULK2","THADA"))
+snps_CD <- get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region = 10000000)
+manhattan(gwas_CD, variants=snps_CD, annotation_thresh = 1e-09, highlight_genes=genes,highlight_genes_ypos = 1)
 ```
 
 ### Chromplot
 
 Take a closer look at the results by chromosome. Here we plot the results on chromosome 16 only.
 
-```{r}
+```{r fig.width=10, fig.height=4.5}
 CHR="chr16"
 chromplot(gwas_CD,chr=CHR, variants = snps_CD, annotation_thresh = 5e-09)
 ```
 
 ### Regionplot
 
-Currently the regionplot uses the `gorr` library to fetch genes from Genuity Science' API to get the genes, so platform connection is needed, see Article `Regionplot Example` for an example.
+Zoom in further on the chromosome plot with the `regionplot` function.
 
-### Manhattan Multi
+Zoom in on a gene of interest:
 
-Display the output from more than one GWAS on the same manhattan plot
+```{r fig.width=12, fig.height=7}
+regionplot(gwas_CD, gene="NOD2")
+```
 
-```{r}
+Zoom in on the top hit on a chromosome
+
+```{r fig.width=12, fig.height=7}
+CHR="chr1"
+top_hit=get_top_hit(gwas_CD,chr=CHR)
+xmin=top_hit$POS-250000
+xmax=top_hit$POS+250000
+regionplot(gwas_CD, chr = CHR, xmin=xmin,xmax=xmax,show_exons = T)
+```
+
+### Display multiple datasets on the same plot
+
+Display the output from more than one GWAS on the same plot
+
+### Chromplot  - multiple phenotypes
+
+Take a closer look at the results by chromosome. Here we plot the results on chromosome 16 only.
+
+```{r fig.width=12, fig.height=4.5}
+CHR="chr16"
+snps_CD_IIBD <- get_best_snp_per_MB(gwas_CD_IIBD, thresh = 1e-09, region = 10000000)
+chromplot(list(gwas_CD_IIBD,gwas_CD),chr=CHR, variants = list(snps_CD_IIBD,snps_CD),
+          annotation_thresh = 5e-09, legend_labels=c("Crohns IIBD", "Crohns UKBB"), alpha=c(1,0.7),size=c(1.2,1))
+```
+
+### Manhattan  - multiple phenotypes
+
+```{r fig.width=12, fig.height=6}
 data(gwas_CD_IIBD)
 manhattan(list(gwas_CD_IIBD,gwas_CD), legend_labels=  c("Crohns IIBD", "Crohns UKBB"), alpha = c(1, 0.5))
+```
+
+```{r fig.width=12, fig.height=6}
+data(finngen_K11_CD_STRICT)
+data(finngen_CHRONSMALL)
+genes=get_genes_by_Gene_Symbol(c("NOD2","ULK2","THADA"))
+manhattan(list(gwas_CD_IIBD,gwas_CD,finngen_K11_CD_STRICT,finngen_CHRONSMALL),
+          ntop=3,
+          legend_labels=  c("Crohns IIBD", "Crohns UKBB","Crohns Finngen (K11 STRICT)", "Crohns finngen (CHRONSMALL)"),
+          alpha = c(1,0.5,0.3,1),
+          highlight_genes = genes,
+          highlight_genes_ypos = -1)
 ```

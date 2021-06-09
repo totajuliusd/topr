@@ -23,7 +23,7 @@
 manhattan=function(df, annotation_thresh=1e-09, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"),
                    sign_thresh=5e-09,label_size=3, size=1,shape=19,alpha=1,highlight_genes_color="green",
                    variants_size=1.2,variants_alpha=1,variants_shape=19,axis_text_size=11,axis_title_size=12, title_text_size=13, legend_title_size=12,legend_text_size=12, rect=NULL,
-                   variant_list=NULL, variants=NULL,plot_order=NULL,legend_labels=NULL,legend_name=NULL,
+                   variants=NULL,legend_labels=NULL,legend_name=NULL,
                    ymin=NULL,ymax=NULL,variants_color=NULL,highlight_genes=NULL,highlight_genes_ypos=NULL,legend_position=NULL){
   #do a dataframe colname check here!!
   dat=df
@@ -32,7 +32,6 @@ manhattan=function(df, annotation_thresh=1e-09, ntop=3, title="", color=c("darkb
   dat=dat_chr_check(dat)
   dat=set_size_shape_alpha(dat,size,shape,alpha)
   df=dat[[1]]
-
   if(! is.null(variants)){
     if(is.data.frame(variants)) variants=list(variants)
     variants=dat_column_check_and_set(variants)
@@ -106,6 +105,7 @@ manhattan=function(df, annotation_thresh=1e-09, ntop=3, title="", color=c("darkb
 
   p1=p1+scale_x_continuous(breaks=ticks$pos, labels=ticks$names,expand=c(.01,.01))
 
+
   if(! is.null(highlight_genes)){
     p1=add_genes2manhattan(p1,dat, offsets,highlight_genes, highlight_genes_color,highlight_genes_ypos)
   }
@@ -122,7 +122,7 @@ manhattan=function(df, annotation_thresh=1e-09, ntop=3, title="", color=c("darkb
 
 
 
-manhattan_multi=function(dat, ntop=2, shades=shades, label_size=3, ymax=NULL,ymin=NULL,plot_order=NULL,color=NULL,variants=NULL,
+manhattan_multi=function(dat, ntop=2, shades=shades, label_size=3, ymax=NULL,ymin=NULL,color=NULL,variants=NULL,
                          legend_labels=NULL,legend_name="Datasets:"){
   #set and get ticknames and tickpositions -requires pos_adj to be included in the df, so cannot be called before the prepare_dat function
   # colorMap=mk_colorMap(dat,colors)
@@ -157,9 +157,8 @@ manhattan_multi=function(dat, ntop=2, shades=shades, label_size=3, ymax=NULL,ymi
 }
 
 
-manhattan_single=function(df, variants=variants,  variant_list=variant_list,label_size=label_size,offsets=offsets,
-                          legend_name="Variants:",color=NULL,
-                          legend_labels=NULL,variants_color=NULL){
+manhattan_single=function(df, variants=variants, legend_name="Variants:",color=NULL,
+                          legend_labels=NULL,variants_color=NULL,annotation_thresh=NULL){
   #df=df %>% dplyr::mutate(pos_adj=POS+offsets[CHROM])
   #set and get ticknames and tickpositions -requires pos_adj to be included in the df
   df$col_code=df$CHROM%%2
@@ -187,38 +186,9 @@ manhattan_single=function(df, variants=variants,  variant_list=variant_list,labe
 
   #p1=p1+scale_color_identity(guide = "legend",   breaks=color[1:length(variants)],)
   #if(is.null(legend_name)) legend_name="Variants:"
+
   p1=p1+scale_color_identity(guide = "legend",breaks=variants_color[1:length(variants)],name=legend_name,labels=legend_labels)
   return(p1)
 }
 
-
-manhattan_yval = function(df, yval, use_log10=TRUE, title="", label_size=3, rect=NULL, variant_list=NULL,variants=NULL){
-  #df=set_chrs_ymax_and_shape(df)
-  #create the offsets using the main data frame (df)
-  tmp=suppressMessages(df %>% group_by(CHROM) %>% summarize(m=max(POS)) %>% mutate(offset=cumsum(lag(m, default=0))))
-  offsets=setNames(tmp$offset, tmp$CHROM)
-  #set the offsets for both df and variants
-  df=df %>% dplyr::mutate(pos_adj=POS+offsets[CHROM])
-  #set and get ticknames and tickpositions
-  ticks=get_ticknames(df)
-  df$col_code=df$CHROM%%2
-  df$color=ifelse(df$col_code=="1", "grey60","grey80")
-
-  if(use_log10){
-    p1=ggplot(df)+geom_point(data=df, aes(x=pos_adj, y=-log10(df %>% pull(yval))), color=df$color, size=df$size, shape=df$shape)+theme_bw()
-  }else{
-    p1=ggplot(df)+geom_point(data=df, aes(x=pos_adj, y=df %>% pull(yval)), color=df$color, size=df$size, shape=df$shape)+theme_bw()
-  }
-  #remove space between axis and plots
-  p1=p1+scale_y_continuous(expand=c(.02,.02))
-  p1=p1+scale_x_continuous(breaks=ticks$pos, labels=ticks$names,expand=c(.01,.01))
-  #subtitle = paste("Gene name is shown for variant if P<", sign_thresh, sep="")
-  p1=p1+labs(title=title, x='Chromosome', y=yval) #,theme(axis.line = element_line(),panel.border = element_blank())
-  p1=p1+theme(panel.grid.major=element_blank(),panel.grid.minor=element_blank())
-  p1=p1+theme(panel.border=element_blank(),panel.grid.major = element_blank(),panel.grid.minor=element_blank(),axis.line=element_line(color="grey"))
-  p1=p1+theme(axis.text.y=element_text(size=12),axis.text=element_text(size=12),
-              title = element_text(size=13))
-  #p1=p1+theme(legend.background=element_blank(),legend.key=element_rect(fill="white"),legend.position = "top", legend.text=element_text(size=12))
-  return(p1)
-}
 

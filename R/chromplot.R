@@ -28,6 +28,7 @@
 #' @param variant_ids A vector of variant ids to highlight on the plot, e.g. variant_ids=c("rs1234, rs45898")
 #' @param variant_ids_color The color of the variants in variants_id (default color is red)
 #' @param highlight_genes A vector of genes or genes to highlight the datapoints for on the plot
+#' @param highlight_genes_ypos Display the genes at this position on the y-axis (default value is 1)
 #' @param highlight_genes_color Colors for the hihglighted genes (default: green)
 #' @param xmin,xmax Parameters setting the chromosomal range to display on the x-axis
 #' @param ymin,ymax Optional parameters, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})
@@ -47,7 +48,7 @@
 #' @param legend_title_size Text size of the legend title
 #' @param legend_text_size Text size of the legend text
 #' @param geneplot_label_size Size of the labels for the genes on the gene and exon plots
-#' @param show_xaxis
+#' @param show_xaxis show the xaxis
 #'
 #' @return a chromosome plot (ggplot object)
 #' @export
@@ -61,11 +62,13 @@
 #' }
 
 
-chromplot=function(dat, annotation_thresh = NULL, title = "",label_all=0, variant_list = NULL, size = 1.2, shape = 19, alpha = 1,
+chromplot=function(dat, annotation_thresh = NULL, title = "", size = 1.2, shape = 19, alpha = 1,
                    color = c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"),
                    label_size=3.5,sign_thresh=5.1e-9, sign_thresh_color="red", legend_position="right",.checked = FALSE, show_xaxis = TRUE,
                    axis_text_size=11,title_text_size=12,axis_title_size=13,legend_title_size=12, legend_text_size = 12,
-                   variant_ids_color=  "red", legend_labels = NULL, legend_name="Data",xmin=0, highlight_genes=NULL,highlight_genes_color=NULL,variants=NULL,xmax=NULL,ymin=NULL,ymax=NULL,chr=NULL,vline=NULL,variant_ids=NULL){
+                   variant_ids_color="red",
+                   legend_labels = NULL, legend_name="Data",xmin=0, highlight_genes=NULL,highlight_genes_ypos=NULL,highlight_genes_color=NULL,
+                   variants=NULL,xmax=NULL,ymin=NULL,ymax=NULL,chr=NULL,vline=NULL,variant_ids=NULL){
 
 
 
@@ -74,12 +77,11 @@ chromplot=function(dat, annotation_thresh = NULL, title = "",label_all=0, varian
     is_df_empty(dat, "main dat")
 
     if (is.data.frame(dat)) {
-    dat <- list(dat) %>%
-      dat_column_check_and_set()
+      dat <- list(dat)
     } else if (is.null(chr)) {
       chr <- get_chr_from_df(dat[[1]])
     }
-
+    dat=dat_column_check_and_set(dat)
     dat <- dat_chr_check(dat) %>%
       filter_on_chr(chr) %>%
       filter_on_xmin_xmax(xmin, xmax) %>%
@@ -144,14 +146,14 @@ chromplot=function(dat, annotation_thresh = NULL, title = "",label_all=0, varian
       }
     }
   }
-
-  p1=color_genes(p1,dat, highlight_genes, highlight_genes_color)
+  p1=color_genes(p1,dat, highlight_genes, highlight_genes_color,highlight_genes_ypos)
   p1=add_sign_thresh_to_plot(p1,df, sign_thresh, sign_thresh_color,xmin,xmax,ymin,ymax)
 
 
   chr_label=gsub("chr", "", chr)
 
   p1=tidy_plot(p1, axis_text_size=axis_text_size,axis_title_size=axis_title_size, title_text_size=title_text_size,legend_title_size=legend_title_size,legend_text_size=legend_text_size)
+  p1=p1+scale_x_continuous(expand=c(.01,.01),labels = scales::comma )
 
   p1=p1+labs(x=paste("Position on chr" ,chr_label, sep=""), y=expression(-log[10](italic(p))))
 
@@ -170,12 +172,16 @@ chromplot=function(dat, annotation_thresh = NULL, title = "",label_all=0, varian
 
     #add the legend
   if(! is.null(legend_name)) legend_name=legend_name
-  if(is.null(legend_labels)) legend_labels=color[1:length(dat)]
+  legend_set2color=0
+  if(is.null(legend_labels)) {
+    legend_labels=color[1:length(dat)]
+    legend_set2color=1
+  }
   p1=p1+scale_color_identity(guide = "legend", name=legend_name,  breaks=color[1:length(dat)],labels=legend_labels)
   p1=p1+theme(legend.position =legend_position)
 
   #Dont include a legend if there is only one dataset and no legend label
-  if((length(dat)<2) & legend_labels==color[1:length(dat)]){
+  if((length(dat)<2) & legend_set2color){
     p1=p1+theme(legend.position ="none")
   }
   return(p1)

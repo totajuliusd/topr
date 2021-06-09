@@ -10,7 +10,6 @@ locuszoom(
   xmin = 0,
   xmax = max(df$POS),
   label_size = 3.5,
-  gene_label_size = 3.5,
   genes = NULL,
   vline = NULL,
   sign_thresh = NULL
