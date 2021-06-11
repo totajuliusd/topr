@@ -4,7 +4,12 @@
 \alias{get_best_snp_per_MB}
 \title{Get the top SNP per 10 MB}
 \usage{
-get_best_snp_per_MB(df, thresh = 1e-09, region = 1e+06)
+get_best_snp_per_MB(
+  df,
+  thresh = 1e-09,
+  region = 1e+06,
+  protein_coding_only = FALSE
+)
 }
 \arguments{
 \item{df}{Dataframe}
@@ -12,6 +17,8 @@ get_best_snp_per_MB(df, thresh = 1e-09, region = 1e+06)
 \item{thresh}{Threshold}
 
 \item{region}{region}
+
+\item{protein_coding_only}{Set this variable to TRUE to only use protein_coding genes for annotation}
 }
 \value{
 numeric vector

@@ -20,7 +20,7 @@ See full documentation at [https://wuxi-nextcode.github.io/topR/](https://wuxi-n
 ### Installing from github using `devtools`
 
 ```{r, eval=FALSE}
-#devtools::install_github("wuxi-nextcode/topR")
+devtools::install_github("wuxi-nextcode/topR")
 ```
 
 ## Example
@@ -64,13 +64,13 @@ manhattan(gwas_CD)
 
 ### Label the top SNPs with the name of the nearest gene
 
-Use the `get_best_snp_per_MB` function to extract the top/lead SNPs from the crohns dataset. Then include them in the manhattan call function with the variants argument.
+Use the `get_best_snp_per_MB` function to extract the top/lead SNPs from the crohns dataset. Then include them in the manhattan call function using the `variants` argument.
 
 ```{r fig.width=10, fig.height=4.5}
 snps_CD <- get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region = 10000000)
 manhattan(gwas_CD, variants=snps_CD, annotation_thresh = 1e-09)
 ```
-## Label the position of genes of interest
+## Highlight genes of interest
 
 ```{r fig.width=10, fig.height=4.5}
 genes=get_genes_by_Gene_Symbol(c("NOD2","ULK2","THADA"))

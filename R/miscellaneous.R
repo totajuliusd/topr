@@ -217,3 +217,62 @@ format_sci=function(dat, colnames,ndigits=1){
   }
   return(dat)
 }
+
+
+#' Get the nearest gene for one or more snps
+#'
+#' @description
+#'
+#' \code{annotate_with_nearest_gene()} Annotate the variant/snp with their nearest gene
+#' Required parameters is a dataframe of SNPs (with the columns CHROM and POS)
+#'
+#' @param variants a dataframe of variant positions (CHROM and POS)
+#' @param protein_coding_only If set to TRUE only annotate with protein caoding genes (the default value is FALSE)
+#' @return the input dataframe with Gene_Symbol as an additional column
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' annotate_with_nearest_gene(variants)
+#' }
+annotate_with_nearest_gene=function(variants, protein_coding_only=FALSE){
+  if("POS" %in% colnames(variants) & "CHROM" %in% colnames(variants)){
+    for(i in 1:length(variants$POS)){
+      nearest_gene=NA
+      variant=variants[i,]
+      chr=gsub("chr", "", variant$CHROM)
+      chr=paste("chr",chr,sep="")
+      genes_on_chr = ENSGENES %>% filter(chrom == chr) %>% arrange(gene_start)
+      within_gene= genes_on_chr %>% filter(gene_end >= variant$POS & gene_start <= variant$POS)
+      if(length(within_gene$gene_symbol) > 0 ){  #TODO: order the genes by their biotype, and pull out the top one
+          if(length(within_gene) == 1){ nearest_gene=within_gene$gene_symbol }
+          else{
+            prot_coding=within_gene %>% filter(biotype=="protein_coding")
+            if(length(prot_coding$gene_symbol) > 0){  nearest_gene=prot_coding %>% head(n=1)}
+            else{  nearest_gene= within_gene %>% head(n=1) }
+          }
+      }else{
+        if(protein_coding_only){
+          genes_left= genes_on_chr %>% filter(gene_end <= variant$POS) %>% filter(biotype == "protein_coding") %>% arrange(gene_end)
+          genes_right =genes_on_chr %>% filter(gene_start >= variant$POS) %>% filter(biotype == "protein_coding") %>% arrange(gene_start)
+        }
+        else{
+          genes_left= genes_on_chr %>% filter(gene_end <= variant$POS) %>% arrange(gene_end)
+          genes_right =genes_on_chr %>% filter(gene_start >= variant$POS) %>% arrange(gene_start)
+        }
+        gene_left=genes_left[as.numeric(length(genes_left$gene_symbol)),]
+        gene_right=genes_right[1,]
+        dist_left=variant$POS-gene_left$gene_end
+        dist_right=gene_right$gene_start-variant$POS
+        if(abs(dist_left) < abs(dist_right)){  nearest_gene=gene_left }
+        else{  nearest_gene=gene_right }
+      }
+      variants[i,"Gene_Symbol"]=nearest_gene$gene_symbol
+      variants[i, "biotype"]=nearest_gene$biotype
+    }
+  }
+  else{
+    stop("Cannot find the columns CHROM and POS in the input data. Add the required columns and try again, or rename existing columns, e.g. df=df %>% dplyr::rename(CHROM=yourColname)")
+  }
+  return(variants)
+}
