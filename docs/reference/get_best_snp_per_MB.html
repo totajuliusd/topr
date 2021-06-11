@@ -73,7 +73,7 @@ All other input parameters are optional" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">topR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -122,7 +122,12 @@ All other input parameters are optional" />
 All other input parameters are optional</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_best_snp_per_MB</span><span class='op'>(</span><span class='va'>df</span>, thresh <span class='op'>=</span> <span class='fl'>1e-09</span>, region <span class='op'>=</span> <span class='fl'>1e+06</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_best_snp_per_MB</span><span class='op'>(</span>
+  <span class='va'>df</span>,
+  thresh <span class='op'>=</span> <span class='fl'>1e-09</span>,
+  region <span class='op'>=</span> <span class='fl'>1e+06</span>,
+  protein_coding_only <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -138,6 +143,10 @@ All other input parameters are optional</p>
     <tr>
       <th>region</th>
       <td><p>region</p></td>
+    </tr>
+    <tr>
+      <th>protein_coding_only</th>
+      <td><p>Set this variable to TRUE to only use protein_coding genes for annotation</p></td>
     </tr>
     </table>
 
