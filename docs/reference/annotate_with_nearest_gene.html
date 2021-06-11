@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get the top hit from the dataframe — get_top_hit • topR</title>
+<title>Get the nearest gene for one or more snps — annotate_with_nearest_gene • topR</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Get the top hit from the dataframe — get_top_hit" />
-<meta property="og:description" content="get_top_hit() Get the top hit from the dataframe
-All other input parameters are optional" />
+<meta property="og:title" content="Get the nearest gene for one or more snps — annotate_with_nearest_gene" />
+<meta property="og:description" content="annotate_with_nearest_gene() Annotate the variant/snp with their nearest gene
+Required parameters is a dataframe of SNPs (with the columns CHROM and POS)" />
 
 
 
@@ -112,41 +112,39 @@ All other input parameters are optional" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get the top hit from the dataframe</h1>
-    <small class="dont-index">Source: <a href='https://github.com/wuxi-nextcode/topr/blob/master/R/setters_and_getters.R'><code>R/setters_and_getters.R</code></a></small>
-    <div class="hidden name"><code>get_top_hit.Rd</code></div>
+    <h1>Get the nearest gene for one or more snps</h1>
+    <small class="dont-index">Source: <a href='https://github.com/wuxi-nextcode/topr/blob/master/R/miscellaneous.R'><code>R/miscellaneous.R</code></a></small>
+    <div class="hidden name"><code>annotate_with_nearest_gene.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>get_top_hit()</code> Get the top hit from the dataframe
-All other input parameters are optional</p>
+    <p><code>annotate_with_nearest_gene()</code> Annotate the variant/snp with their nearest gene
+Required parameters is a dataframe of SNPs (with the columns CHROM and POS)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_top_hit</span><span class='op'>(</span><span class='va'>df</span>, chr <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>annotate_with_nearest_gene</span><span class='op'>(</span><span class='va'>variants</span>, protein_coding_only <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>df</th>
-      <td><p>Dataframe containing association results</p></td>
+      <th>variants</th>
+      <td><p>a dataframe of variant positions (CHROM and POS)</p></td>
     </tr>
     <tr>
-      <th>chr</th>
-      <td><p>Get the top hit in the data frame for this chromosome. If chromosome is not provided, the top hit from the entire dataset is returned.</p></td>
+      <th>protein_coding_only</th>
+      <td><p>If set to TRUE only annotate with protein caoding genes (the default value is FALSE)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Dataframe containing the top hit</p>
+    <p>the input dataframe with Gene_Symbol as an additional column</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>gwas_CD</span><span class='op'>)</span>
-<span class='fu'>get_top_hit</span><span class='op'>(</span><span class='va'>gwas_CD</span>, chr<span class='op'>=</span><span class='st'>"chr1"</span><span class='op'>)</span>
+<span class='fu'>annotate_with_nearest_gene</span><span class='op'>(</span><span class='va'>variants</span><span class='op'>)</span>
 <span class='op'>}</span>
-
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -77,7 +77,7 @@ All other input parameters are optional" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">topR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -151,14 +151,14 @@ Required parameter is at least one dataset (dataframe) containing the associatio
   show_exons <span class='op'>=</span> <span class='cn'>FALSE</span>,
   sign_thresh <span class='op'>=</span> <span class='fl'>5.1e-09</span>,
   sign_thresh_color <span class='op'>=</span> <span class='st'>"red"</span>,
-  variant_list <span class='op'>=</span> <span class='cn'>NULL</span>,
   genes <span class='op'>=</span> <span class='cn'>NULL</span>,
   variants <span class='op'>=</span> <span class='cn'>NULL</span>,
   variant_ids <span class='op'>=</span> <span class='cn'>NULL</span>,
-  variant_ids_color <span class='op'>=</span> <span class='cn'>NULL</span>,
+  variant_ids_color <span class='op'>=</span> <span class='st'>"red"</span>,
   xmax <span class='op'>=</span> <span class='cn'>NULL</span>,
   ymin <span class='op'>=</span> <span class='cn'>NULL</span>,
   ymax <span class='op'>=</span> <span class='cn'>NULL</span>,
+  protein_coding_only <span class='op'>=</span> <span class='cn'>FALSE</span>,
   chr <span class='op'>=</span> <span class='cn'>NULL</span>,
   vline <span class='op'>=</span> <span class='cn'>NULL</span>,
   legend_name <span class='op'>=</span> <span class='st'>"Data:"</span>,
@@ -272,6 +272,10 @@ Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise
     <tr>
       <th>ymax</th>
       <td><p>Optional parameters, min and max of the y-axis, (default values: <code>ymin=0, ymax=max(-log10(df$P))</code>)</p></td>
+    </tr>
+    <tr>
+      <th>protein_coding_only</th>
+      <td><p>Set this parameter to TRUE to only use protein coding genes for annotation</p></td>
     </tr>
     <tr>
       <th>chr</th>
