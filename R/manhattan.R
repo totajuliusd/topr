@@ -20,10 +20,11 @@
 #' manhattan(gwas_CD)
 #' }
 
-manhattan=function(df, annotation_thresh=1e-09, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"),
+manhattan=function(df, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"),
                    sign_thresh=5e-09,label_size=3, size=1,shape=19,alpha=1,highlight_genes_color="green",
-                   variants_size=1.2,variants_alpha=1,variants_shape=19,axis_text_size=11,axis_title_size=12, title_text_size=13, legend_title_size=12,legend_text_size=12, rect=NULL,
-                   variants=NULL,legend_labels=NULL,legend_name=NULL,
+                   variants_size=1.2,variants_alpha=1,variants_shape=19,axis_text_size=11,axis_title_size=12, title_text_size=13,
+                   legend_title_size=12,legend_text_size=12, rect=NULL, protein_coding_only=FALSE,
+                   variants=NULL,legend_labels=NULL,legend_name=NULL,annotation_thresh=NULL,
                    ymin=NULL,ymax=NULL,variants_color=NULL,highlight_genes=NULL,highlight_genes_ypos=NULL,legend_position=NULL){
   #do a dataframe colname check here!!
   dat=df
@@ -32,14 +33,20 @@ manhattan=function(df, annotation_thresh=1e-09, ntop=3, title="", color=c("darkb
   dat=dat_chr_check(dat)
   dat=set_size_shape_alpha(dat,size,shape,alpha)
   df=dat[[1]]
-  if(! is.null(variants)){
-    if(is.data.frame(variants)) variants=list(variants)
-    variants=dat_column_check_and_set(variants)
-    variants=dat_chr_check(variants)
+  if(! is.null(annotation_thresh)){
+    if(! is.null(variants)){
+      if(is.data.frame(variants)) variants=list(variants)
+      variants=dat_column_check_and_set(variants)
+      variants=dat_chr_check(variants)
+    }
+    else{
+      #retrieve the top variants
+      variants=get_best_snp_per_MB(dat, thresh = annotation_thresh,protein_coding_only = protein_coding_only)
+    }
     variants=set_size_shape_alpha(variants,variants_size,variants_shape,variants_alpha)
     variants=set_annotation_thresh(variants,annotation_thresh)
-
   }
+
   incl_chrX=include_chrX(dat)
   offsets=get_chr_offsets(incl_chrX)
 

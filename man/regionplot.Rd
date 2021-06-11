@@ -25,14 +25,14 @@ regionplot(
   show_exons = FALSE,
   sign_thresh = 5.1e-09,
   sign_thresh_color = "red",
-  variant_list = NULL,
   genes = NULL,
   variants = NULL,
   variant_ids = NULL,
-  variant_ids_color = NULL,
+  variant_ids_color = "red",
   xmax = NULL,
   ymin = NULL,
   ymax = NULL,
+  protein_coding_only = FALSE,
   chr = NULL,
   vline = NULL,
   legend_name = "Data:",
@@ -94,6 +94,8 @@ Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise
 \item{ymin}{Optional parameters, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
 
 \item{ymax}{Optional parameters, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
+
+\item{protein_coding_only}{Set this parameter to TRUE to only use protein coding genes for annotation}
 
 \item{chr}{The chromosome to plot (i.e. chr15), only required if the input dataframe contains results from more than one chromosome}
 

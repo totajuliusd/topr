@@ -28,8 +28,8 @@
 regionplot=function(dat, annotation_thresh=NULL, title="",label_all=0,xmin=0, size=2, shape=19, alpha=1,label_size=4,
                     color=c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"),
                     axis_text_size=11,axis_title_size=12,title_text_size=13,legend_title_size=12,legend_text_size=12,
-                    show_genes=FALSE, show_overview=TRUE, show_exons=FALSE,sign_thresh=5.1e-9,sign_thresh_color="red", variant_list=NULL,genes=NULL,variants=NULL,variant_ids=NULL,
-                    variant_ids_color=NULL,xmax=NULL,ymin=NULL,ymax=NULL,
+                    show_genes=FALSE, show_overview=TRUE, show_exons=FALSE,sign_thresh=5.1e-9,sign_thresh_color="red", genes=NULL,variants=NULL,variant_ids=NULL,
+                    variant_ids_color="red",xmax=NULL,ymin=NULL,ymax=NULL,protein_coding_only=FALSE,
                     chr=NULL,vline=NULL,legend_name="Data:",legend_position="right",legend_labels=NULL,gene=NULL,highlight_genes=NULL,highlight_genes_color=NULL){
   # three plots, overview_plot, main_plot and gene_plot
   #only include overview plot if df region is larger than the region between xmin and xmax
@@ -65,23 +65,26 @@ regionplot=function(dat, annotation_thresh=NULL, title="",label_all=0,xmin=0, si
   dat_full=dat
   dat=filter_on_xmin_xmax(dat,xmin,xmax)
   #check and set variants
+  if(! is.null(annotation_thresh)){
+    if(! is.null(variants)){
+      if(is.data.frame(variants)) variants=list(variants)
+      variants=dat_column_check_and_set(variants)
+      variants=dat_chr_check(variants)
+    }
+    else{
+       variants=get_best_snp_per_MB(dat, thresh = annotation_thresh,protein_coding_only = protein_coding_only)
+    }
+      variants=filter_on_chr(variants,chr)
+      variants=filter_on_xmin_xmax(variants,xmin,xmax)
+      variant_color=color
+      if(length(dat) == 1) variant_color="red"
+      variants=set_size_shape_alpha(variants,size,shape,alpha)
+      variants=set_color(variants,variant_color)
+      variants=set_annotation_thresh(variants,annotation_thresh)
 
-  if(! is.null(variants)){
-    if(is.data.frame(variants)) variants=list(variants)
-
-
-    variants=dat_column_check_and_set(variants)
-    variants=dat_chr_check(variants)
-    variants=filter_on_chr(variants,chr)
-    variants=filter_on_xmin_xmax(variants,xmin,xmax)
-    variant_color=color
-    if(length(dat) == 1) variant_color="red"
-    variants=set_size_shape_alpha(variants,size,shape,alpha)
-    variants=set_color(variants,variant_color)
-    variants=set_annotation_thresh(variants,annotation_thresh)
   }
 
-  main_plot=chromplot(dat, variants=variants,variant_list=variant_list,annotation_thresh=annotation_thresh,xmin=xmin,xmax=xmax,ymin=ymin, ymax=ymax,show_xaxis = F,size=size,
+  main_plot=chromplot(dat, variants=variants,annotation_thresh=annotation_thresh,xmin=xmin,xmax=xmax,ymin=ymin, ymax=ymax,show_xaxis = F,size=size,
                       shape=shape,alpha=alpha, color=color,.checked=TRUE, label_size=label_size, variant_ids=variant_ids,variant_ids_color=variant_ids_color,
                       vline=vline,legend_name=legend_name,legend_position = legend_position,legend_labels=legend_labels,sign_thresh=sign_thresh,
                       sign_thresh_color=sign_thresh_color,chr=chr,highlight_genes=highlight_genes,highlight_genes_color=highlight_genes_color,
@@ -98,17 +101,17 @@ regionplot=function(dat, annotation_thresh=NULL, title="",label_all=0,xmin=0, si
 
   if(is.null(genes)){
     if(show_genes){
-      genes=get_genes(chr,xmin,xmax)
+      genes=get_genes(chr,xmin,xmax,protein_coding_only = protein_coding_only )
     }else if(show_exons){
-      genes=get_exons(chr,xmin,xmax)
+      genes=get_exons(chr,xmin,xmax,protein_coding_only = protein_coding_only)
     }else{
       if(xmax-xmin < 1000001){
         show_exons=TRUE
-        genes=get_exons(chr,xmin,xmax)
+        genes=get_exons(chr,xmin,xmax,protein_coding_only = protein_coding_only )
       }
       else{
         show_genes=TRUE
-        genes=get_genes(chr,xmin,xmax)
+        genes=get_genes(chr,xmin,xmax,protein_coding_only = protein_coding_only )
       }
     }
   }

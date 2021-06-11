@@ -141,15 +141,22 @@ get_genes_gor=function(chr,xmin,xmax){
 }
 
 
-get_genes=function(chr,xmin,xmax){
+get_genes=function(chr,xmin,xmax,protein_coding_only=FALSE){
   chr=gsub("chr", "", chr)
   chr=paste("chr",chr,sep="")
-  genes=ENSGENES %>% filter(chrom==chr) %>% filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax)
+  if(protein_coding_only)
+    genes=ENSGENES %>% filter(chrom==chr) %>% filter(biotype=="protein_coding") %>% filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax)
+else
+    genes=ENSGENES %>% filter(chrom==chr) %>% filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax)
   return(genes)
 }
-get_exons=function(chr,xmin,xmax){
+
+get_exons=function(chr,xmin,xmax,protein_coding_only=FALSE){
   genes=get_genes(chr,xmin,xmax)
-  exons=merge(ENSEXONS, genes %>% select(gene_symbol,biotype))
+  if(protein_coding_only)
+    exons=merge(ENSEXONS, genes %>% select(gene_symbol,biotype) %>% filter(biotype=="protein_coding"))
+  else
+    exons=merge(ENSEXONS, genes %>% select(gene_symbol,biotype))
     #rename chromstart exon_chromstart | rename chromend exon_chromend)",sep=""))
   return(exons)
 }
@@ -276,7 +283,7 @@ get_ticknames=function(df){
 #' @param df Dataframe
 #' @param thresh Threshold
 #' @param region region
-
+#' @param protein_coding_only Set this variable to TRUE to only use protein_coding genes for annotation
 #' @return numeric vector
 #' @export
 #'
@@ -285,25 +292,38 @@ get_ticknames=function(df){
 #' data(gwas_CD)
 #' get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region = 10000000)
 #' }
-get_best_snp_per_MB=function(df,thresh=1e-09,region=1000000){
-  if(! "CHROM" %in% colnames(df) || (! "POS" %in% colnames(df)) || (! "P" %in% colnames(df))){
-    if(is.data.frame(df)) dat=list(df)
-    dat=dat_column_check_and_set(dat)
-    dat=dat_chr_check(dat)
-    df=dat[[1]]
-  }
-  df$CHROM=gsub("chr","", df$CHROM)
-  df=df %>% filter(P<thresh)
-  df$tmp=NA
-  for(row in 1:nrow(df)){
-    df$tmp=round(df$POS/region)
-  }
-  lead_snps=df %>% group_by(CHROM,tmp) %>% arrange(P) %>% filter(P== min(P))
-  if(length(lead_snps)== 0){
-    print(paste("There are no SNPs with a p-value below ",thresh, " in the input. Use the [thresh] argument to adjust the threshold.",sep=""))
-  }
+get_best_snp_per_MB=function(df,thresh=1e-09,region=1000000,protein_coding_only=FALSE){
+  dat=df
+  if(is.data.frame(df)) dat=list(df)
+  dat=dat_column_check_and_set(dat)
+  dat=dat_chr_check(dat)
+  thresh_filt=thresh;
+  for(i in 1:length(dat)){
+    df=as.data.frame(dat[[i]])
+    df$CHROM=gsub("chr","", df$CHROM)
+    if(is.vector(thresh)){ #in case multiple thresholds were provided
+        if(length(thresh) >= i){
+            thresh_filt=thresh[i]
+        }
+        else{ thresh_filt=thresh[1]}
+    }
+    df=df %>% filter(P<thresh_filt)
+    df$tmp=NA
 
-  return(ungroup(lead_snps)%>% distinct(CHROM,POS, .keep_all = T))
+    for(row in 1:nrow(df)){
+      df$tmp=round(df$POS/region)
+    }
+    lead_snps=df %>% group_by(CHROM,tmp) %>% arrange(P) %>% filter(P== min(P))
+    if(length(lead_snps)== 0){
+      print(paste("There are no SNPs with a p-value below ",thresh, " in the input. Use the [thresh] argument to adjust the threshold.",sep=""))
+    }
+    variants=ungroup(lead_snps)%>% distinct(CHROM,POS, .keep_all = T)
+    if(! "Gene_symbol" %in% colnames(variants)){
+      variants=annotate_with_nearest_gene(variants, protein_coding_only=protein_coding_only)
+    }
+    dat[[i]]=variants
+  }
+  return(dat)
 }
 
 #' Get the genetic position of a gene or genes by their gene name
@@ -330,6 +350,7 @@ get_genes_by_Gene_Symbol=function(genes){
   dist_genes=gene_df %>% distinct(CHROM,gene_start,gene_end, .keep_all = T)
   return(dist_genes)
 }
+
 
 
 get_legend<-function(p1){
@@ -364,6 +385,9 @@ get_legend<-function(p1){
 get_top_hit=function(df, chr=NULL){
   if(! is.null(chr))
     df=df %>% filter(CHROM ==chr)
+  else{
+    print("Returning the top hit over the entire genome, since chromosome was not provided as an argument")
+  }
   top_hit=df %>% dplyr::arrange(P) %>% head(n=1)
   return(top_hit)
 }
