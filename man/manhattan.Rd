@@ -6,7 +6,6 @@
 \usage{
 manhattan(
   df,
-  annotation_thresh = 1e-09,
   ntop = 3,
   title = "",
   color = c("darkblue", "#E69F00", "#00AFBB", "#999999", "#FC4E07", "darkorange1"),
@@ -25,9 +24,11 @@ manhattan(
   legend_title_size = 12,
   legend_text_size = 12,
   rect = NULL,
+  protein_coding_only = FALSE,
   variants = NULL,
   legend_labels = NULL,
   legend_name = NULL,
+  annotation_thresh = NULL,
   ymin = NULL,
   ymax = NULL,
   variants_color = NULL,
@@ -38,8 +39,6 @@ manhattan(
 }
 \arguments{
 \item{df}{Dataframe (required columns are \code{CHROM,POS,P}), in upper- or lowercase) to use for the plot. See examples on how to retrieve the dataset with GOR.}
-
-\item{annotation_thresh}{Display annotation for variants with p-values below this threshold}
 
 \item{ntop}{Number of datasets (GWASes) to show on the top plot}
 
@@ -77,12 +76,16 @@ manhattan(
 
 \item{rect}{Rectangle to add to the plot}
 
+\item{protein_coding_only}{Set this parameter to TRUE to only use protein coding genes for annotation}
+
 \item{variants}{Optional parameter, a dataset (required columns are \code{CHROM,POS,P}) with a list of variants to display and label on the plot.
 Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise with ID.  If neither Gene_Symbol nor ID are in the dataset, the variant will be labelled with its position (CHROM and POS)}
 
 \item{legend_labels}{Legend labels}
 
 \item{legend_name}{Change the name of the legend (default: None)}
+
+\item{annotation_thresh}{Display annotation for variants with p-values below this threshold}
 
 \item{ymin}{Optional parameters, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
 

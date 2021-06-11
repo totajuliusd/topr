@@ -23,7 +23,8 @@ chromplot(
   axis_title_size = 13,
   legend_title_size = 12,
   legend_text_size = 12,
-  variant_ids_color = "red",
+  variant_ids_color = NULL,
+  protein_coding_only = FALSE,
   legend_labels = NULL,
   legend_name = "Data",
   xmin = 0,
@@ -73,6 +74,8 @@ chromplot(
 \item{legend_text_size}{Text size of the legend text}
 
 \item{variant_ids_color}{The color of the variants in variants_id (default color is red)}
+
+\item{protein_coding_only}{Set this parameter to TRUE to only use protein coding genes for annotation}
 
 \item{legend_labels}{Legend labels}
 

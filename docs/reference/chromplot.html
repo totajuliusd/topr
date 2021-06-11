@@ -76,7 +76,7 @@ E.g. chromplot(multi_chr_dataset,chr = &quot;chr15&quot;)" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">topR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -147,7 +147,8 @@ chromosome can be used as input if provided with the <code>chr parameter</code>.
   axis_title_size <span class='op'>=</span> <span class='fl'>13</span>,
   legend_title_size <span class='op'>=</span> <span class='fl'>12</span>,
   legend_text_size <span class='op'>=</span> <span class='fl'>12</span>,
-  variant_ids_color <span class='op'>=</span> <span class='st'>"red"</span>,
+  variant_ids_color <span class='op'>=</span> <span class='cn'>NULL</span>,
+  protein_coding_only <span class='op'>=</span> <span class='cn'>FALSE</span>,
   legend_labels <span class='op'>=</span> <span class='cn'>NULL</span>,
   legend_name <span class='op'>=</span> <span class='st'>"Data"</span>,
   xmin <span class='op'>=</span> <span class='fl'>0</span>,
@@ -233,6 +234,10 @@ chromosome can be used as input if provided with the <code>chr parameter</code>.
     <tr>
       <th>variant_ids_color</th>
       <td><p>The color of the variants in variants_id (default color is red)</p></td>
+    </tr>
+    <tr>
+      <th>protein_coding_only</th>
+      <td><p>Set this parameter to TRUE to only use protein coding genes for annotation</p></td>
     </tr>
     <tr>
       <th>legend_labels</th>

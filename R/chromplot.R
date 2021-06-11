@@ -49,6 +49,7 @@
 #' @param legend_text_size Text size of the legend text
 #' @param geneplot_label_size Size of the labels for the genes on the gene and exon plots
 #' @param show_xaxis show the xaxis
+#' @param protein_coding_only Set this parameter to TRUE to only use protein coding genes for annotation
 #'
 #' @return a chromosome plot (ggplot object)
 #' @export
@@ -66,7 +67,7 @@ chromplot=function(dat, annotation_thresh = NULL, title = "", size = 1.2, shape 
                    color = c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"),
                    label_size=3.5,sign_thresh=5.1e-9, sign_thresh_color="red", legend_position="right",.checked = FALSE, show_xaxis = TRUE,
                    axis_text_size=11,title_text_size=12,axis_title_size=13,legend_title_size=12, legend_text_size = 12,
-                   variant_ids_color="red",
+                   variant_ids_color=NULL,protein_coding_only=FALSE,
                    legend_labels = NULL, legend_name="Data",xmin=0, highlight_genes=NULL,highlight_genes_ypos=NULL,highlight_genes_color=NULL,
                    variants=NULL,xmax=NULL,ymin=NULL,ymax=NULL,chr=NULL,vline=NULL,variant_ids=NULL){
 
@@ -89,11 +90,16 @@ chromplot=function(dat, annotation_thresh = NULL, title = "", size = 1.2, shape 
       set_color(color)
 
     #check and set variants
-    if (! is.null(variants)) {
-      is_df_empty(variants, "variants")
-      if(is.data.frame(variants)) variants=list(variants)
-      variants=dat_column_check_and_set(variants)
-      variants=dat_chr_check(variants)
+    if(! is.null(annotation_thresh)){
+      if (! is.null(variants)) {
+        is_df_empty(variants, "variants")
+        if(is.data.frame(variants)) variants=list(variants)
+        variants=dat_column_check_and_set(variants)
+        variants=dat_chr_check(variants)
+      }
+      else{
+        variants=get_best_snp_per_MB(dat, thresh = annotation_thresh,protein_coding_only = protein_coding_only)
+      }
       variants=filter_on_chr(variants,chr)
       variants=filter_on_xmin_xmax(variants,xmin,xmax)
       variant_color=color
@@ -102,6 +108,7 @@ chromplot=function(dat, annotation_thresh = NULL, title = "", size = 1.2, shape 
       variants=set_color(variants,variant_color)
       variants=set_annotation_thresh(variants,annotation_thresh)
     }
+
   }
   df=dat[[1]]
   zoom_y=0
@@ -149,6 +156,15 @@ chromplot=function(dat, annotation_thresh = NULL, title = "", size = 1.2, shape 
   p1=color_genes(p1,dat, highlight_genes, highlight_genes_color,highlight_genes_ypos)
   p1=add_sign_thresh_to_plot(p1,df, sign_thresh, sign_thresh_color,xmin,xmax,ymin,ymax)
 
+  if(! is.null(variant_ids)){
+      for(i in 1:length(dat)){
+        df=dat[[i]]
+        variants2label=df %>% filter(ID %in% variant_ids) %>% distinct(ID, .keep_all = T)
+        p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants2label, aes(x=POS,y=-log10(P), label=ID), color="grey40",direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
+        if(is.null(variant_ids_color)) variant_ids_color="red"
+        p1=p1+geom_point(data=variants2label, aes(x=POS, y=-log10(P),color=variant_ids_color),shape=variants2label$shape,size=variants2label$size,alpha=variants2label$alpha)
+      }
+  }
 
   chr_label=gsub("chr", "", chr)
 
