@@ -5,7 +5,8 @@
 
 # 1.0.0
 
-* Minor bug fixes and gene and exon coordinate files included.
+* Gene and exon coordinate data included
+* Bug fixes
 
 # 0.1.0
 
