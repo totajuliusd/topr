@@ -43,11 +43,18 @@ manhattan=function(df, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB",
       #retrieve the top variants
       for(i in 1:length(dat)){
         df=as.data.frame(dat[[i]])
-        variants[[i]]=get_best_snp_per_MB(df, thresh = annotation_thresh[i],protein_coding_only = protein_coding_only)
+        if(is.vector(annotation_thresh) & length(annotation_thresh) >= i){
+          annot_thresh=annotation_thresh[i]
+        }else{
+          annot_thresh=annotation_thresh;
+        }
+        variants[[i]]=get_best_snp_per_MB(df, thresh = annot_thresh,protein_coding_only = protein_coding_only)
       }
     }
     variants=set_size_shape_alpha(variants,variants_size,variants_shape,variants_alpha)
-    variants=set_annotation_thresh(variants,annotation_thresh)
+    if(! is.null(annotation_thresh)){
+      variants=set_annotation_thresh(variants,annotation_thresh)
+    }
   }
 
   incl_chrX=include_chrX(dat)
@@ -78,7 +85,7 @@ manhattan=function(df, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB",
     dat=set_log10p(dat,ntop)
     shades=get_shades(offsets,dat,ntop,incl_chrX)
     if(is.null(legend_position)) legend_position="top"
-    p1=manhattan_multi(dat, color=color,shades=shades,variants=variants, ntop=ntop, label_size=label_size, ymax=ymax,ymin=ymin,legend_name=legend_name,legend_labels=legend_labels)
+    p1=manhattan_multi(dat, color=color,shades=shades,variants=variants, ntop=ntop, label_size=label_size, ymax=ymax,ymin=ymin,legend_name=legend_name,legend_labels=legend_labels,annotation_thresh=annotation_thresh)
   }
   else{
     if(is.null(variants_color))
@@ -133,7 +140,7 @@ manhattan=function(df, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB",
 
 
 manhattan_multi=function(dat, ntop=2, shades=shades, label_size=3, ymax=NULL,ymin=NULL,color=NULL,variants=NULL,
-                         legend_labels=NULL,legend_name="Datasets:"){
+                         legend_labels=NULL,legend_name="Datasets:",annotation_thresh=NULL){
   #set and get ticknames and tickpositions -requires pos_adj to be included in the df, so cannot be called before the prepare_dat function
   # colorMap=mk_colorMap(dat,colors)
   p1=ggplot()+theme_bw() #+geom_point(data=dat[[1]]$gwas, aes(dat[[1]]$gwas$pos_adj, dat[[1]]$gwas$log10p),color=colors[1] alpha=0.7,size=1)+theme_bw()
@@ -142,7 +149,17 @@ manhattan_multi=function(dat, ntop=2, shades=shades, label_size=3, ymax=NULL,ymi
     if(! is.null(variants[[i]])){
       variant_set=variants[[i]]
       for(j in 1:length(variant_set$POS)){
-        dat_labels= variant_set[j,] %>% filter(P < annotation_thresh) %>% distinct(Gene_Symbol, .keep_all = T)
+
+        if(!is.null(annotation_thresh)){
+          if(is.vector(annotation_thresh) & length(annotation_thresh) >= j){
+            annot_thresh=annotation_thresh[j]
+          }else{annot_thresh=annotation_thresh}
+
+          dat_labels= variant_set[j,] %>% filter(P < annot_thresh) %>% distinct(Gene_Symbol, .keep_all = T)
+        }
+        else{
+          dat_labels= variant_set[j,] %>% distinct(Gene_Symbol, .keep_all = T)
+        }
         nudge_y=4
         if(i>ntop)
           nudge_y=-4
