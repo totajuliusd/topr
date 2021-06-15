@@ -41,7 +41,10 @@ manhattan=function(df, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB",
     }
     else{
       #retrieve the top variants
-      variants=get_best_snp_per_MB(dat, thresh = annotation_thresh,protein_coding_only = protein_coding_only)
+      for(i in 1:length(dat)){
+        df=as.data.frame(dat[[i]])
+        variants[[i]]=get_best_snp_per_MB(df, thresh = annotation_thresh[i],protein_coding_only = protein_coding_only)
+      }
     }
     variants=set_size_shape_alpha(variants,variants_size,variants_shape,variants_alpha)
     variants=set_annotation_thresh(variants,annotation_thresh)
@@ -134,12 +137,12 @@ manhattan_multi=function(dat, ntop=2, shades=shades, label_size=3, ymax=NULL,ymi
   #set and get ticknames and tickpositions -requires pos_adj to be included in the df, so cannot be called before the prepare_dat function
   # colorMap=mk_colorMap(dat,colors)
   p1=ggplot()+theme_bw() #+geom_point(data=dat[[1]]$gwas, aes(dat[[1]]$gwas$pos_adj, dat[[1]]$gwas$log10p),color=colors[1] alpha=0.7,size=1)+theme_bw()
-
   for(i in 1:length(dat)){
     p1=p1+geom_point(data=dat[[i]], aes(x=pos_adj, y=log10p, color=color), alpha=dat[[i]]$alpha, size=dat[[i]]$size,shape=dat[[i]]$shape)
-    if(! is.null(variants)){
-      for(i in 1:length(variants)){
-        dat_labels= variants[[i]] %>% filter(P < annotation_thresh) %>% distinct(Gene_Symbol, .keep_all = T)
+    if(! is.null(variants[[i]])){
+      variant_set=variants[[i]]
+      for(j in 1:length(variant_set$POS)){
+        dat_labels= variant_set[j,] %>% filter(P < annotation_thresh) %>% distinct(Gene_Symbol, .keep_all = T)
         nudge_y=4
         if(i>ntop)
           nudge_y=-4

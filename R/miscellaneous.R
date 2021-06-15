@@ -260,12 +260,21 @@ annotate_with_nearest_gene=function(variants, protein_coding_only=FALSE){
           genes_left= genes_on_chr %>% filter(gene_end <= variant$POS) %>% arrange(gene_end)
           genes_right =genes_on_chr %>% filter(gene_start >= variant$POS) %>% arrange(gene_start)
         }
-        gene_left=genes_left[as.numeric(length(genes_left$gene_symbol)),]
-        gene_right=genes_right[1,]
-        dist_left=variant$POS-gene_left$gene_end
-        dist_right=gene_right$gene_start-variant$POS
-        if(abs(dist_left) < abs(dist_right)){  nearest_gene=gene_left }
-        else{  nearest_gene=gene_right }
+        if(length(genes_left$gene_symbol)>0  & length(genes_right$gene_symbol)> 0){
+          gene_left=genes_left[as.numeric(length(genes_left$gene_symbol)),]
+          gene_right=genes_right[1,]
+          dist_left=variant$POS-gene_left$gene_end
+          dist_right=gene_right$gene_start-variant$POS
+          if(abs(dist_left) < abs(dist_right)){  nearest_gene=gene_left }
+          else{  nearest_gene=gene_right }
+        }
+        else if(length(genes_left$gene_symbol)== 0  & length(genes_right$gene_symbol)> 0){
+          nearest_gene=genes_right[1,]
+        }
+        else if(length(genes_left$gene_symbol)> 0  & length(genes_right$gene_symbol)==0){
+          nearest_gene=genes_left[as.numeric(length(genes_left$gene_symbol)),]
+        }
+
       }
       variants[i,"Gene_Symbol"]=nearest_gene$gene_symbol
       variants[i, "biotype"]=nearest_gene$biotype
