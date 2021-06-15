@@ -294,36 +294,25 @@ get_ticknames=function(df){
 #' }
 get_best_snp_per_MB=function(df,thresh=1e-09,region=1000000,protein_coding_only=FALSE){
   dat=df
-  if(is.data.frame(df)) dat=list(df)
+  if(is.data.frame(dat)) dat=list(dat)
   dat=dat_column_check_and_set(dat)
   dat=dat_chr_check(dat)
-  thresh_filt=thresh;
-  for(i in 1:length(dat)){
-    df=as.data.frame(dat[[i]])
-    df$CHROM=gsub("chr","", df$CHROM)
-    if(is.vector(thresh)){ #in case multiple thresholds were provided
-        if(length(thresh) >= i){
-            thresh_filt=thresh[i]
-        }
-        else{ thresh_filt=thresh[1]}
-    }
-    df=df %>% filter(P<thresh_filt)
-    df$tmp=NA
-
-    for(row in 1:nrow(df)){
+  df=dat[[1]]
+  df$CHROM=gsub("chr","", df$CHROM)
+  df=df %>% filter(P<thresh)
+  df$tmp=NA
+  for(row in 1:nrow(df)){
       df$tmp=round(df$POS/region)
-    }
-    lead_snps=df %>% group_by(CHROM,tmp) %>% arrange(P) %>% filter(P== min(P))
-    if(length(lead_snps)== 0){
-      print(paste("There are no SNPs with a p-value below ",thresh, " in the input. Use the [thresh] argument to adjust the threshold.",sep=""))
-    }
-    variants=ungroup(lead_snps)%>% distinct(CHROM,POS, .keep_all = T)
-    if(! "Gene_symbol" %in% colnames(variants)){
-      variants=annotate_with_nearest_gene(variants, protein_coding_only=protein_coding_only)
-    }
-    dat[[i]]=variants
   }
-  return(dat)
+  lead_snps=df %>% group_by(CHROM,tmp) %>% arrange(P) %>% filter(P== min(P))
+  if(length(lead_snps)== 0){
+      print(paste("There are no SNPs with a p-value below ",thresh, " in the input. Use the [thresh] argument to adjust the threshold.",sep=""))
+  }
+  variants=ungroup(lead_snps)%>% distinct(CHROM,POS, .keep_all = T)
+  if(! "Gene_symbol" %in% colnames(variants)){
+      variants=annotate_with_nearest_gene(variants, protein_coding_only=protein_coding_only)
+  }
+  return(variants)
 }
 
 #' Get the genetic position of a gene or genes by their gene name

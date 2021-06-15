@@ -272,7 +272,7 @@ annotate_with_nearest_gene=function(variants, protein_coding_only=FALSE){
           nearest_gene=genes_right[1,]
         }
         else if(length(genes_left$gene_symbol)> 0  & length(genes_right$gene_symbol)==0){
-          nearest_gene=ggenes_left[as.numeric(length(genes_left$gene_symbol)),]
+          nearest_gene=genes_left[as.numeric(length(genes_left$gene_symbol)),]
         }
 
       }

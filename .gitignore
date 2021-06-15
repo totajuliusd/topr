@@ -10,3 +10,6 @@ testscript.R
 pkgdown
 .
 *.Rproj
+CD_IIBD.rda
+UC_IIBD.rda
+IBD_IIBD.rda
