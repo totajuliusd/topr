@@ -309,7 +309,7 @@ get_best_snp_per_MB=function(df,thresh=1e-09,region=1000000,protein_coding_only=
       print(paste("There are no SNPs with a p-value below ",thresh, " in the input. Use the [thresh] argument to adjust the threshold.",sep=""))
   }
   variants=ungroup(lead_snps)%>% distinct(CHROM,POS, .keep_all = T)
-  if(! "Gene_symbol" %in% colnames(variants)){
+  if(! "Gene_Symbol" %in% colnames(variants)){
       variants=annotate_with_nearest_gene(variants, protein_coding_only=protein_coding_only)
   }
   return(variants)
