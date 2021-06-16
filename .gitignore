@@ -13,3 +13,5 @@ pkgdown
 CD_IIBD.rda
 UC_IIBD.rda
 IBD_IIBD.rda
+.idea/
+local/
