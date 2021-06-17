@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Locuszoom plot — locuszoom • topR</title>
+<title>Pipe operator — %&gt;% • topR</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,8 @@
 
 
 
-<meta property="og:title" content="Locuszoom plot — locuszoom" />
-<meta property="og:description" content="locuszoom() displays the association results for a smaler region within one chromosome
-Required parameter one dataset (dataframe) containing the association data (with columns CHROM,POS,P,R2 in upper or lowercase), xmin and xmax
-All other input parameters are optional" />
+<meta property="og:title" content="Pipe operator — %&gt;%" />
+<meta property="og:description" content="See magrittr::%&amp;gt;% for details." />
 
 
 
@@ -113,66 +111,18 @@ All other input parameters are optional" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Locuszoom plot</h1>
-    <small class="dont-index">Source: <a href='https://github.com/wuxi-nextcode/topr/blob/master/R/locuszoomplot.R'><code>R/locuszoomplot.R</code></a></small>
-    <div class="hidden name"><code>locuszoom.Rd</code></div>
+    <h1>Pipe operator</h1>
+    <small class="dont-index">Source: <a href='https://github.com/wuxi-nextcode/topr/blob/master/R/utils-pipe.R'><code>R/utils-pipe.R</code></a></small>
+    <div class="hidden name"><code>pipe.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>locuszoom()</code> displays the association results for a smaler region within one chromosome
-Required parameter one dataset (dataframe) containing the association data (with columns <code>CHROM,POS,P,R2</code> in upper or lowercase), xmin and xmax</p>
-<p>All other input parameters are optional</p>
+    <p>See <code>magrittr::%&gt;%</code> for details.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>locuszoom</span><span class='op'>(</span>
-  <span class='va'>df</span>,
-  <span class='va'>ids2label</span>,
-  xmin <span class='op'>=</span> <span class='fl'>0</span>,
-  xmax <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>$</span><span class='va'>POS</span><span class='op'>)</span>,
-  label_size <span class='op'>=</span> <span class='fl'>3.5</span>,
-  genes <span class='op'>=</span> <span class='cn'>NULL</span>,
-  vline <span class='op'>=</span> <span class='cn'>NULL</span>,
-  sign_thresh <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>xmin</th>
-      <td><p>Parameters setting the chromosomal range to display on the x-axis</p></td>
-    </tr>
-    <tr>
-      <th>xmax</th>
-      <td><p>Parameters setting the chromosomal range to display on the x-axis</p></td>
-    </tr>
-    <tr>
-      <th>label_size</th>
-      <td><p>Optional parameter to set the size of the plot labels (default: <code>label_size=3.5</code>)</p></td>
-    </tr>
-    <tr>
-      <th>genes</th>
-      <td><p>List of genes or exons to plot</p></td>
-    </tr>
-    <tr>
-      <th>vline</th>
-      <td><p>Parameter (optional) to add a vertical line to the plot at a specific chromosomal position, e.g <code>vline=204000066</code>. Multiple values can be provided in a vector, e.g  <code>vline=c(204000066,100500188)</code></p></td>
-    </tr>
-    <tr>
-      <th>sign_thresh</th>
-      <td><p>Optional parameter setting the threshold of the dashed red horizontal line representing the significance threshold (default: <code>sign_thresh=5.1e-9</code>). Multiple thresholds can be provided in a vector, e.g <code>sign_thresh=c(5.1e-9,1.0e-6)</code>). Set this parameter to NULL if you dont want this line to appear at all <code>sign_thresh=NULL</code></p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>ggplot object</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>locuszoomt</span><span class='op'>(</span><span class='va'>df</span>,xmin<span class='op'>=</span><span class='va'>xmin</span>,xmax<span class='op'>=</span><span class='va'>xmax</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

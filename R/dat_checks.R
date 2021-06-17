@@ -22,7 +22,6 @@ dat_chr_check=function(dat,chr=NULL){
 #'
 #'
 #' @param dat  The data input, a data frame or a list of data frames
-
 dat_column_check_and_set=function(dat){
   for(i in 1:length(dat)){
     df=as.data.frame(dat[[i]])

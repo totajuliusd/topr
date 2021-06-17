@@ -1,6 +1,6 @@
 Package: topR
 Title: Create custom plots for viewing genetic association results using ggplot
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: c(
     person("Genuity", "Science", role = c("aut", "cre","cph"), email = "support@genuitysci.com"),
     person("Thorhildur", "Juliusdottir", role = "aut", email = "thorhildur@genuitysci.com"),
@@ -35,6 +35,7 @@ Imports:
     ggrepel,
     egg,
     grid,
-    gridExtra
+    gridExtra,
+    magrittr (>= 1.5)
 Depends: 
     R (>= 2.10)
