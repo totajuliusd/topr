@@ -1,3 +1,7 @@
+# 1.0.2
+
+* Minor bugfixes
+
 # 1.0.1
 
 * Fixed error, variant_list unused argument in chromplot.
