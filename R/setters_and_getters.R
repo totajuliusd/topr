@@ -371,12 +371,16 @@ get_legend<-function(p1){
 #' get_top_hit(gwas_CD, chr="chr1")
 #' }
 #'
-get_top_hit=function(df, chr=NULL){
-  if(! is.null(chr))
-    df=df %>% filter(CHROM ==chr)
-  else{
+get_top_hit <- function(df, chr=NULL){
+  if (!is.null(chr)) {
+    df <- df %>%
+      filter(CHROM == chr)
+  } else {
     print("Returning the top hit over the entire genome, since chromosome was not provided as an argument")
   }
-  top_hit=df %>% dplyr::arrange(P) %>% head(n=1)
+  top_hit <- df %>%
+    dplyr::arrange(P) %>%
+    head(n = 1)
+
   return(top_hit)
 }

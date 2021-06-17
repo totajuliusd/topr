@@ -9,7 +9,9 @@ filter_on_chr=function(dat,chr){
 filter_on_xmin_xmax=function(dat,xmin=NULL,xmax=NULL){
   for(i in 1:length(dat)){
     if(! is.null(xmin)) {
-      if(xmin < 0) xmin=0
+      if(xmin < 0){
+        xmin=0
+      }
       dat[[i]] = dat[[i]] %>% filter(POS >= xmin)
     }
     if(! is.null(xmax)) dat[[i]] = dat[[i]] %>% filter(POS <= xmax)

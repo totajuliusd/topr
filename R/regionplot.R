@@ -35,10 +35,10 @@ regionplot=function(dat, annotation_thresh=NULL, title="",label_all=0,xmin=0, si
   #only include overview plot if df region is larger than the region between xmin and xmax
   #dat=list(gwas_ukbb,gwas_abbvie)
 
-  #is_df_empty(dat,"main dat")
-
-  #is_df_empty(variants, "variants")
-
+  is_df_empty(dat,"main dat")
+  if(! is.null(variants)){
+    is_df_empty(variants, "variants")
+  }
   if(! is.null(gene)){
     gene_df=get_gene_coords(gene,chr)
     if(dim(gene_df)[1]==0){
@@ -49,8 +49,9 @@ regionplot=function(dat, annotation_thresh=NULL, title="",label_all=0,xmin=0, si
       xmax=gene_df$gene_end+100000
     }
   }
-  if(is.null(xmin) || is.null(xmax))
+  if(is.null(xmin) || is.null(xmax)){
     stop("The region to view has not been set. Set the size of the region with xmin and xmax, e.g. xmin=66716513, xmax=67716513")
+  }
   #check and set data
   if(is.data.frame(dat)) dat=list(dat)
   dat=dat_column_check_and_set(dat)
@@ -66,6 +67,7 @@ regionplot=function(dat, annotation_thresh=NULL, title="",label_all=0,xmin=0, si
   dat=filter_on_xmin_xmax(dat,xmin,xmax)
   #check and set variants
   if(! is.null(annotation_thresh)){
+
     if(! is.null(variants)){
       if(is.data.frame(variants)) variants=list(variants)
       variants=dat_column_check_and_set(variants)
@@ -89,7 +91,6 @@ regionplot=function(dat, annotation_thresh=NULL, title="",label_all=0,xmin=0, si
                       vline=vline,legend_name=legend_name,legend_position = legend_position,legend_labels=legend_labels,sign_thresh=sign_thresh,
                       sign_thresh_color=sign_thresh_color,chr=chr,highlight_genes=highlight_genes,highlight_genes_color=highlight_genes_color,
                       axis_text_size=axis_text_size,axis_title_size=axis_title_size,title_text_size=title_text_size,legend_title_size=legend_title_size,legend_text_size=legend_text_size)
-
 
   if(show_overview){
     if(min(df$POS) < xmin & max(df$POS) > xmax){ # showOverviewplot if TRUE
@@ -117,9 +118,9 @@ regionplot=function(dat, annotation_thresh=NULL, title="",label_all=0,xmin=0, si
   }
 
   if(show_exons & ("exon_chromstart" %in% colnames(genes))){
-    gene_plot=exonplot(genes, xmin, as.numeric(xmax),label_size=label_size,vline=vline)
+    gene_plot=exonplot(genes, chr=chr,xmin, as.numeric(xmax),label_size=label_size,vline=vline)
   }else{
-    gene_plot=geneplot(genes, xmin, as.numeric(xmax),label_size=label_size,vline=vline)
+    gene_plot=geneplot(genes, chr=chr, xmin, as.numeric(xmax),label_size=label_size,vline=vline)
   }
   gene_plot=tidy_plot(gene_plot,axis_text_size=axis_text_size,axis_title_size=axis_title_size,title_text_size=title_text_size,legend_title_size=legend_title_size,legend_text_size=legend_text_size)
   gene_plot=gene_plot+scale_x_continuous(expand=c(.01,.01),labels = scales::comma )
