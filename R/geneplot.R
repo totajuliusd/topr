@@ -70,7 +70,7 @@ geneplot=function(genes,chr, xmin, xmax, label_size=3.5,vline=NULL){
 
  # p1=p1+scale_y_discrete(breaks=NULL)
 
-  p1=p1+suppressWarnings(coord_cartesian(xlim=c(xmin, xmax), ylim=c(1,level_count+0.2)))
+  p1=p1+suppressWarnings(coord_cartesian(xlim=c(xmin, xmax), ylim=c(1,level_count+1)))
   if(!is.null(vline)){
     p1=p1+geom_vline(xintercept =vline , colour="grey", linetype="dashed")
   }

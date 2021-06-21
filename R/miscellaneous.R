@@ -142,7 +142,7 @@ add_genes2manhattan=function(p1,dat,offsets,genes,genes_color,genes_ypos){
 
 
 
-add_variants_from_variant_list=function(p1,variant_list,annotation_thresh,rectr,show_xaxis=FALSE,offsets=NULL){
+add_variants_from_variant_list=function(p1,variant_list,annotate,rectr,show_xaxis=FALSE,offsets=NULL){
   for(i in 1:length(variant_list)){
     variants=variant_list[[i]]$v
     ##variants=set_chrs_ymax_and_shape(variants) -- TODO update
@@ -155,7 +155,7 @@ add_variants_from_variant_list=function(p1,variant_list,annotation_thresh,rectr,
 
       if(i == 1){
 
-        p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants, aes(x=pos_adj,y=log10p,label=ifelse(P<annotation_thresh, Gene_Symbol,"")), color="grey40",size=3,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
+        p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants, aes(x=pos_adj,y=log10p,label=ifelse(P<annotate, Gene_Symbol,"")), color="grey40",size=3,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
 
       }
     }
@@ -165,10 +165,10 @@ add_variants_from_variant_list=function(p1,variant_list,annotation_thresh,rectr,
       if(i==1){
 
         if(show_xaxis){
-          p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants, aes(x=POS,y=log10p,label=ifelse(P<annotation_thresh, Gene_Symbol,"")), color="grey40",size=3.5,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
+          p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants, aes(x=POS,y=log10p,label=ifelse(P<annotate, Gene_Symbol,"")), color="grey40",size=3.5,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
         }
         else{
-          p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants, aes(x=POS,y=log10p,label=ifelse(P<annotation_thresh, ID,"")), color="grey40",size=3.5,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
+          p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants, aes(x=POS,y=log10p,label=ifelse(P<annotate, ID,"")), color="grey40",size=3.5,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
         }
       }
     }

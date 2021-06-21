@@ -9,6 +9,7 @@
 #' All other input parameters are optional
 #'
 #' @param ntop Number of datasets (GWASes) to show on the top plot
+#' @traditional Show a traditional Manhattan plot (with two colors) for one phenotype
 #' @inheritParams chromplot
 
 #' @return plots using egg (https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html)
@@ -23,8 +24,8 @@
 manhattan=function(df, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"),
                    sign_thresh=5e-09,label_size=3, size=1,shape=19,alpha=1,highlight_genes_color="green",
                    variants_size=1.2,variants_alpha=1,variants_shape=19,axis_text_size=11,axis_title_size=12, title_text_size=13,
-                   legend_title_size=12,legend_text_size=12, rect=NULL, protein_coding_only=FALSE,
-                   variants=NULL,legend_labels=NULL,legend_name=NULL,annotation_thresh=NULL,
+                   legend_title_size=12,legend_text_size=12, rect=NULL, protein_coding_only=FALSE,nudge_x=0.1,nudge_y=0.2, angle=0,
+                   variants=NULL,legend_labels=NULL,legend_name=NULL,annotate=NULL,region=10000000,traditional=FALSE,
                    ymin=NULL,ymax=NULL,variants_color=NULL,highlight_genes=NULL,highlight_genes_ypos=NULL,legend_position=NULL){
   #do a dataframe colname check here!!
   dat=df
@@ -33,7 +34,7 @@ manhattan=function(df, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB",
   dat=dat_chr_check(dat)
   dat=set_size_shape_alpha(dat,size,shape,alpha)
   df=dat[[1]]
-  if(! is.null(annotation_thresh)){
+  if(! is.null(annotate)){
     if(! is.null(variants)){
       if(is.data.frame(variants)) variants=list(variants)
       variants=dat_column_check_and_set(variants)
@@ -43,18 +44,16 @@ manhattan=function(df, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB",
       #retrieve the top variants
       for(i in 1:length(dat)){
         df=as.data.frame(dat[[i]])
-        if(is.vector(annotation_thresh) & length(annotation_thresh) >= i){
-          annot_thresh=annotation_thresh[i]
+        if(is.vector(annotate) & length(annotate) >= i){
+          annot_thresh=annotate[i]
         }else{
-          annot_thresh=annotation_thresh;
+          annot_thresh=annotate;
         }
-        variants[[i]]=get_best_snp_per_MB(df, thresh = annot_thresh,protein_coding_only = protein_coding_only)
+        variants[[i]]=get_best_snp_per_MB(df, thresh = annot_thresh,protein_coding_only = protein_coding_only,region=region)
       }
     }
     variants=set_size_shape_alpha(variants,variants_size,variants_shape,variants_alpha)
-    if(! is.null(annotation_thresh)){
-      variants=set_annotation_thresh(variants,annotation_thresh)
-    }
+ 
   }
 
   incl_chrX=include_chrX(dat)
@@ -63,10 +62,16 @@ manhattan=function(df, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB",
   for(i in 1:length(dat)){
     dat[[i]]=dat[[i]] %>% dplyr::mutate(pos_adj=POS+offsets[CHROM])
   }
-  if(! is.null(variants)){
+  if(! is.null(variants) ){
+    if(is.data.frame(variants)) variants=list(variants)
+    variants=dat_column_check_and_set(variants)
+    variants=dat_chr_check(variants)
     for(i in 1:length(variants)){
       variants[[i]]=variants[[i]] %>% dplyr::mutate(pos_adj=POS+offsets[CHROM])
     }
+  }
+  if(! is.null(annotate)){
+    variants=set_annotate(variants,annotate)
   }
   #in case there are multiple dataframes, use the one with most chromosome s
   dat4ticks=dat[[1]]
@@ -76,16 +81,24 @@ manhattan=function(df, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB",
     }
   }
   ticks=get_ticknames(dat4ticks)
-  if(length(dat) > 1){
+ 
+   if(length(dat) > 1 & traditional){
+    stop("The traditional argument can only be used when plotting the results from one GWAS")
+    }
+ 
+  
+  if(traditional==FALSE){
     dat=set_color(dat,color)
+    dat=set_log10p(dat,ntop)
+    
     if(! is.null(variants)){
       variants=set_color(variants,color)
       variants=set_log10p(variants,ntop)
     }
-    dat=set_log10p(dat,ntop)
-    shades=get_shades(offsets,dat,ntop,incl_chrX)
+
+    shades=get_shades(offsets,dat,ntop,incl_chrX,ymin=ymin,ymax=ymax)
     if(is.null(legend_position)) legend_position="top"
-    p1=manhattan_multi(dat, color=color,shades=shades,variants=variants, ntop=ntop, label_size=label_size, ymax=ymax,ymin=ymin,legend_name=legend_name,legend_labels=legend_labels,annotation_thresh=annotation_thresh)
+    p1=manhattan_multi(dat, color=color,shades=shades,variants=variants, ntop=ntop, nudge_x=nudge_x,nudge_y=nudge_y,label_size=label_size, ymax=ymax,ymin=ymin,angle=angle,legend_name=legend_name,legend_labels=legend_labels,annotate=annotate)
   }
   else{
     if(is.null(variants_color))
@@ -93,7 +106,7 @@ manhattan=function(df, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB",
     if(! is.null(variants)){
       variants=set_color(variants,variants_color)
     }
-    p1=manhattan_single(dat[[1]],variants=variants,color=color,legend_name=legend_name,legend_labels=legend_labels,variants_color=variants_color)
+    p1=manhattan_single(dat[[1]],variants=variants,color=color,legend_name=legend_name,nudge_x=nudge_x,nudge_y=nudge_y,legend_labels=legend_labels,variants_color=variants_color)
     if(is.null(legend_position)) legend_position="bottom"
   }
 
@@ -114,7 +127,7 @@ manhattan=function(df, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB",
   # p1=add_sign_thresh_to_plot(p1,df, sign_thresh, sign_thresh_color,xmin,xmax,ymin,ymax)
 
   p1=p1+geom_hline(yintercept = -log10(thresh), colour="red", linetype="dashed")+
-    geom_text(aes(x=20000000,y=(-log10(thresh)+1),label=thresh),color="red",size=3.5)+
+    geom_text(aes(x=20100000,y=(-log10(thresh)+1),label=thresh),color="red",size=3.5)+
     labs(title=title, x='Chromosome', y=expression(-log[10](italic(p)))) +
     theme(panel.border=element_blank(), axis.line=element_line(color="grey"))
 
@@ -126,50 +139,61 @@ manhattan=function(df, ntop=3, title="", color=c("darkblue","#E69F00","#00AFBB",
   if(! is.null(highlight_genes)){
     p1=add_genes2manhattan(p1,dat, offsets,highlight_genes, highlight_genes_color,highlight_genes_ypos)
   }
-  if(! is.null(ymin) & is.null(ymax))
+  if(is.null(ymin) & is.null(ymax) & length(dat) <= ntop){
+    p1=p1+coord_cartesian(ylim=c(get_ymin(ntop,dat), get_ymax(ntop,dat)))
+  }
+  else if(! is.null(ymin) & is.null(ymax)){
     p1=p1+coord_cartesian(ylim=c(ymin, get_ymax(ntop,dat)))
-  if(! is.null(ymin) & (! is.null(ymax)))
+  }
+  else if(! is.null(ymin) & (! is.null(ymax))){
     p1=p1+coord_cartesian(ylim=c(ymin, ymax))
-  if(is.null(ymin) & (! is.null(ymax)))
+  }
+  else if(is.null(ymin) & (! is.null(ymax))){
     p1=p1+coord_cartesian(ylim=c(get_ymin(ntop,dat), ymax))
-
-
+  }
   return(p1)
 }
 
 
 
-manhattan_multi=function(dat, ntop=2, shades=shades, label_size=3, ymax=NULL,ymin=NULL,color=NULL,variants=NULL,
-                         legend_labels=NULL,legend_name="Datasets:",annotation_thresh=NULL){
+manhattan_multi=function(dat, ntop=2, shades=shades, label_size=3, nudge_x=0.1,nudge_y=0.2, ymax=NULL,ymin=NULL,color=NULL,variants=NULL,
+                         legend_labels=NULL,legend_name="Datasets:",annotate=NULL,angle=0){
   #set and get ticknames and tickpositions -requires pos_adj to be included in the df, so cannot be called before the prepare_dat function
   # colorMap=mk_colorMap(dat,colors)
   p1=ggplot()+theme_bw() #+geom_point(data=dat[[1]]$gwas, aes(dat[[1]]$gwas$pos_adj, dat[[1]]$gwas$log10p),color=colors[1] alpha=0.7,size=1)+theme_bw()
+  
   for(i in 1:length(dat)){
     p1=p1+geom_point(data=dat[[i]], aes(x=pos_adj, y=log10p, color=color), alpha=dat[[i]]$alpha, size=dat[[i]]$size,shape=dat[[i]]$shape)
+      
     if(! is.null(variants[[i]])){
-      variant_set=variants[[i]]
-      for(j in 1:length(variant_set$POS)){
-
-        if(!is.null(annotation_thresh)){
-          if(is.vector(annotation_thresh)) {
-            if(length(annotation_thresh) >= j){
-              annot_thresh=annotation_thresh[j]
-            }
-          }else{annot_thresh=annotation_thresh}
+        variant_set=variants[[i]]
+    
+        for(j in 1:length(variant_set$POS)){
+          if(!is.null(annotate)){
+            if(is.vector(annotate)) {
+              if(length(annotate) >= j){
+                annot_thresh=annotate[j]
+              }
+            }else{
+              annot_thresh=annotate
+              }
           dat_labels= variant_set[j,] %>% filter(P < annot_thresh) %>% distinct(Gene_Symbol, .keep_all = T)
         }
         else{
           dat_labels= variant_set[j,] %>% distinct(Gene_Symbol, .keep_all = T)
         }
-        nudge_y=2
-        if(i>ntop)
-          nudge_y=-2
-        p1=p1+ggrepel::geom_text_repel(data=dat_labels, aes(x=pos_adj, y=log10p, label=Gene_Symbol),nudge_y=nudge_y,size=label_size,
+        nudgey=nudge_y
+        if(i>ntop){
+          nudgey=-nudge_y
+        }
+        p1=p1+ggrepel::geom_text_repel(data=dat_labels, aes(x=pos_adj, y=log10p, label=Gene_Symbol),nudge_x=nudge_x,nudge_y=nudgey,size=label_size,
                               segment.size=0.2, color=dat_labels$color,segment.color = "black",
-                              direction="both",angle=0, vjust=0, max.iter=5000) # fontface=gene_labels_top$fontface,
-      }
+                             max.iter=10000,direction="both",angle=angle) # fontface=gene_labels_top$fontface,  direction="both",angle=0, vjust=0, 
     }
   }
+    
+  }
+  
    if(length(dat)> ntop){
     p1=p1+geom_hline(yintercept = log10(5.1e-9), color="red", linetype="dashed")
    }
@@ -179,16 +203,23 @@ manhattan_multi=function(dat, ntop=2, shades=shades, label_size=3, ymax=NULL,ymi
   #add the legend for the different datasets
   if(! is.null(legend_name)) legend_name=legend_name
   if(is.null(legend_labels)){
-    legend_labels=color[1:length(dat)]
-    print("Use the legend_labels argument to change the legend labels from color names to meaningful labels! ")
+   if(length(dat) > 1){
+      legend_labels=color[1:length(dat)]
+      print("Use the legend_labels argument to change the legend labels from color names to meaningful labels! ")
+    }
   }
-  p1=p1+scale_color_identity(guide = "legend", name=legend_name,  breaks=color[1:length(dat)],labels=legend_labels)
+  if(length(dat) == 1){ #no need to use a legend when there is only one phenotype on display
+    p1=p1+scale_color_identity(breaks=color[1:length(dat)])
+  }
+  else{ 
+    p1=p1+scale_color_identity(guide = "legend", name=legend_name,  breaks=color[1:length(dat)],labels=legend_labels)
+  }
   return(p1)
 }
 
 
-manhattan_single=function(df, variants=variants, legend_name="Variants:",color=NULL,
-                          legend_labels=NULL,variants_color=NULL,annotation_thresh=NULL){
+manhattan_single=function(df, variants=variants, legend_name="Variants:",color=NULL,nudge_x=0.1,nudge_y=0.2,
+                          legend_labels=NULL,variants_color=NULL,annotate=NULL){
   #df=df %>% dplyr::mutate(pos_adj=POS+offsets[CHROM])
   #set and get ticknames and tickpositions -requires pos_adj to be included in the df
   df$col_code=df$CHROM%%2
@@ -199,7 +230,7 @@ manhattan_single=function(df, variants=variants, legend_name="Variants:",color=N
     if(length(variants)> 0){
 
       for(i in 1:length(variants)){
-        p1 = p1 + suppressWarnings(ggrepel::geom_text_repel(data=variants[[i]], aes(x=pos_adj,y=-log10(P),label=ifelse(P<annotation_thresh, Gene_Symbol,"")), color="grey40",size=3,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
+        p1 = p1 + suppressWarnings(ggrepel::geom_text_repel(data=variants[[i]], aes(x=pos_adj,y=-log10(P),label=ifelse(P<annotate, Gene_Symbol,"")), color="grey40",size=3,direction="both",nudge_x = nudge_x,nudge_y = nudge_y,segment.size=0.2,segment.alpha =.5))
         p1 = p1 + geom_point(data=variants[[i]], aes(x=pos_adj, y=-log10(P),color=color), size=variants[[i]]$size, shape=variants[[i]]$shape)
       }
     }
