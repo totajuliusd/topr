@@ -21,7 +21,7 @@
 #' @param size Optional parameter setting the size of the plot points (default: \code{size=1.2})
 #' @param alpha A number or vector of numbers setting the transparancy of the plotted points
 #' @param shape A number of vector of numers setting the shape of the plotted points
-#' @param annotation_thresh Display annotation for variants with p-values below this threshold
+#' @param annotate Display annotation for variants with p-values below this threshold
 #' @param label_size Optional parameter to set the size of the plot labels (default: \code{label_size=3.5})
 #' @param sign_thresh Optional parameter setting the threshold of the dashed red horizontal line representing the significance threshold (default: \code{sign_thresh=5.1e-9}). Multiple thresholds can be provided in a vector, e.g \code{sign_thresh=c(5.1e-9,1.0e-6)}). Set this parameter to NULL if you dont want this line to appear at all \code{sign_thresh=NULL}
 #' @param sign_thresh_color set the color of the significance threshold line or lines
@@ -50,24 +50,28 @@
 #' @param geneplot_label_size Size of the labels for the genes on the gene and exon plots
 #' @param show_xaxis show the xaxis
 #' @param protein_coding_only Set this parameter to TRUE to only use protein coding genes for annotation
+#' @param region the size of the region used when annotating the top variant in a region (default value is 10000000 or 10 MB)
+#' @param nudge_x  To vertically adjust the starting position of each gene label (this is a ggrepel parameter) 
+#' @param nudge_y  To horizontally adjust the starting position of each gene label (this is a ggrepel parameter)
+#' @param angle The angle of the text label 
 #'
 #' @return a chromosome plot (ggplot object)
-#' @export
+#' @export 
 #'
 #' @examples
 #' \dontrun{
 #' data(gwas_CD)
 #' snps_CD <- get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region = 10000000)
 #' CHR="chr16"
-#' chromplot(gwas_CD,chr=CHR, variants = snps_CD, annotation_thresh = 5e-09)
+#' chromplot(gwas_CD,chr=CHR, variants = snps_CD, annotate = 5e-09)
 #' }
 
 
-chromplot=function(dat, annotation_thresh = NULL, title = "", size = 1.2, shape = 19, alpha = 1,
+chromplot=function(dat, annotate = NULL, title = "", size = 1.2, shape = 19, alpha = 1,
                    color = c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"),
                    label_size=3.5,sign_thresh=5.1e-9, sign_thresh_color="red", legend_position="right",.checked = FALSE, show_xaxis = TRUE,
                    axis_text_size=11,title_text_size=12,axis_title_size=13,legend_title_size=12, legend_text_size = 12,
-                   variant_ids_color=NULL,protein_coding_only=FALSE,
+                   variant_ids_color=NULL,protein_coding_only=FALSE,region=10000000,nudge_x=0.01,nudge_y=0.01,variants_color="red",
                    legend_labels = NULL, legend_name="Data",xmin=0, highlight_genes=NULL,highlight_genes_ypos=NULL,highlight_genes_color=NULL,
                    variants=NULL,xmax=NULL,ymin=NULL,ymax=NULL,chr=NULL,vline=NULL,variant_ids=NULL){
 
@@ -90,23 +94,24 @@ chromplot=function(dat, annotation_thresh = NULL, title = "", size = 1.2, shape 
       set_color(color)
 
     #check and set variants
-    if(! is.null(annotation_thresh)){
+    if(! is.null(annotate)){
       if (! is.null(variants)) {
         is_df_empty(variants, "variants")
-        if(is.data.frame(variants)) variants=list(variants)
-        variants=dat_column_check_and_set(variants)
-        variants=dat_chr_check(variants)
+       
       }
       else{
-        variants=get_best_snp_per_MB(dat, thresh = annotation_thresh,protein_coding_only = protein_coding_only)
+        variants=get_best_snp_per_MB(dat, thresh = annotate,protein_coding_only = protein_coding_only,region=region)
       }
+      if(is.data.frame(variants)) variants=list(variants)
+      variants=dat_column_check_and_set(variants)
+      variants=dat_chr_check(variants)
       variants=filter_on_chr(variants,chr)
       variants=filter_on_xmin_xmax(variants,xmin,xmax)
-      variant_color=color
-      if(length(dat) == 1) variant_color="red"
+      
+      #if(length(dat) == 1) variant_color="red"
       variants=set_size_shape_alpha(variants,size,shape,alpha)
-      variants=set_color(variants,variant_color)
-      variants=set_annotation_thresh(variants,annotation_thresh)
+      variants=set_color(variants,variants_color)
+      variants=set_annotate(variants,annotate)
     }
 
   }
@@ -137,7 +142,7 @@ chromplot=function(dat, annotation_thresh = NULL, title = "", size = 1.2, shape 
       p1=p1+geom_point(data=variants[[i]], aes(x=POS, y=-log10(P)),color=variants[[i]]$color, size=variants[[i]]$size, shape=variants[[i]]$shape)
     }
   }
-  if(! is.null(annotation_thresh)){
+  if(! is.null(annotate)){
     if(! is.null(variants)){
       for(i in 1:length(variants)){
         if(length(dat) == 1) {
@@ -146,9 +151,9 @@ chromplot=function(dat, annotation_thresh = NULL, title = "", size = 1.2, shape 
           varcol=variants[[i]]$color
         }
         if(show_xaxis) { #we are in whole chromosome view and want to display the Gene_Symbol for the variant
-          p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants[[i]], aes(x=POS,y=-log10(P),label=ifelse(P<annotation_thresh, Gene_Symbol,"")), color=varcol,size=label_size,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
+          p1=p1+ggrepel::geom_text_repel(data=variants[[i]], aes(x=POS,y=-log10(P),label=ifelse(P<annotate, Gene_Symbol,"")), color="grey40",size=label_size,direction="both",nudge_x = nudge_x,nudge_y = nudge_y,segment.size=0.2,segment.alpha =.5)
         }else{ #in region view, display the variant ID instead of the gene_symbol
-          p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants[[i]], aes(x=POS,y=-log10(P),label=ifelse(P<annotation_thresh, ID,"")), color=varcol,size=label_size,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
+          p1=p1+ggrepel::geom_text_repel(data=variants[[i]], aes(x=POS,y=-log10(P),label=ifelse(P<annotate, ID,"")), color="grey40",size=label_size,direction="both",nudge_x = nudge_x,nudge_y = nudge_y,segment.size=0.2,segment.alpha =.5)
         }
       }
     }
@@ -160,7 +165,7 @@ chromplot=function(dat, annotation_thresh = NULL, title = "", size = 1.2, shape 
       for(i in 1:length(dat)){
         df=dat[[i]]
         variants2label=df %>% filter(ID %in% variant_ids) %>% distinct(ID, .keep_all = T)
-        p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants2label, aes(x=POS,y=-log10(P), label=ID), color="grey40",direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5))
+        p1=p1+suppressWarnings(ggrepel::geom_text_repel(data=variants2label, aes(x=POS,y=-log10(P), label=ID), color="grey40",direction="both",nudge_x = nudge_x,nudge_y = nudge_y,segment.size=0.2,segment.alpha =.5))
         if(is.null(variant_ids_color)) variant_ids_color="red"
         p1=p1+geom_point(data=variants2label, aes(x=POS, y=-log10(P),color=variant_ids_color),shape=variants2label$shape,size=variants2label$size,alpha=variants2label$alpha)
       }
@@ -184,7 +189,7 @@ chromplot=function(dat, annotation_thresh = NULL, title = "", size = 1.2, shape 
   if((! is.null(xmax) && (! is.null(xmin))))
     p1=p1 + coord_cartesian(xlim=c(xmin,xmax))
 
-  if(zoom_y)  p1=p1+coord_cartesian(ylim=c(ymin,ymax))
+  if(zoom_y){  p1=p1+coord_cartesian(ylim=c(ymin,ymax))}
 
     #add the legend
   if(! is.null(legend_name)) legend_name=legend_name

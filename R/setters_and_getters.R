@@ -17,14 +17,14 @@ set_shape_by_impact=function(dat){
   return(dat)
 }
 
-set_annotation_thresh=function(dat,annotation_thresh){
-  if(! is.null(annotation_thresh)){
+set_annotate=function(dat,annotate){
+  if(! is.null(annotate)){
     for(i in 1:length(dat)){
-      if(!is.null(annotation_thresh) & nrow(dat[[i]]>0)){
-        if(is.vector(annotation_thresh) & (length(annotation_thresh) >= i))
-          dat[[i]]$annotation_thresh=annotation_thresh[i]
+      if(!is.null(annotate) & nrow(dat[[i]]>0)){
+        if(is.vector(annotate) & (length(annotate) >= i))
+          dat[[i]]$annotate=annotate[i]
         else
-          dat[[i]]$annotation_thresh=annotation_thresh
+          dat[[i]]$annotate=annotate
       }
     }
   }
@@ -187,17 +187,21 @@ get_chr_from_df=function(df){
 }
 
 
-get_shades=function(offsets,dat,ntop,include_chrX){
+get_shades=function(offsets,dat,ntop,include_chrX,ymin=NULL,ymax=NULL){
   n_offsets=11
   if(!(include_chrX)) n_offsets=10
 
   y1=c(rep(0, n_offsets))  #if there is no bottom plot
-  ymin=get_ymin(ntop,dat)
-
+  
+  if(is.null(ymin)){
+    ymin=get_ymin(ntop,dat,multi=TRUE)
+  }
   if(length(dat) > ntop){
     y1=c(rep(ymin, n_offsets))
   }
-  ymax=get_ymax(ntop,dat)
+  if(is.null(ymax)){
+    ymax=get_ymax(ntop,dat)
+  }
   gene_label_size=2
 
   ##### here we need to accoutn for whether we have chr X or not
@@ -217,9 +221,10 @@ get_shades=function(offsets,dat,ntop,include_chrX){
 }
 get_ymax=function(ntop,dat){
   ymax=0
+  if(is.data.frame(dat)) dat=list(dat)
   if(length(dat)<ntop) ntop=length(dat)
   for(i in 1:ntop){
-    tmp=max(dat[[i]]$log10p)
+    tmp=max(-log10(dat[[i]]$P))
     if(tmp>ymax){
       ymax=tmp
     }
@@ -227,12 +232,22 @@ get_ymax=function(ntop,dat){
   return(ymax)
 }
 
-get_ymin=function(ntop,dat){
+get_ymin=function(ntop,dat,multi=FALSE){
   ymin=0
-  if(ntop < length(dat)){
+  if(is.data.frame(dat)) dat=list(dat)
+  if(length(dat)<ntop) ntop=length(dat)
+  if(multi){
     for(i in ntop:length(dat)){
-      tmp=min(dat[[i]]$log10p)
+        tmp=min(dat[[i]]$log10p)
       if(tmp<ymin){
+        ymin=tmp
+      }
+    }
+  }
+  else{
+    for(i in ntop:length(dat)){
+      tmp=min(-log10(dat[[i]]$P))
+      if(tmp>ymin){
         ymin=tmp
       }
     }
@@ -292,13 +307,17 @@ get_ticknames=function(df){
 #' data(gwas_CD)
 #' get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region = 10000000)
 #' }
-get_best_snp_per_MB=function(df,thresh=1e-09,region=1000000,protein_coding_only=FALSE){
+get_best_snp_per_MB=function(df,thresh=1e-09,region=1000000,protein_coding_only=FALSE,chr=NULL){
   dat=df
   if(is.data.frame(dat)) dat=list(dat)
   dat=dat_column_check_and_set(dat)
   dat=dat_chr_check(dat)
   df=dat[[1]]
   df$CHROM=gsub("chr","", df$CHROM)
+  if(! is.null(chr)){
+    chr=gsub("chr","", chr)
+    df=df %>% filter(CHROM==chr)
+  }
   df=df %>% filter(P<thresh)
   df$tmp=NA
   for(row in 1:nrow(df)){
@@ -384,3 +403,26 @@ get_top_hit <- function(df, chr=NULL){
 
   return(top_hit)
 }
+
+
+
+#' Get the top hit from the dataframe
+#'
+#' @description
+#'
+#' \code{get_topr_colors()} Get the top hit from the dataframe
+#' All other input parameters are optional
+#'
+#' @return Vector of colors used for plotting
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' get_topr_colors()
+#'
+get_topr_colors=function(){
+  return(c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"))
+}
+
+
+

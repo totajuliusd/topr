@@ -25,20 +25,18 @@
 #' }
 
 
-regionplot=function(dat, annotation_thresh=NULL, title="",label_all=0,xmin=0, size=2, shape=19, alpha=1,label_size=4,
-                    color=c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"),
+regionplot=function(dat, annotate=NULL, title="",label_all=0,xmin=0, size=2, shape=19, alpha=1,label_size=4,
+                    color=c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"),variants_color="red",
                     axis_text_size=11,axis_title_size=12,title_text_size=13,legend_title_size=12,legend_text_size=12,
                     show_genes=FALSE, show_overview=TRUE, show_exons=FALSE,sign_thresh=5.1e-9,sign_thresh_color="red", genes=NULL,variants=NULL,variant_ids=NULL,
-                    variant_ids_color="red",xmax=NULL,ymin=NULL,ymax=NULL,protein_coding_only=FALSE,
+                    variant_ids_color="red",xmax=NULL,ymin=NULL,ymax=NULL,protein_coding_only=FALSE,region=1000000,nudge_x=0.01,nudge_y=0.01,
                     chr=NULL,vline=NULL,legend_name="Data:",legend_position="right",legend_labels=NULL,gene=NULL,highlight_genes=NULL,highlight_genes_color=NULL){
   # three plots, overview_plot, main_plot and gene_plot
   #only include overview plot if df region is larger than the region between xmin and xmax
   #dat=list(gwas_ukbb,gwas_abbvie)
 
   is_df_empty(dat,"main dat")
-  if(! is.null(variants)){
-    is_df_empty(variants, "variants")
-  }
+
   if(! is.null(gene)){
     gene_df=get_gene_coords(gene,chr)
     if(dim(gene_df)[1]==0){
@@ -66,30 +64,32 @@ regionplot=function(dat, annotation_thresh=NULL, title="",label_all=0,xmin=0, si
   dat_full=dat
   dat=filter_on_xmin_xmax(dat,xmin,xmax)
   #check and set variants
-  if(! is.null(annotation_thresh)){
+  if(! is.null(annotate)){
 
     if(! is.null(variants)){
-      if(is.data.frame(variants)) variants=list(variants)
-      variants=dat_column_check_and_set(variants)
-      variants=dat_chr_check(variants)
+      is_df_empty(variants, "variants")
     }
+
     else{
-       variants=get_best_snp_per_MB(dat, thresh = annotation_thresh,protein_coding_only = protein_coding_only)
+       variants=get_best_snp_per_MB(dat, thresh = annotate,protein_coding_only = protein_coding_only,region=region)
     }
+    
+    if(is.data.frame(variants)) variants=list(variants)
+    variants=dat_column_check_and_set(variants)
+    variants=dat_chr_check(variants)
       variants=filter_on_chr(variants,chr)
       variants=filter_on_xmin_xmax(variants,xmin,xmax)
-      variant_color=color
       if(length(dat) == 1) variant_color="red"
       variants=set_size_shape_alpha(variants,size,shape,alpha)
-      variants=set_color(variants,variant_color)
-      variants=set_annotation_thresh(variants,annotation_thresh)
+      variants=set_color(variants,variants_color)
+      variants=set_annotate(variants,annotate)
 
   }
 
-  main_plot=chromplot(dat, variants=variants,annotation_thresh=annotation_thresh,xmin=xmin,xmax=xmax,ymin=ymin, ymax=ymax,show_xaxis = F,size=size,
+  main_plot=chromplot(dat, variants=variants,variants_color=variants_color,annotate=annotate,xmin=xmin,xmax=xmax,ymin=ymin, ymax=ymax,show_xaxis = F,size=size,
                       shape=shape,alpha=alpha, color=color,.checked=TRUE, label_size=label_size, variant_ids=variant_ids,variant_ids_color=variant_ids_color,
                       vline=vline,legend_name=legend_name,legend_position = legend_position,legend_labels=legend_labels,sign_thresh=sign_thresh,
-                      sign_thresh_color=sign_thresh_color,chr=chr,highlight_genes=highlight_genes,highlight_genes_color=highlight_genes_color,
+                      sign_thresh_color=sign_thresh_color,chr=chr,highlight_genes=highlight_genes,highlight_genes_color=highlight_genes_color,nudge_x=nudge_x,nudge_y=nudge_y,
                       axis_text_size=axis_text_size,axis_title_size=axis_title_size,title_text_size=title_text_size,legend_title_size=legend_title_size,legend_text_size=legend_text_size)
 
   if(show_overview){

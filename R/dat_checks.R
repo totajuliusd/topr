@@ -48,7 +48,7 @@ dat_column_check_and_set=function(dat){
     if(! "ID" %in% colnames(df)){
       df$ID=paste(df$CHROM, df$POS, sep="_")
     }
-    if(! "Gene_Symbol" %in% colnames(df)) df$Gene_Symbol=df$ID
+   # if(! "Gene_Symbol" %in% colnames(df)) df$Gene_Symbol=df$ID
     if("Gene_Symbol" %in% colnames(df)){
       df$Gene_Symbol=sub(",.*","", df$Gene_Symbol)
       df$Gene_Symbol=ifelse(df$Gene_Symbol == ".",df$ID, df$Gene_Symbol)

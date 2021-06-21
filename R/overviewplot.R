@@ -1,5 +1,5 @@
 
-mk_overview_plot=function(dat,annotation_thresh=1e-08, xmin=0,xmax=0,sign_thresh=1e-09, sign_thresh_color="red",chr=NULL){
+mk_overview_plot=function(dat,xmin=0,xmax=0,sign_thresh=1e-09, sign_thresh_color="red",chr=NULL){
   if(is.null(chr))
     chr=get_chr_from_df(dat[[1]])
   df=dat[[1]]
