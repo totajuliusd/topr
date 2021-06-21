@@ -8,7 +8,8 @@ get_best_snp_per_MB(
   df,
   thresh = 1e-09,
   region = 1e+06,
-  protein_coding_only = FALSE
+  protein_coding_only = FALSE,
+  chr = NULL
 )
 }
 \arguments{

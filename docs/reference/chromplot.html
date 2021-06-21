@@ -76,7 +76,7 @@ E.g. chromplot(multi_chr_dataset,chr = &quot;chr15&quot;)" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">topR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
       </span>
     </div>
 
@@ -130,7 +130,7 @@ chromosome can be used as input if provided with the <code>chr parameter</code>.
 
     <pre class="usage"><span class='fu'>chromplot</span><span class='op'>(</span>
   <span class='va'>dat</span>,
-  annotation_thresh <span class='op'>=</span> <span class='cn'>NULL</span>,
+  annotate <span class='op'>=</span> <span class='cn'>NULL</span>,
   title <span class='op'>=</span> <span class='st'>""</span>,
   size <span class='op'>=</span> <span class='fl'>1.2</span>,
   shape <span class='op'>=</span> <span class='fl'>19</span>,
@@ -149,6 +149,10 @@ chromosome can be used as input if provided with the <code>chr parameter</code>.
   legend_text_size <span class='op'>=</span> <span class='fl'>12</span>,
   variant_ids_color <span class='op'>=</span> <span class='cn'>NULL</span>,
   protein_coding_only <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  region <span class='op'>=</span> <span class='fl'>1e+07</span>,
+  nudge_x <span class='op'>=</span> <span class='fl'>0.01</span>,
+  nudge_y <span class='op'>=</span> <span class='fl'>0.01</span>,
+  variants_color <span class='op'>=</span> <span class='st'>"red"</span>,
   legend_labels <span class='op'>=</span> <span class='cn'>NULL</span>,
   legend_name <span class='op'>=</span> <span class='st'>"Data"</span>,
   xmin <span class='op'>=</span> <span class='fl'>0</span>,
@@ -168,7 +172,7 @@ chromosome can be used as input if provided with the <code>chr parameter</code>.
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>annotation_thresh</th>
+      <th>annotate</th>
       <td><p>Display annotation for variants with p-values below this threshold</p></td>
     </tr>
     <tr>
@@ -240,6 +244,22 @@ chromosome can be used as input if provided with the <code>chr parameter</code>.
       <td><p>Set this parameter to TRUE to only use protein coding genes for annotation</p></td>
     </tr>
     <tr>
+      <th>region</th>
+      <td><p>the size of the region used when annotating the top variant in a region (default value is 10000000 or 10 MB)</p></td>
+    </tr>
+    <tr>
+      <th>nudge_x</th>
+      <td><p>To vertically adjust the starting position of each gene label (this is a ggrepel parameter)</p></td>
+    </tr>
+    <tr>
+      <th>nudge_y</th>
+      <td><p>To horizontally adjust the starting position of each gene label (this is a ggrepel parameter)</p></td>
+    </tr>
+    <tr>
+      <th>variants_color</th>
+      <td><p>One color or a vector of colors in case multiple variant dataframes are provided</p></td>
+    </tr>
+    <tr>
       <th>legend_labels</th>
       <td><p>Legend labels</p></td>
     </tr>
@@ -297,10 +317,6 @@ Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise
       <td><p>Sets the size of the rectangle, default is 500 kb</p></td>
     </tr>
     <tr>
-      <th>variants_color</th>
-      <td><p>One color or a vector of colors in case multiple variant dataframes are provided</p></td>
-    </tr>
-    <tr>
       <th>variants_size</th>
       <td><p>A number or a vector of numbers (default: 1.2)</p></td>
     </tr>
@@ -316,6 +332,10 @@ Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise
       <th>geneplot_label_size</th>
       <td><p>Size of the labels for the genes on the gene and exon plots</p></td>
     </tr>
+    <tr>
+      <th>angle</th>
+      <td><p>The angle of the text label</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -327,7 +347,7 @@ Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>gwas_CD</span><span class='op'>)</span>
 <span class='va'>snps_CD</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_best_snp_per_MB.html'>get_best_snp_per_MB</a></span><span class='op'>(</span><span class='va'>gwas_CD</span>, thresh <span class='op'>=</span> <span class='fl'>1e-09</span>, region <span class='op'>=</span> <span class='fl'>10000000</span><span class='op'>)</span>
 <span class='va'>CHR</span><span class='op'>=</span><span class='st'>"chr16"</span>
-<span class='fu'>chromplot</span><span class='op'>(</span><span class='va'>gwas_CD</span>,chr<span class='op'>=</span><span class='va'>CHR</span>, variants <span class='op'>=</span> <span class='va'>snps_CD</span>, annotation_thresh <span class='op'>=</span> <span class='fl'>5e-09</span><span class='op'>)</span>
+<span class='fu'>chromplot</span><span class='op'>(</span><span class='va'>gwas_CD</span>,chr<span class='op'>=</span><span class='va'>CHR</span>, variants <span class='op'>=</span> <span class='va'>snps_CD</span>, annotate <span class='op'>=</span> <span class='fl'>5e-09</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div></pre>
   </div>

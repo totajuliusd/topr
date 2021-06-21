@@ -74,7 +74,7 @@ All other input parameters are optional" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">topR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
       </span>
     </div>
 
@@ -145,10 +145,15 @@ Required parameter is at least one dataset (dataframe) containing the associatio
   legend_text_size <span class='op'>=</span> <span class='fl'>12</span>,
   rect <span class='op'>=</span> <span class='cn'>NULL</span>,
   protein_coding_only <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  nudge_x <span class='op'>=</span> <span class='fl'>0.1</span>,
+  nudge_y <span class='op'>=</span> <span class='fl'>0.2</span>,
+  angle <span class='op'>=</span> <span class='fl'>0</span>,
   variants <span class='op'>=</span> <span class='cn'>NULL</span>,
   legend_labels <span class='op'>=</span> <span class='cn'>NULL</span>,
   legend_name <span class='op'>=</span> <span class='cn'>NULL</span>,
-  annotation_thresh <span class='op'>=</span> <span class='cn'>NULL</span>,
+  annotate <span class='op'>=</span> <span class='cn'>NULL</span>,
+  region <span class='op'>=</span> <span class='fl'>1e+07</span>,
+  traditional <span class='op'>=</span> <span class='cn'>FALSE</span>,
   ymin <span class='op'>=</span> <span class='cn'>NULL</span>,
   ymax <span class='op'>=</span> <span class='cn'>NULL</span>,
   variants_color <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -241,6 +246,18 @@ Required parameter is at least one dataset (dataframe) containing the associatio
       <td><p>Set this parameter to TRUE to only use protein coding genes for annotation</p></td>
     </tr>
     <tr>
+      <th>nudge_x</th>
+      <td><p>To vertically adjust the starting position of each gene label (this is a ggrepel parameter)</p></td>
+    </tr>
+    <tr>
+      <th>nudge_y</th>
+      <td><p>To horizontally adjust the starting position of each gene label (this is a ggrepel parameter)</p></td>
+    </tr>
+    <tr>
+      <th>angle</th>
+      <td><p>The angle of the text label</p></td>
+    </tr>
+    <tr>
       <th>variants</th>
       <td><p>Optional parameter, a dataset (required columns are <code>CHROM,POS,P</code>) with a list of variants to display and label on the plot.
 Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise with ID.  If neither Gene_Symbol nor ID are in the dataset, the variant will be labelled with its position (CHROM and POS)</p></td>
@@ -254,8 +271,12 @@ Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise
       <td><p>Change the name of the legend (default: None)</p></td>
     </tr>
     <tr>
-      <th>annotation_thresh</th>
+      <th>annotate</th>
       <td><p>Display annotation for variants with p-values below this threshold</p></td>
+    </tr>
+    <tr>
+      <th>region</th>
+      <td><p>the size of the region used when annotating the top variant in a region (default value is 10000000 or 10 MB)</p></td>
     </tr>
     <tr>
       <th>ymin</th>

@@ -1,3 +1,11 @@
+# 1.0.4
+
+* Minor bugfixes
+
+# 1.0.3
+
+* Minor bugfixes
+
 # 1.0.2
 
 * Minor bugfixes
