@@ -1,6 +1,6 @@
 Package: topR
 Title: Create custom plots for viewing genetic association results using ggplot
-Version: 1.0.3
+Version: 1.0.4
 Authors@R: c(
     person("Genuity", "Science", role = c("aut", "cre","cph"), email = "support@genuitysci.com"),
     person("Thorhildur", "Juliusdottir", role = "aut", email = "thorhildur@genuitysci.com"),

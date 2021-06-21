@@ -6,7 +6,7 @@
 \usage{
 chromplot(
   dat,
-  annotation_thresh = NULL,
+  annotate = NULL,
   title = "",
   size = 1.2,
   shape = 19,
@@ -25,6 +25,10 @@ chromplot(
   legend_text_size = 12,
   variant_ids_color = NULL,
   protein_coding_only = FALSE,
+  region = 1e+07,
+  nudge_x = 0.01,
+  nudge_y = 0.01,
+  variants_color = "red",
   legend_labels = NULL,
   legend_name = "Data",
   xmin = 0,
@@ -41,7 +45,7 @@ chromplot(
 )
 }
 \arguments{
-\item{annotation_thresh}{Display annotation for variants with p-values below this threshold}
+\item{annotate}{Display annotation for variants with p-values below this threshold}
 
 \item{title}{Plot title (optional)}
 
@@ -77,6 +81,14 @@ chromplot(
 
 \item{protein_coding_only}{Set this parameter to TRUE to only use protein coding genes for annotation}
 
+\item{region}{the size of the region used when annotating the top variant in a region (default value is 10000000 or 10 MB)}
+
+\item{nudge_x}{To vertically adjust the starting position of each gene label (this is a ggrepel parameter)}
+
+\item{nudge_y}{To horizontally adjust the starting position of each gene label (this is a ggrepel parameter)}
+
+\item{variants_color}{One color or a vector of colors in case multiple variant dataframes are provided}
+
 \item{legend_labels}{Legend labels}
 
 \item{legend_name}{Change the name of the legend (default: None)}
@@ -106,8 +118,6 @@ Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise
 
 \item{rect_range}{Sets the size of the rectangle, default is 500 kb}
 
-\item{variants_color}{One color or a vector of colors in case multiple variant dataframes are provided}
-
 \item{variants_size}{A number or a vector of numbers (default: 1.2)}
 
 \item{variants_alpha}{A number or a vector of numbers (default: 1)}
@@ -115,6 +125,8 @@ Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise
 \item{variants_shape}{A number or a vector of numbers (default: 19)}
 
 \item{geneplot_label_size}{Size of the labels for the genes on the gene and exon plots}
+
+\item{angle}{The angle of the text label}
 }
 \value{
 a chromosome plot (ggplot object)
@@ -133,6 +145,6 @@ E.g. \code{chromplot(multi_chr_dataset,chr = "chr15")}
 data(gwas_CD)
 snps_CD <- get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region = 10000000)
 CHR="chr16"
-chromplot(gwas_CD,chr=CHR, variants = snps_CD, annotation_thresh = 5e-09)
+chromplot(gwas_CD,chr=CHR, variants = snps_CD, annotate = 5e-09)
 }
 }

@@ -6,7 +6,7 @@
 \usage{
 regionplot(
   dat,
-  annotation_thresh = NULL,
+  annotate = NULL,
   title = "",
   label_all = 0,
   xmin = 0,
@@ -15,6 +15,7 @@ regionplot(
   alpha = 1,
   label_size = 4,
   color = c("darkblue", "#E69F00", "#00AFBB", "#999999", "#FC4E07", "darkorange1"),
+  variants_color = "red",
   axis_text_size = 11,
   axis_title_size = 12,
   title_text_size = 13,
@@ -33,6 +34,9 @@ regionplot(
   ymin = NULL,
   ymax = NULL,
   protein_coding_only = FALSE,
+  region = 1e+06,
+  nudge_x = 0.01,
+  nudge_y = 0.01,
   chr = NULL,
   vline = NULL,
   legend_name = "Data:",
@@ -44,7 +48,7 @@ regionplot(
 )
 }
 \arguments{
-\item{annotation_thresh}{Display annotation for variants with p-values below this threshold}
+\item{annotate}{Display annotation for variants with p-values below this threshold}
 
 \item{title}{Plot title (optional)}
 
@@ -59,6 +63,8 @@ regionplot(
 \item{label_size}{Optional parameter to set the size of the plot labels (default: \code{label_size=3.5})}
 
 \item{color}{Optional parameter setting the color of the plot points (default: \code{color="darkblue"})}
+
+\item{variants_color}{One color or a vector of colors in case multiple variant dataframes are provided}
 
 \item{axis_text_size}{Text size of the x and y axes tick labels (default: 12)}
 
@@ -96,6 +102,12 @@ Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise
 \item{ymax}{Optional parameters, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
 
 \item{protein_coding_only}{Set this parameter to TRUE to only use protein coding genes for annotation}
+
+\item{region}{the size of the region used when annotating the top variant in a region (default value is 10000000 or 10 MB)}
+
+\item{nudge_x}{To vertically adjust the starting position of each gene label (this is a ggrepel parameter)}
+
+\item{nudge_y}{To horizontally adjust the starting position of each gene label (this is a ggrepel parameter)}
 
 \item{chr}{The chromosome to plot (i.e. chr15), only required if the input dataframe contains results from more than one chromosome}
 

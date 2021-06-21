@@ -25,10 +25,15 @@ manhattan(
   legend_text_size = 12,
   rect = NULL,
   protein_coding_only = FALSE,
+  nudge_x = 0.1,
+  nudge_y = 0.2,
+  angle = 0,
   variants = NULL,
   legend_labels = NULL,
   legend_name = NULL,
-  annotation_thresh = NULL,
+  annotate = NULL,
+  region = 1e+07,
+  traditional = FALSE,
   ymin = NULL,
   ymax = NULL,
   variants_color = NULL,
@@ -78,6 +83,12 @@ manhattan(
 
 \item{protein_coding_only}{Set this parameter to TRUE to only use protein coding genes for annotation}
 
+\item{nudge_x}{To vertically adjust the starting position of each gene label (this is a ggrepel parameter)}
+
+\item{nudge_y}{To horizontally adjust the starting position of each gene label (this is a ggrepel parameter)}
+
+\item{angle}{The angle of the text label}
+
 \item{variants}{Optional parameter, a dataset (required columns are \code{CHROM,POS,P}) with a list of variants to display and label on the plot.
 Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise with ID.  If neither Gene_Symbol nor ID are in the dataset, the variant will be labelled with its position (CHROM and POS)}
 
@@ -85,7 +96,9 @@ Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise
 
 \item{legend_name}{Change the name of the legend (default: None)}
 
-\item{annotation_thresh}{Display annotation for variants with p-values below this threshold}
+\item{annotate}{Display annotation for variants with p-values below this threshold}
+
+\item{region}{the size of the region used when annotating the top variant in a region (default value is 10000000 or 10 MB)}
 
 \item{ymin}{Optional parameters, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
 
