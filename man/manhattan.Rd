@@ -8,50 +8,58 @@ manhattan(
   df,
   ntop = 3,
   title = "",
-  color = c("darkblue", "#E69F00", "#00AFBB", "#999999", "#FC4E07", "darkorange1"),
+  annotate = NULL,
+  color = get_topr_colors(),
   sign_thresh = 5e-09,
+  sign_thresh_color = "red",
+  sign_thresh_label_size = 3.5,
   label_size = 3,
   size = 1,
   shape = 19,
   alpha = 1,
   highlight_genes_color = "green",
-  variants_size = 1.2,
-  variants_alpha = 1,
-  variants_shape = 19,
+  highlight_genes_ypos = 1,
   axis_text_size = 11,
   axis_title_size = 12,
   title_text_size = 13,
   legend_title_size = 12,
   legend_text_size = 12,
+  protein_coding_only = TRUE,
+  angle = 0,
+  legend_labels = NULL,
+  gene = NULL,
+  gene_region = 1e+05,
+  chr = NULL,
+  annotate_with = "Gene_Symbol",
+  region = 1e+07,
+  legend_name = NULL,
+  legend_position = NULL,
   rect = NULL,
-  protein_coding_only = FALSE,
   nudge_x = 0.1,
   nudge_y = 0.2,
-  angle = 0,
-  variants = NULL,
-  legend_labels = NULL,
-  legend_name = NULL,
-  annotate = NULL,
-  region = 1e+07,
-  traditional = FALSE,
+  xmin = NULL,
+  xmax = NULL,
   ymin = NULL,
   ymax = NULL,
-  variants_color = NULL,
-  highlight_genes = NULL,
-  highlight_genes_ypos = NULL,
-  legend_position = NULL
+  highlight_genes = NULL
 )
 }
 \arguments{
-\item{df}{Dataframe (required columns are \code{CHROM,POS,P}), in upper- or lowercase) to use for the plot. See examples on how to retrieve the dataset with GOR.}
+\item{df}{Dataframe or a list of dataframes (required columns are \code{CHROM,POS,P}), in upper- or lowercase) of association results.}
 
 \item{ntop}{Number of datasets (GWASes) to show on the top plot}
 
-\item{title}{Plot title (optional)}
+\item{title}{Plot title (optional}
+
+\item{annotate}{Display annotation for variants with p-values below this threshold}
 
 \item{color}{Optional parameter setting the color of the plot points (default: \code{color="darkblue"})}
 
 \item{sign_thresh}{Optional parameter setting the threshold of the dashed red horizontal line representing the significance threshold (default: \code{sign_thresh=5.1e-9}). Multiple thresholds can be provided in a vector, e.g \code{sign_thresh=c(5.1e-9,1.0e-6)}). Set this parameter to NULL if you dont want this line to appear at all \code{sign_thresh=NULL}}
+
+\item{sign_thresh_color}{set the color of the significance threshold line or lines}
+
+\item{sign_thresh_label_size}{Set the text size of the label for the signficance thresholdds (default text sizze is 3.5)}
 
 \item{label_size}{Optional parameter to set the size of the plot labels (default: \code{label_size=3.5})}
 
@@ -63,11 +71,7 @@ manhattan(
 
 \item{highlight_genes_color}{Colors for the hihglighted genes (default: green)}
 
-\item{variants_size}{A number or a vector of numbers (default: 1.2)}
-
-\item{variants_alpha}{A number or a vector of numbers (default: 1)}
-
-\item{variants_shape}{A number or a vector of numbers (default: 19)}
+\item{highlight_genes_ypos}{Display the genes at this position on the y-axis (default value is 1)}
 
 \item{axis_text_size}{Text size of the x and y axes tick labels (default: 12)}
 
@@ -79,41 +83,40 @@ manhattan(
 
 \item{legend_text_size}{Text size of the legend text}
 
-\item{rect}{Rectangle to add to the plot}
-
 \item{protein_coding_only}{Set this parameter to TRUE to only use protein coding genes for annotation}
+
+\item{angle}{The angle of the text label}
+
+\item{legend_labels}{Legend labels}
+
+\item{gene}{Zoom in on this gene (e.g. gene=FTO)}
+
+\item{gene_region}{The size of the region around the gene, if the gene argument was used (default: gene_region=100000)}
+
+\item{chr}{The chromosome to plot (i.e. chr15), only required if the input dataframe contains results from more than one chromosome}
+
+\item{annotate_with}{Annotate the variants with eiher Gene_Symbol or ID (default annotate_with="Gene_Symbol")}
+
+\item{region}{the size of the region used when annotating the top variant in a region (default value is 10000000 or 10 MB)}
+
+\item{legend_name}{Change the name of the legend (default: None)}
+
+\item{legend_position}{Top,bottom,left or right}
+
+\item{rect}{Rectangle to add to the plot}
 
 \item{nudge_x}{To vertically adjust the starting position of each gene label (this is a ggrepel parameter)}
 
 \item{nudge_y}{To horizontally adjust the starting position of each gene label (this is a ggrepel parameter)}
 
-\item{angle}{The angle of the text label}
+\item{xmin, xmax}{Parameters setting the chromosomal range to display on the x-axis}
 
-\item{variants}{Optional parameter, a dataset (required columns are \code{CHROM,POS,P}) with a list of variants to display and label on the plot.
-Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise with ID.  If neither Gene_Symbol nor ID are in the dataset, the variant will be labelled with its position (CHROM and POS)}
-
-\item{legend_labels}{Legend labels}
-
-\item{legend_name}{Change the name of the legend (default: None)}
-
-\item{annotate}{Display annotation for variants with p-values below this threshold}
-
-\item{region}{the size of the region used when annotating the top variant in a region (default value is 10000000 or 10 MB)}
-
-\item{ymin}{Optional parameters, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
-
-\item{ymax}{Optional parameters, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
-
-\item{variants_color}{One color or a vector of colors in case multiple variant dataframes are provided}
+\item{ymin, ymax}{Optional parameters, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
 
 \item{highlight_genes}{A vector of genes or genes to highlight the datapoints for on the plot}
-
-\item{highlight_genes_ypos}{Display the genes at this position on the y-axis (default value is 1)}
-
-\item{legend_position}{Top,bottom,left or right}
 }
 \value{
-plots using egg (https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html)
+ggplot object
 }
 \description{
 \code{manhattan()} displays the association results for the entire genome
@@ -126,4 +129,5 @@ All other input parameters are optional
 data(gwas_CD)
 manhattan(gwas_CD)
 }
+
 }

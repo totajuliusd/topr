@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Region plot — regionplot • topR</title>
+<title>Region plot — regionplot • topr</title>
 
 
 <!-- jquery -->
@@ -76,8 +76,8 @@ All other input parameters are optional" />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">topR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <a class="navbar-link" href="../index.html">topr</a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0</span>
       </span>
     </div>
 
@@ -131,58 +131,63 @@ Required parameter is at least one dataset (dataframe) containing the associatio
     </div>
 
     <pre class="usage"><span class='fu'>regionplot</span><span class='op'>(</span>
-  <span class='va'>dat</span>,
+  <span class='va'>df</span>,
+  ntop <span class='op'>=</span> <span class='fl'>3</span>,
   annotate <span class='op'>=</span> <span class='cn'>NULL</span>,
-  title <span class='op'>=</span> <span class='st'>""</span>,
-  label_all <span class='op'>=</span> <span class='fl'>0</span>,
   xmin <span class='op'>=</span> <span class='fl'>0</span>,
   size <span class='op'>=</span> <span class='fl'>2</span>,
   shape <span class='op'>=</span> <span class='fl'>19</span>,
   alpha <span class='op'>=</span> <span class='fl'>1</span>,
   label_size <span class='op'>=</span> <span class='fl'>4</span>,
-  color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"darkblue"</span>, <span class='st'>"#E69F00"</span>, <span class='st'>"#00AFBB"</span>, <span class='st'>"#999999"</span>, <span class='st'>"#FC4E07"</span>, <span class='st'>"darkorange1"</span><span class='op'>)</span>,
-  variants_color <span class='op'>=</span> <span class='st'>"red"</span>,
+  annotate_with <span class='op'>=</span> <span class='st'>"ID"</span>,
+  color <span class='op'>=</span> <span class='fu'><a href='get_topr_colors.html'>get_topr_colors</a></span><span class='op'>(</span><span class='op'>)</span>,
   axis_text_size <span class='op'>=</span> <span class='fl'>11</span>,
   axis_title_size <span class='op'>=</span> <span class='fl'>12</span>,
   title_text_size <span class='op'>=</span> <span class='fl'>13</span>,
-  legend_title_size <span class='op'>=</span> <span class='fl'>12</span>,
-  legend_text_size <span class='op'>=</span> <span class='fl'>12</span>,
   show_genes <span class='op'>=</span> <span class='cn'>FALSE</span>,
   show_overview <span class='op'>=</span> <span class='cn'>TRUE</span>,
   show_exons <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  sign_thresh <span class='op'>=</span> <span class='fl'>5.1e-09</span>,
+  max_genes <span class='op'>=</span> <span class='fl'>200</span>,
+  sign_thresh <span class='op'>=</span> <span class='fl'>5e-09</span>,
   sign_thresh_color <span class='op'>=</span> <span class='st'>"red"</span>,
-  genes <span class='op'>=</span> <span class='cn'>NULL</span>,
-  variants <span class='op'>=</span> <span class='cn'>NULL</span>,
-  variant_ids <span class='op'>=</span> <span class='cn'>NULL</span>,
-  variant_ids_color <span class='op'>=</span> <span class='st'>"red"</span>,
+  sign_thresh_label_size <span class='op'>=</span> <span class='fl'>3.5</span>,
   xmax <span class='op'>=</span> <span class='cn'>NULL</span>,
   ymin <span class='op'>=</span> <span class='cn'>NULL</span>,
   ymax <span class='op'>=</span> <span class='cn'>NULL</span>,
   protein_coding_only <span class='op'>=</span> <span class='cn'>FALSE</span>,
   region <span class='op'>=</span> <span class='fl'>1e+06</span>,
+  gene_region <span class='op'>=</span> <span class='fl'>1e+05</span>,
+  angle <span class='op'>=</span> <span class='fl'>0</span>,
+  legend_title_size <span class='op'>=</span> <span class='fl'>12</span>,
+  legend_text_size <span class='op'>=</span> <span class='fl'>12</span>,
   nudge_x <span class='op'>=</span> <span class='fl'>0.01</span>,
   nudge_y <span class='op'>=</span> <span class='fl'>0.01</span>,
-  chr <span class='op'>=</span> <span class='cn'>NULL</span>,
-  vline <span class='op'>=</span> <span class='cn'>NULL</span>,
+  rsids <span class='op'>=</span> <span class='cn'>NULL</span>,
+  rsids_color <span class='op'>=</span> <span class='st'>"red"</span>,
   legend_name <span class='op'>=</span> <span class='st'>"Data:"</span>,
   legend_position <span class='op'>=</span> <span class='st'>"right"</span>,
+  chr <span class='op'>=</span> <span class='cn'>NULL</span>,
+  vline <span class='op'>=</span> <span class='cn'>NULL</span>,
+  show_gene_names <span class='op'>=</span> <span class='cn'>NULL</span>,
   legend_labels <span class='op'>=</span> <span class='cn'>NULL</span>,
   gene <span class='op'>=</span> <span class='cn'>NULL</span>,
-  highlight_genes <span class='op'>=</span> <span class='cn'>NULL</span>,
-  highlight_genes_color <span class='op'>=</span> <span class='cn'>NULL</span>
+  title <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>annotate</th>
-      <td><p>Display annotation for variants with p-values below this threshold</p></td>
+      <th>df</th>
+      <td><p>Dataframe or a list of dataframes (required columns are <code>CHROM,POS,P</code>), in upper- or lowercase) of association results.</p></td>
     </tr>
     <tr>
-      <th>title</th>
-      <td><p>Plot title (optional)</p></td>
+      <th>ntop</th>
+      <td><p>Number of datasets (GWASes) to show on the top plot</p></td>
+    </tr>
+    <tr>
+      <th>annotate</th>
+      <td><p>Display annotation for variants with p-values below this threshold</p></td>
     </tr>
     <tr>
       <th>xmin</th>
@@ -205,12 +210,12 @@ Required parameter is at least one dataset (dataframe) containing the associatio
       <td><p>Optional parameter to set the size of the plot labels (default: <code>label_size=3.5</code>)</p></td>
     </tr>
     <tr>
-      <th>color</th>
-      <td><p>Optional parameter setting the color of the plot points (default: <code>color="darkblue"</code>)</p></td>
+      <th>annotate_with</th>
+      <td><p>Annotate the variants with eiher Gene_Symbol or ID (default annotate_with="Gene_Symbol")</p></td>
     </tr>
     <tr>
-      <th>variants_color</th>
-      <td><p>One color or a vector of colors in case multiple variant dataframes are provided</p></td>
+      <th>color</th>
+      <td><p>Optional parameter setting the color of the plot points (default: <code>color="darkblue"</code>)</p></td>
     </tr>
     <tr>
       <th>axis_text_size</th>
@@ -225,14 +230,6 @@ Required parameter is at least one dataset (dataframe) containing the associatio
       <td><p>Text size of the plot title (default: 13)</p></td>
     </tr>
     <tr>
-      <th>legend_title_size</th>
-      <td><p>Text size of the legend title</p></td>
-    </tr>
-    <tr>
-      <th>legend_text_size</th>
-      <td><p>Text size of the legend text</p></td>
-    </tr>
-    <tr>
       <th>show_genes</th>
       <td><p>Show genes instead of exons (default show_genes=FALSE)</p></td>
     </tr>
@@ -242,7 +239,11 @@ Required parameter is at least one dataset (dataframe) containing the associatio
     </tr>
     <tr>
       <th>show_exons</th>
-      <td><p>Show exons instead of genees (default show_exons=FALSE)#'</p></td>
+      <td><p>Show exons instead of genees (default show_exons=FALSE)</p></td>
+    </tr>
+    <tr>
+      <th>max_genes</th>
+      <td><p>Only label the genes if they are fewer than max_genes (default values is 200).</p></td>
     </tr>
     <tr>
       <th>sign_thresh</th>
@@ -253,21 +254,8 @@ Required parameter is at least one dataset (dataframe) containing the associatio
       <td><p>set the color of the significance threshold line or lines</p></td>
     </tr>
     <tr>
-      <th>genes</th>
-      <td><p>List of genes or exons to plot</p></td>
-    </tr>
-    <tr>
-      <th>variants</th>
-      <td><p>Optional parameter, a dataset (required columns are <code>CHROM,POS,P</code>) with a list of variants to display and label on the plot.
-Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise with ID.  If neither Gene_Symbol nor ID are in the dataset, the variant will be labelled with its position (CHROM and POS)</p></td>
-    </tr>
-    <tr>
-      <th>variant_ids</th>
-      <td><p>A vector of variant ids to highlight on the plot, e.g. variant_ids=c("rs1234, rs45898")</p></td>
-    </tr>
-    <tr>
-      <th>variant_ids_color</th>
-      <td><p>The color of the variants in variants_id (default color is red)</p></td>
+      <th>sign_thresh_label_size</th>
+      <td><p>Set the text size of the label for the signficance thresholdds (default text sizze is 3.5)</p></td>
     </tr>
     <tr>
       <th>xmax</th>
@@ -290,6 +278,22 @@ Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise
       <td><p>the size of the region used when annotating the top variant in a region (default value is 10000000 or 10 MB)</p></td>
     </tr>
     <tr>
+      <th>gene_region</th>
+      <td><p>The size of the region around the gene, if the gene argument was used (default: gene_region=100000)</p></td>
+    </tr>
+    <tr>
+      <th>angle</th>
+      <td><p>The angle of the text label</p></td>
+    </tr>
+    <tr>
+      <th>legend_title_size</th>
+      <td><p>Text size of the legend title</p></td>
+    </tr>
+    <tr>
+      <th>legend_text_size</th>
+      <td><p>Text size of the legend text</p></td>
+    </tr>
+    <tr>
       <th>nudge_x</th>
       <td><p>To vertically adjust the starting position of each gene label (this is a ggrepel parameter)</p></td>
     </tr>
@@ -298,12 +302,12 @@ Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise
       <td><p>To horizontally adjust the starting position of each gene label (this is a ggrepel parameter)</p></td>
     </tr>
     <tr>
-      <th>chr</th>
-      <td><p>The chromosome to plot (i.e. chr15), only required if the input dataframe contains results from more than one chromosome</p></td>
+      <th>rsids</th>
+      <td><p>A vector of rs ids to highlight on the plot, e.g. rsids=c("rs1234, rs45898")</p></td>
     </tr>
     <tr>
-      <th>vline</th>
-      <td><p>Parameter (optional) to add a vertical line to the plot at a specific chromosomal position, e.g <code>vline=204000066</code>. Multiple values can be provided in a vector, e.g  <code>vline=c(204000066,100500188)</code></p></td>
+      <th>rsids_color</th>
+      <td><p>The color of the variants in variants_id (default color is red)</p></td>
     </tr>
     <tr>
       <th>legend_name</th>
@@ -314,26 +318,38 @@ Variants will be labeled with Gene_Symbol if present in the dataframe, otherwise
       <td><p>Top,bottom,left or right</p></td>
     </tr>
     <tr>
+      <th>chr</th>
+      <td><p>The chromosome to plot (i.e. chr15), only required if the input dataframe contains results from more than one chromosome</p></td>
+    </tr>
+    <tr>
+      <th>vline</th>
+      <td><p>Parameter (optional) to add a vertical line to the plot at a specific chromosomal position, e.g <code>vline=204000066</code>. Multiple values can be provided in a vector, e.g  <code>vline=c(204000066,100500188)</code></p></td>
+    </tr>
+    <tr>
+      <th>show_gene_names</th>
+      <td><p>Show the gene names even though they exceed the max_genes count</p></td>
+    </tr>
+    <tr>
       <th>legend_labels</th>
       <td><p>Legend labels</p></td>
     </tr>
     <tr>
-      <th>highlight_genes</th>
-      <td><p>A vector of genes or genes to highlight the datapoints for on the plot</p></td>
+      <th>gene</th>
+      <td><p>Zoom in on this gene (e.g. gene=FTO)</p></td>
     </tr>
     <tr>
-      <th>highlight_genes_color</th>
-      <td><p>Colors for the hihglighted genes (default: green)</p></td>
+      <th>title</th>
+      <td><p>Plot title (optional</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>ggplot object</p>
+    <p>plots using egg (https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>regionplot</span><span class='op'>(</span><span class='va'>df</span>,xmin<span class='op'>=</span><span class='va'>xmin</span>,xmax<span class='op'>=</span><span class='va'>xmax</span><span class='op'>)</span>
+<span class='fu'>regionplot</span><span class='op'>(</span><span class='va'>df</span>,gene<span class='op'>=</span><span class='st'>"FTO"</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div></pre>
   </div>

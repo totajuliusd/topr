@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>QQ Plot — qqplot • topR</title>
+<title>QQ Plot — qqplot • topr</title>
 
 
 <!-- jquery -->
@@ -71,8 +71,8 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">topR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <a class="navbar-link" href="../index.html">topr</a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0</span>
       </span>
     </div>
 
@@ -86,18 +86,6 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/regionplot_example.html">Regionplot Example</a>
-    </li>
-  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -132,14 +120,21 @@
     <p>QQ Plot</p>
     </div>
 
-    <pre class="usage"><span class='fu'>qqplot</span><span class='op'>(</span><span class='va'>df</span>, scale <span class='op'>=</span> <span class='fl'>1</span>, n_variants <span class='op'>=</span> <span class='fl'>0</span>, fontfamily <span class='op'>=</span> <span class='st'>""</span>, breaks <span class='op'>=</span> <span class='fl'>15</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>qqplot</span><span class='op'>(</span>
+  <span class='va'>dat</span>,
+  scale <span class='op'>=</span> <span class='fl'>1</span>,
+  n_variants <span class='op'>=</span> <span class='fl'>0</span>,
+  fontfamily <span class='op'>=</span> <span class='st'>""</span>,
+  breaks <span class='op'>=</span> <span class='fl'>15</span>,
+  color <span class='op'>=</span> <span class='fu'><a href='get_topr_colors.html'>get_topr_colors</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>df</th>
-      <td><p>dataframe with required data</p></td>
+      <th>dat</th>
+      <td><p>Dataframe or a list of dataframes (required columns is <code>P</code>)) of association results.</p></td>
     </tr>
     <tr>
       <th>scale</th>
@@ -152,6 +147,14 @@
     <tr>
       <th>fontfamily</th>
       <td><p>font</p></td>
+    </tr>
+    <tr>
+      <th>breaks</th>
+      <td><p>number of breaks for the axes</p></td>
+    </tr>
+    <tr>
+      <th>color</th>
+      <td><p>the color of the datapoints, can be one color or multiple</p></td>
     </tr>
     </table>
 
@@ -170,7 +173,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Genuity Science, Thorhildur Juliusdottir.</p>
+  <p>Developed by Genuity Science, Thorhildur Juliusdottir, Andri Stefansson.</p>
 </div>
 
 <div class="pkgdown">
