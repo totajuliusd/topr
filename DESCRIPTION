@@ -1,6 +1,6 @@
-Package: topR
+Package: topr
 Title: Create custom plots for viewing genetic association results using ggplot
-Version: 1.0.4
+Version: 0.0.0
 Authors@R: c(
     person("Genuity", "Science", role = c("aut", "cre","cph"), email = "support@genuitysci.com"),
     person("Thorhildur", "Juliusdottir", role = "aut", email = "thorhildur@genuitysci.com"),
@@ -8,7 +8,7 @@ Authors@R: c(
     )
 URL: https://github.com/wuxi-nextcode/topr
 BugReports: https://github.com/wuxi-nextcode/topr/issues
-Description: topR is a collection of plotting functions for visualizing and exploring genetic association results. Association results from multiple phenotypes can be viewed simultaneously, over the entire genome (Manhattan plot) or in the more detailed regional view.
+Description: topr is a collection of plotting functions for visualizing and exploring genetic association results. Association results from multiple phenotypes can be viewed simultaneously, over the entire genome (Manhattan plot) or in the more detailed regional view.
 License: LGPL (>= 3)
 Encoding: UTF-8
 LazyData: true
@@ -36,6 +36,7 @@ Imports:
     egg,
     grid,
     gridExtra,
-    magrittr (>= 1.5)
+    magrittr (>= 1.5),
+    utils
 Depends: 
     R (>= 2.10)

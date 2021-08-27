@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Create custom plots for viewing genetic association results using ggplot • topR</title>
+<title>Create custom plots for viewing genetic association results using ggplot • topr</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Create custom plots for viewing genetic association results using ggplot">
-<meta property="og:description" content="topR is a collection of plotting functions for visualizing and exploring genetic association results. Association results from multiple phenotypes can be viewed simultaneously, over the entire genome (Manhattan plot) or in the more detailed regional view.">
+<meta property="og:description" content="topr is a collection of plotting functions for visualizing and exploring genetic association results. Association results from multiple phenotypes can be viewed simultaneously, over the entire genome (Manhattan plot) or in the more detailed regional view.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -30,8 +30,8 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">topR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <a class="navbar-link" href="index.html">topr</a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0</span>
       </span>
     </div>
 
@@ -72,24 +72,28 @@
 <div id="topr" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#topr" class="anchor"></a>topR</h1></div>
-<p>See full documentation at <a href="https://wuxi-nextcode.github.io/topR/" class="uri">https://wuxi-nextcode.github.io/topR/</a></p>
+<p>See full documentation at <a href="https://wuxi-nextcode.github.io/topr/" class="uri">https://wuxi-nextcode.github.io/topr/</a></p>
 <div id="installing-from-github-using-devtools" class="section level3">
 <h3 class="hasAnchor">
-<a href="#installing-from-github-using-devtools" class="anchor"></a>Installing from github using <code>devtools</code>
-</h3>
+<a href="#installing-from-github-using-devtools" class="anchor"></a>Installing from github using devtools</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#devtools::install_github("wuxi-nextcode/topR")</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"wuxi-nextcode/topr"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
-<p>In this example we demonstrate the basic usage of the topR library.</p>
+<p>In this example we demonstrate the basic usage of the topr library.</p>
 <div id="load-packages" class="section level3">
 <h3 class="hasAnchor">
 <a href="#load-packages" class="anchor"></a>Load packages</h3>
-<p>First load the <code>topr</code> package, the <code>tidyverse</code> package is recommended in general, but not required for this example</p>
+<p>First load the topr package, the tidyverse package is recommended in general, but not required for this example</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wuxi-nextcode/topr">topR</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wuxi-nextcode/topr">topr</a></span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'topr'</span>
+<span class="co">#&gt; The following object is masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     qqplot</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
 <span class="co">#&gt; ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</span>
 <span class="co">#&gt; ✔ ggplot2 3.3.3     ✔ purrr   0.3.4</span>
@@ -98,120 +102,142 @@
 <span class="co">#&gt; ✔ readr   1.4.0     ✔ forcats 0.5.0</span>
 <span class="co">#&gt; ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──</span>
 <span class="co">#&gt; ✖ dplyr::filter() masks stats::filter()</span>
-<span class="co">#&gt; ✖ dplyr::lag()    masks stats::lag()</span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/slowkow/ggrepel">ggrepel</a></span><span class="op">)</span></code></pre></div>
+<span class="co">#&gt; ✖ dplyr::lag()    masks stats::lag()</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/slowkow/ggrepel">ggrepel</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="loading-and-exploring-prebuilt-datasets" class="section level3">
 <h3 class="hasAnchor">
 <a href="#loading-and-exploring-prebuilt-datasets" class="anchor"></a>Loading and exploring prebuilt datasets</h3>
-<p>Load the <code>gwas_CD</code> dataset, which is a subset of association results (SNPs with P&lt;1e-03) for Crohn´s disease from the UK biobank.</p>
+<p>Load the gwas_CD dataset, which is a subset of association results (SNPs with P&lt;1e-03) for Crohn´s disease from the UK biobank.</p>
 <p>It is highly recommended to theck the number of datapoints in your dataset before you plot, since a very large dataset will take a long time to plot.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">gwas_CD</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">gwas_CD</span><span class="op">)</span>
-<span class="co">#&gt;   CHROM     POS          ID       REF ALT        SE           P       OR</span>
-<span class="co">#&gt; 1  chr1 1006415 rs145588482 TGGCAGCTC   T 0.1540620 0.000468758 0.583384</span>
-<span class="co">#&gt; 2  chr1 1006415 rs145588482 TGGCAGCTC   T 0.1540620 0.000468758 0.583384</span>
-<span class="co">#&gt; 3  chr1 1007256  rs76233940         G   A 0.1540250 0.000401567 0.579783</span>
-<span class="co">#&gt; 4  chr1 1007256  rs76233940         G   A 0.1540250 0.000401567 0.579783</span>
-<span class="co">#&gt; 5  chr1 1007256  rs76233940         G   A 0.1540250 0.000401567 0.579783</span>
-<span class="co">#&gt; 6  chr1 1341559 rs376494450         C   T 0.0732974 0.000151216 1.320130</span>
-<span class="co">#&gt;          AF Gene_Symbol Max_Impact         max_consequence</span>
-<span class="co">#&gt; 1 0.0129317  AL645608.3     LOWEST downstream_gene_variant</span>
-<span class="co">#&gt; 2 0.0129317       ISG15        LOW          intron_variant</span>
-<span class="co">#&gt; 3 0.0130091  AL645608.1     LOWEST downstream_gene_variant</span>
-<span class="co">#&gt; 4 0.0130091  AL645608.3     LOWEST downstream_gene_variant</span>
-<span class="co">#&gt; 5 0.0130091       ISG15        LOW          intron_variant</span>
-<span class="co">#&gt; 6 0.0270627        DVL1        LOW          intron_variant</span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Number of SNPs in the dataset: ["</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">gwas_CD</span><span class="op">$</span><span class="va">POS</span><span class="op">)</span>,<span class="st">"]"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Number of SNPs in the dataset: ["</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">CD_UKBB</span><span class="op">$</span><span class="va">POS</span><span class="op">)</span>,<span class="st">"]"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
 <span class="co">#&gt; [1] "Number of SNPs in the dataset: [26821]"</span></code></pre></div>
 </div>
 <div id="manhattan-plots" class="section level3">
 <h3 class="hasAnchor">
 <a href="#manhattan-plots" class="anchor"></a>Manhattan plots</h3>
 <p>Get an overview of association results for crohn’s disease (CD) in a Manhattan plot</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="va">CD_UKBB</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="120%"></p>
+</div>
+<div id="qq-plots" class="section level3">
+<h3 class="hasAnchor">
+<a href="#qq-plots" class="anchor"></a>QQ plots</h3>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/qqtopr.html">qqtopr</a></span><span class="op">(</span><span class="va">CD_UKBB</span>,n_variants<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">CD_UKBB</span><span class="op">$</span><span class="va">POS</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="label-the-top-snps-with-the-name-of-their-nearest-gene" class="section level3">
+<h3 class="hasAnchor">
+<a href="#label-the-top-snps-with-the-name-of-their-nearest-gene" class="anchor"></a>Label the top SNPs with the name of their nearest gene</h3>
+<p>Use the annotate argument in the manhattan function to label the top SNPs with p-values below the annotate threshold with their nearest gene</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="va">gwas_CD</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="va">CD_UKBB</span>, annotate <span class="op">=</span> <span class="fl">1e-09</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="120%"></p>
 </div>
-<div id="label-the-top-snps-with-the-name-of-the-nearest-gene" class="section level3">
-<h3 class="hasAnchor">
-<a href="#label-the-top-snps-with-the-name-of-the-nearest-gene" class="anchor"></a>Label the top SNPs with the name of the nearest gene</h3>
-<p>Use the <code>get_best_snp_per_MB</code> function to extract the top/lead SNPs from the crohns dataset. Then include them in the manhattan call function with the variants argument.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">snps_CD</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_best_snp_per_MB.html">get_best_snp_per_MB</a></span><span class="op">(</span><span class="va">gwas_CD</span>, thresh <span class="op">=</span> <span class="fl">1e-09</span>, region <span class="op">=</span> <span class="fl">10000000</span><span class="op">)</span>
-<span class="fu"><a href="reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="va">gwas_CD</span>, variants<span class="op">=</span><span class="va">snps_CD</span>, annotation_thresh <span class="op">=</span> <span class="fl">1e-09</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="120%"> ## Label the position of genes of interest</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">genes</span><span class="op">=</span><span class="fu"><a href="reference/get_genes_by_Gene_Symbol.html">get_genes_by_Gene_Symbol</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"NOD2"</span>,<span class="st">"ULK2"</span>,<span class="st">"THADA"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">snps_CD</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_best_snp_per_MB.html">get_best_snp_per_MB</a></span><span class="op">(</span><span class="va">gwas_CD</span>, thresh <span class="op">=</span> <span class="fl">1e-09</span>, region <span class="op">=</span> <span class="fl">10000000</span><span class="op">)</span>
-<span class="fu"><a href="reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="va">gwas_CD</span>, variants<span class="op">=</span><span class="va">snps_CD</span>, annotation_thresh <span class="op">=</span> <span class="fl">1e-09</span>, highlight_genes<span class="op">=</span><span class="va">genes</span>,highlight_genes_ypos <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-9-1.png" width="120%"></p>
 </div>
-<div id="chromplot" class="section level3">
+<div id="highlight-genes-of-interest" class="section level2">
+<h2 class="hasAnchor">
+<a href="#highlight-genes-of-interest" class="anchor"></a>Highlight genes of interest</h2>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="va">CD_UKBB</span>, annotate <span class="op">=</span> <span class="fl">1e-09</span>, highlight_genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"NOD2"</span>,<span class="st">"IL23R"</span>,<span class="st">"JAK2"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="120%"></p>
+<div id="view-one-chromsome-only" class="section level3">
 <h3 class="hasAnchor">
-<a href="#chromplot" class="anchor"></a>Chromplot</h3>
-<p>Take a closer look at the results by chromosome. Here we plot the results on chromosome 16 only.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">CHR</span><span class="op">=</span><span class="st">"chr16"</span>
-<span class="fu"><a href="reference/chromplot.html">chromplot</a></span><span class="op">(</span><span class="va">gwas_CD</span>,chr<span class="op">=</span><span class="va">CHR</span>, variants <span class="op">=</span> <span class="va">snps_CD</span>, annotation_thresh <span class="op">=</span> <span class="fl">5e-09</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="120%"></p>
+<a href="#view-one-chromsome-only" class="anchor"></a>View one chromsome only</h3>
+<p>Take a closer look at the results by chromosome. Here we plot the results on chromosome 7 only.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="va">CD_UKBB</span>, annotate <span class="op">=</span> <span class="fl">1e-09</span>, chr <span class="op">=</span> <span class="st">"7"</span><span class="op">)</span>
+<span class="co">#&gt; [1] "7"</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-9-1.png" width="120%"></p>
 </div>
 <div id="regionplot" class="section level3">
 <h3 class="hasAnchor">
 <a href="#regionplot" class="anchor"></a>Regionplot</h3>
-<p>Zoom in further on the chromosome plot with the <code>regionplot</code> function.</p>
-<p>Zoom in on a gene of interest:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/regionplot.html">regionplot</a></span><span class="op">(</span><span class="va">gwas_CD</span>, gene<span class="op">=</span><span class="st">"NOD2"</span><span class="op">)</span>
-<span class="co">#&gt; [1] "Zoomed to region: chr16:50593587-50834041"</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="120%"></p>
+<p>Zoom in further on the chromosome plot with the regionplot function.</p>
+<p>Zoom in on a gene of interest, e.g IKZF1:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/regionplot.html">regionplot</a></span><span class="op">(</span><span class="va">CD_UKBB</span>, gene<span class="op">=</span><span class="st">"IKZF1"</span>, annotate<span class="op">=</span> <span class="fl">1e-09</span><span class="op">)</span>
+<span class="co">#&gt; [1] "7"</span>
+<span class="co">#&gt; [1] "Zoomed to region:  chr7:50204067-50505101"</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="120%"></p>
 <p>Zoom in on the top hit on a chromosome</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">CHR</span><span class="op">=</span><span class="st">"chr1"</span>
-<span class="va">top_hit</span><span class="op">=</span><span class="fu"><a href="reference/get_top_hit.html">get_top_hit</a></span><span class="op">(</span><span class="va">gwas_CD</span>,chr<span class="op">=</span><span class="va">CHR</span><span class="op">)</span>
-<span class="va">xmin</span><span class="op">=</span><span class="va">top_hit</span><span class="op">$</span><span class="va">POS</span><span class="op">-</span><span class="fl">250000</span>
-<span class="va">xmax</span><span class="op">=</span><span class="va">top_hit</span><span class="op">$</span><span class="va">POS</span><span class="op">+</span><span class="fl">250000</span>
-<span class="fu"><a href="reference/regionplot.html">regionplot</a></span><span class="op">(</span><span class="va">gwas_CD</span>, chr <span class="op">=</span> <span class="va">CHR</span>, xmin<span class="op">=</span><span class="va">xmin</span>,xmax<span class="op">=</span><span class="va">xmax</span>,show_exons <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-<span class="co">#&gt; [1] "Zoomed to region: chr1:66966513-67466513"</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="120%"></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">CHR</span> <span class="op">&lt;-</span> <span class="st">"chr1"</span>
+<span class="va">top_hit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_top_hit.html">get_top_hit</a></span><span class="op">(</span><span class="va">CD_UKBB</span>,chr<span class="op">=</span><span class="va">CHR</span><span class="op">)</span>
+<span class="fu"><a href="reference/regionplot.html">regionplot</a></span><span class="op">(</span><span class="va">CD_UKBB</span>, chr <span class="op">=</span> <span class="va">CHR</span>, xmin<span class="op">=</span><span class="va">top_hit</span><span class="op">$</span><span class="va">POS</span><span class="op">-</span><span class="fl">250000</span> ,xmax<span class="op">=</span> <span class="va">top_hit</span><span class="op">$</span><span class="va">POS</span><span class="op">+</span><span class="fl">250000</span><span class="op">)</span>
+<span class="co">#&gt; [1] "1"</span>
+<span class="co">#&gt; [1] "Zoomed to region:  chr1:66966513-67466513"</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="120%"></p>
 </div>
-<div id="display-multiple-datasets-on-the-same-plot" class="section level3">
+<div id="display-multiple-phenotypesdatasets-on-the-same-plot" class="section level3">
 <h3 class="hasAnchor">
-<a href="#display-multiple-datasets-on-the-same-plot" class="anchor"></a>Display multiple datasets on the same plot</h3>
+<a href="#display-multiple-phenotypesdatasets-on-the-same-plot" class="anchor"></a>Display multiple phenotypes/datasets on the same plot</h3>
 <p>Display the output from more than one GWAS on the same plot</p>
 </div>
-<div id="chromplot---multiple-phenotypes" class="section level3">
+<div id="manhattan-multiple-phenotypes" class="section level3">
 <h3 class="hasAnchor">
-<a href="#chromplot---multiple-phenotypes" class="anchor"></a>Chromplot - multiple phenotypes</h3>
-<p>Take a closer look at the results by chromosome. Here we plot the results on chromosome 16 only.</p>
+<a href="#manhattan-multiple-phenotypes" class="anchor"></a>Manhattan multiple phenotypes</h3>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">CD_UKBB</span>,<span class="va">CD_FINNGEN</span>,<span class="va">UC_UKBB</span><span class="op">)</span>,legend_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CD UKBB"</span>,<span class="st">"CD Finngen"</span>,<span class="st">"UC UKBB"</span><span class="op">)</span>,title<span class="op">=</span><span class="st">"IBD"</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="120%"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">CHR</span><span class="op">=</span><span class="st">"chr16"</span>
-<span class="va">snps_CD_IIBD</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_best_snp_per_MB.html">get_best_snp_per_MB</a></span><span class="op">(</span><span class="va">gwas_CD_IIBD</span>, thresh <span class="op">=</span> <span class="fl">1e-09</span>, region <span class="op">=</span> <span class="fl">10000000</span><span class="op">)</span>
-<span class="fu"><a href="reference/chromplot.html">chromplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">gwas_CD_IIBD</span>,<span class="va">gwas_CD</span><span class="op">)</span>,chr<span class="op">=</span><span class="va">CHR</span>, variants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">snps_CD_IIBD</span>,<span class="va">snps_CD</span><span class="op">)</span>,
-          annotation_thresh <span class="op">=</span> <span class="fl">5e-09</span>, legend_labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Crohns IIBD"</span>, <span class="st">"Crohns UKBB"</span><span class="op">)</span>, alpha<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0.7</span><span class="op">)</span>,size<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/regionplot.html">regionplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">CD_UKBB</span>,<span class="va">CD_FINNGEN</span><span class="op">)</span>,gene<span class="op">=</span><span class="st">"NOD2"</span>, annotate<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1e-15</span>, <span class="fl">1e-09</span><span class="op">)</span>, legend_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"UKBB"</span>, <span class="st">"Finngen"</span><span class="op">)</span>, title<span class="op">=</span><span class="st">"Crohn's disease (CD)"</span><span class="op">)</span>
+<span class="co">#&gt; [1] "16"</span>
+<span class="co">#&gt; [1] "16"</span>
+<span class="co">#&gt; [1] "Zoomed to region:  chr16:50593587-50834041"</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-13-1.png" width="120%"></p>
-</div>
-<div id="manhattan---multiple-phenotypes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#manhattan---multiple-phenotypes" class="anchor"></a>Manhattan - multiple phenotypes</h3>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">gwas_CD_IIBD</span><span class="op">)</span>
-<span class="fu"><a href="reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">gwas_CD_IIBD</span>,<span class="va">gwas_CD</span><span class="op">)</span>, legend_labels<span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Crohns IIBD"</span>, <span class="st">"Crohns UKBB"</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">CD_UKBB</span>,<span class="va">CD_FINNGEN</span>,<span class="va">UC_UKBB</span><span class="op">)</span>,legend_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CD UKBB"</span>,<span class="st">"CD Finngen"</span>,<span class="st">"UC UKBB"</span><span class="op">)</span>,title<span class="op">=</span><span class="st">"IBD"</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-14-1.png" width="120%"></p>
+<div id="the-ntop-argument" class="section level4">
+<h4 class="hasAnchor">
+<a href="#the-ntop-argument" class="anchor"></a>The ntop argument</h4>
+<p>Use the ntop argument to set the number of datasets displayed at the top (default value is 3)</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">finngen_K11_CD_STRICT</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">finngen_CHRONSMALL</span><span class="op">)</span>
-<span class="va">genes</span><span class="op">=</span><span class="fu"><a href="reference/get_genes_by_Gene_Symbol.html">get_genes_by_Gene_Symbol</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"NOD2"</span>,<span class="st">"ULK2"</span>,<span class="st">"THADA"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">gwas_CD_IIBD</span>,<span class="va">gwas_CD</span>,<span class="va">finngen_K11_CD_STRICT</span>,<span class="va">finngen_CHRONSMALL</span><span class="op">)</span>,
-          ntop<span class="op">=</span><span class="fl">3</span>,
-          legend_labels<span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Crohns IIBD"</span>, <span class="st">"Crohns UKBB"</span>,<span class="st">"Crohns Finngen (K11 STRICT)"</span>, <span class="st">"Crohns finngen (CHRONSMALL)"</span><span class="op">)</span>,
-          alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0.5</span>,<span class="fl">0.3</span>,<span class="fl">1</span><span class="op">)</span>,
-          highlight_genes <span class="op">=</span> <span class="va">genes</span>,
-          highlight_genes_ypos <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">CD_UKBB</span>,<span class="va">CD_FINNGEN</span>,<span class="va">UC_UKBB</span><span class="op">)</span>,ntop<span class="op">=</span><span class="fl">2</span>,legend_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CD UKBB"</span>,<span class="st">"CD Finngen"</span>,<span class="st">"UC UKBB"</span><span class="op">)</span>,title<span class="op">=</span><span class="st">"IBD"</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-15-1.png" width="120%"></p>
+</div>
+</div>
+</div>
+<div id="useful-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#useful-functions" class="anchor"></a>Useful functions</h2>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/get_top_hit.html">get_top_hit</a></span><span class="op">(</span><span class="va">CD_UKBB</span>, chr<span class="op">=</span><span class="st">"chr16"</span><span class="op">)</span>
+<span class="va">dat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_best_snp_per_MB.html">get_best_snp_per_MB</a></span><span class="op">(</span><span class="va">CD_UKBB</span>,thresh <span class="op">=</span> <span class="fl">1e-07</span>, region<span class="op">=</span><span class="fl">1000000</span><span class="op">)</span>
+<span class="co">#get overlapping SNPS overlapping in two datasets</span>
+<span class="va">overlapping_snps</span> <span class="op">&lt;-</span> <span class="va">dat1</span> <span class="op">%&gt;%</span> <span class="fu"><a href="reference/get_overlapping_snps_by_pos.html">get_overlapping_snps_by_pos</a></span><span class="op">(</span><span class="va">CD_FINNGEN</span><span class="op">)</span>
+
+<span class="va">overlapping_snps_matched</span> <span class="op">&lt;-</span> <span class="va">overlapping_snps</span> <span class="op">%&gt;%</span> <span class="fu"><a href="reference/match_alleles.html">match_alleles</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">overl_snps_matched_pos_allele_dat1</span> <span class="op">&lt;-</span> <span class="va">overlapping_snps_matched</span> <span class="op">%&gt;%</span> <span class="fu"><a href="reference/flip_to_positive_allele_for_dat1.html">flip_to_positive_allele_for_dat1</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">snpset1</span> <span class="op">&lt;-</span> <span class="va">overl_snps_matched_pos_allele_dat1</span> <span class="op">%&gt;%</span> <span class="fu"><a href="reference/annotate_with_nearest_gene.html">annotate_with_nearest_gene</a></span><span class="op">(</span>protein_coding_only <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
+
+<span class="co">#or do all this in one go, by calling the create_snpset functon</span>
+<span class="va">snpset1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/create_snpset.html">create_snpset</a></span><span class="op">(</span><span class="va">CD_FINNGEN</span>, <span class="va">CD_UKBB</span>, thresh <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span>
+<span class="va">snpset2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/create_snpset.html">create_snpset</a></span><span class="op">(</span><span class="va">CD_UKBB</span>, <span class="va">CD_FINNGEN</span>, thresh<span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">e1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/effect_plot.html">effect_plot</a></span><span class="op">(</span><span class="va">snpset1</span>, pheno_x<span class="op">=</span><span class="st">"CD Finngen"</span>, pheno_y<span class="op">=</span><span class="st">"CD UKBB"</span>,color<span class="op">=</span><span class="fu"><a href="reference/get_topr_colors.html">get_topr_colors</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, gene_label_thresh <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="va">e2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/effect_plot.html">effect_plot</a></span><span class="op">(</span><span class="va">snpset2</span>, pheno_x<span class="op">=</span><span class="st">"CD UKBB"</span>, pheno_y<span class="op">=</span><span class="st">"CD Finngen"</span>, color<span class="op">=</span><span class="fu"><a href="reference/get_topr_colors.html">get_topr_colors</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, gene_label_thresh<span class="op">=</span><span class="fl">1</span>,annotate_with <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span>
+<span class="fu">grid.arrange</span><span class="op">(</span><span class="va">e1</span>,<span class="va">e2</span><span class="op">)</span></code></pre></div>
+<div id="plot-apperance-setting-text-sizes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#plot-apperance-setting-text-sizes" class="anchor"></a>Plot apperance: setting text sizes</h3>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">CD_UKBB</span>,<span class="va">CD_FINNGEN</span><span class="op">)</span>, annotate<span class="op">=</span><span class="fl">1e-09</span>,axis_title_size <span class="op">=</span> <span class="fl">20</span>,axis_text_size <span class="op">=</span> <span class="fl">16</span>,label_size <span class="op">=</span> <span class="fl">5</span>, title_text_size <span class="op">=</span> <span class="fl">16</span>, legend_text_size <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
+<span class="co">#&gt; [1] "Use the legend_labels argument to change the legend labels from color names to meaningful labels! "</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-18-1.png" width="120%"></p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/regionplot.html">regionplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">CD_UKBB</span>,<span class="va">CD_FINNGEN</span><span class="op">)</span>, gene<span class="op">=</span><span class="st">"IKZF1"</span>, vline<span class="op">=</span><span class="fl">50274703</span>,title<span class="op">=</span><span class="st">"CD UKBB"</span>, title_text_size <span class="op">=</span> <span class="fl">16</span>,axis_title_size <span class="op">=</span> <span class="fl">20</span>,axis_text_size <span class="op">=</span> <span class="fl">20</span>,legend_text_size <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
+<span class="co">#&gt; [1] "7"</span>
+<span class="co">#&gt; [1] "7"</span>
+<span class="co">#&gt; [1] "Use the legend_labels argument to change the legend labels from color names to meaningful labels! "</span>
+<span class="co">#&gt; Warning in min(dat[[i]]$log10p): no non-missing arguments to min; returning Inf</span>
+<span class="co">#&gt; Warning in max(dat[[i]]$log10p): no non-missing arguments to max; returning -Inf</span>
+<span class="co">#&gt; [1] "Zoomed to region:  chr7:50204067-50505101"</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-19-1.png" width="120%"></p>
+<p>Setting alpha, size and shape</p>
 </div>
 </div>
 </div>

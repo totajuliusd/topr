@@ -1,4 +1,4 @@
 library(testthat)
-library(topR)
+library(topr)
 
-test_check("topR")
+test_check("topr")

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get the top SNP per 10 MB — get_best_snp_per_MB • topR</title>
+<title>Get the top SNP per 10 MB — get_best_snp_per_MB • topr</title>
 
 
 <!-- jquery -->
@@ -72,8 +72,8 @@ All other input parameters are optional" />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">topR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <a class="navbar-link" href="../index.html">topr</a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0</span>
       </span>
     </div>
 
@@ -127,7 +127,8 @@ All other input parameters are optional</p>
   thresh <span class='op'>=</span> <span class='fl'>1e-09</span>,
   region <span class='op'>=</span> <span class='fl'>1e+06</span>,
   protein_coding_only <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  chr <span class='op'>=</span> <span class='cn'>NULL</span>
+  chr <span class='op'>=</span> <span class='cn'>NULL</span>,
+  .checked <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -139,21 +140,29 @@ All other input parameters are optional</p>
     </tr>
     <tr>
       <th>thresh</th>
-      <td><p>Threshold</p></td>
+      <td><p>P-value threshold, only consider variants with p-values below this threshold (1e-09 by default)</p></td>
     </tr>
     <tr>
       <th>region</th>
-      <td><p>region</p></td>
+      <td><p>Get the top/best variant (with p-value below thresh) within this region (region=1000000 by default)</p></td>
     </tr>
     <tr>
       <th>protein_coding_only</th>
       <td><p>Set this variable to TRUE to only use protein_coding genes for annotation</p></td>
     </tr>
+    <tr>
+      <th>chr</th>
+      <td><p>Use this argument to get the top variants from one chromosome only</p></td>
+    </tr>
+    <tr>
+      <th>.checked</th>
+      <td><p>If the input data has already been checked, this can be set to TRUE so it wont be checked again (FALSE by default)</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>numeric vector</p>
+    <p>Dataframe of lead variants. Returns the best variant per MB (by default, change the region size with the region argument) with p-values below the input threshold (thresh=1e-09 by default)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
