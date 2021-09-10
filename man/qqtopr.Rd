@@ -10,6 +10,7 @@ qqtopr(
   n_variants = 0,
   fontfamily = "",
   breaks = 15,
+  title = "",
   color = get_topr_colors()
 )
 }

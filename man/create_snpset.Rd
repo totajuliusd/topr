@@ -9,7 +9,8 @@ create_snpset(
   df2,
   thresh = 1e-08,
   protein_coding_only = TRUE,
-  region = 1e+06
+  region_size = 1e+06,
+  verbose = F
 )
 }
 \arguments{
@@ -21,7 +22,7 @@ create_snpset(
 
 \item{protein_coding_only}{Set this variable to TRUE to only use protein_coding genes for the annotation}
 
-\item{region}{The size of the interval which to extract the top snps from}
+\item{region_size}{The size of the interval which to extract the top snps from}
 }
 \value{
 Dataframe containing the top hit

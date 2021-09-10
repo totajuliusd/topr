@@ -1,5 +1,5 @@
 
-# topR
+# topr
 
 See full documentation at <https://wuxi-nextcode.github.io/topr/>
 

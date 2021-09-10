@@ -9,9 +9,9 @@ effect_plot(
   pheno_x = "x_pheno",
   pheno_y = "y_pheno",
   annotate_with = "Gene_Symbol",
-  thresh = 5e-07,
+  thresh = 1e-08,
   ci_thresh = 1,
-  gene_label_thresh = 1e-04,
+  gene_label_thresh = 1e-08,
   color = get_topr_colors()[1]
 )
 }

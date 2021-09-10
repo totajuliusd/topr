@@ -4,7 +4,7 @@
 \alias{match_alleles}
 \title{Match the variants in the snpset by their alleles}
 \usage{
-match_alleles(df)
+match_alleles(df, verbose = F)
 }
 \arguments{
 \item{df}{A dataframe that is in the snpset format (like returned by the get_snpset() function)}
