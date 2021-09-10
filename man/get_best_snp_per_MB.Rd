@@ -7,10 +7,11 @@
 get_best_snp_per_MB(
   df,
   thresh = 1e-09,
-  region = 1e+06,
+  region_size = 1e+06,
   protein_coding_only = FALSE,
   chr = NULL,
-  .checked = FALSE
+  .checked = FALSE,
+  verbose = F
 )
 }
 \arguments{
@@ -18,24 +19,24 @@ get_best_snp_per_MB(
 
 \item{thresh}{P-value threshold, only consider variants with p-values below this threshold (1e-09 by default)}
 
-\item{region}{Get the top/best variant (with p-value below thresh) within this region (region=1000000 by default)}
-
 \item{protein_coding_only}{Set this variable to TRUE to only use protein_coding genes for annotation}
 
 \item{chr}{Use this argument to get the top variants from one chromosome only}
 
 \item{.checked}{If the input data has already been checked, this can be set to TRUE so it wont be checked again (FALSE by default)}
+
+\item{region}{Get the top/best variant (with p-value below thresh) within this region (region=1000000 by default)}
 }
 \value{
 Dataframe of lead variants. Returns the best variant per MB (by default, change the region size with the region argument) with p-values below the input threshold (thresh=1e-09 by default)
 }
 \description{
-\code{get_best_snp_per_MB()} Get the top SNP per 10 MB
+\code{get_best_snp_per_MB()} Get the top SNP per 1 MB region
 All other input parameters are optional
 }
 \examples{
 \dontrun{
 data(gwas_CD)
-get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region = 10000000)
+get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region_size = 10000000)
 }
 }

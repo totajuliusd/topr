@@ -28,12 +28,12 @@ manhattan(
   angle = 0,
   legend_labels = NULL,
   gene = NULL,
-  gene_region = 1e+05,
+  gene_padding = 1e+05,
   chr = NULL,
   annotate_with = "Gene_Symbol",
-  region = 1e+07,
+  region_size = 1e+06,
   legend_name = NULL,
-  legend_position = NULL,
+  legend_position = "bottom",
   rect = NULL,
   nudge_x = 0.1,
   nudge_y = 0.2,
@@ -41,7 +41,8 @@ manhattan(
   xmax = NULL,
   ymin = NULL,
   ymax = NULL,
-  highlight_genes = NULL
+  highlight_genes = NULL,
+  label_color = NULL
 )
 }
 \arguments{
@@ -61,7 +62,7 @@ manhattan(
 
 \item{sign_thresh_label_size}{Set the text size of the label for the signficance thresholdds (default text sizze is 3.5)}
 
-\item{label_size}{Optional parameter to set the size of the plot labels (default: \code{label_size=3.5})}
+\item{label_size}{Optional parameter to set the size of the plot labels (default: \code{label_size=3})}
 
 \item{size}{Optional parameter setting the size of the plot points (default: \code{size=1.2})}
 
@@ -89,15 +90,11 @@ manhattan(
 
 \item{legend_labels}{Legend labels}
 
-\item{gene}{Zoom in on this gene (e.g. gene=FTO)}
-
-\item{gene_region}{The size of the region around the gene, if the gene argument was used (default: gene_region=100000)}
-
 \item{chr}{The chromosome to plot (i.e. chr15), only required if the input dataframe contains results from more than one chromosome}
 
 \item{annotate_with}{Annotate the variants with eiher Gene_Symbol or ID (default annotate_with="Gene_Symbol")}
 
-\item{region}{the size of the region used when annotating the top variant in a region (default value is 10000000 or 10 MB)}
+\item{region_size}{the size of the region used when annotating the top variant in a region (default value is 10000000 or 10 MB)}
 
 \item{legend_name}{Change the name of the legend (default: None)}
 
@@ -114,6 +111,8 @@ manhattan(
 \item{ymin, ymax}{Optional parameters, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
 
 \item{highlight_genes}{A vector of genes or genes to highlight the datapoints for on the plot}
+
+\item{label_color}{Otpional parameter to change the color}
 }
 \value{
 ggplot object

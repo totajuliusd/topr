@@ -4,7 +4,7 @@
 \alias{get_overlapping_snps_by_pos}
 \title{Get variants that overlap between two datasets}
 \usage{
-get_overlapping_snps_by_pos(df1, df2)
+get_overlapping_snps_by_pos(df1, df2, verbose = F)
 }
 \arguments{
 \item{df1}{A dataframe of variants, has to contain CHROM and POS}

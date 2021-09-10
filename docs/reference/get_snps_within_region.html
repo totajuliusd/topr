@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a plot comparing effects within two datasets — effect_plot • topr</title>
+<title>Get SNPs/variants within region — get_snps_within_region • topr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Create a plot comparing effects within two datasets — effect_plot" />
-<meta property="og:description" content="effect_plot()" />
+<meta property="og:title" content="Get SNPs/variants within region — get_snps_within_region" />
+<meta property="og:description" content="get_snps_within_region()" />
 
 
 
@@ -111,67 +111,49 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a plot comparing effects within two datasets</h1>
-    <small class="dont-index">Source: <a href='https://github.com/wuxi-nextcode/topr/blob/master/R/effectplot.R'><code>R/effectplot.R</code></a></small>
-    <div class="hidden name"><code>effect_plot.Rd</code></div>
+    <h1>Get SNPs/variants within region</h1>
+    <small class="dont-index">Source: <a href='https://github.com/wuxi-nextcode/topr/blob/master/R/setters_and_getters.R'><code>R/setters_and_getters.R</code></a></small>
+    <div class="hidden name"><code>get_snps_within_region.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>effect_plot()</code></p>
+    <p><code>get_snps_within_region()</code></p>
     </div>
 
-    <pre class="usage"><span class='fu'>effect_plot</span><span class='op'>(</span>
-  <span class='va'>dat</span>,
-  pheno_x <span class='op'>=</span> <span class='st'>"x_pheno"</span>,
-  pheno_y <span class='op'>=</span> <span class='st'>"y_pheno"</span>,
-  annotate_with <span class='op'>=</span> <span class='st'>"Gene_Symbol"</span>,
-  thresh <span class='op'>=</span> <span class='fl'>1e-08</span>,
-  ci_thresh <span class='op'>=</span> <span class='fl'>1</span>,
-  gene_label_thresh <span class='op'>=</span> <span class='fl'>1e-08</span>,
-  color <span class='op'>=</span> <span class='fu'><a href='get_topr_colors.html'>get_topr_colors</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_snps_within_region</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>region</span>, chr <span class='op'>=</span> <span class='cn'>NULL</span>, xmin <span class='op'>=</span> <span class='cn'>NULL</span>, xmax <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dat</th>
-      <td><p>The input dataframe (snpset) containing one row per variant and P values (P1 and P2) and effects (E1 and E2) from two datasets/phenotypes</p></td>
+      <th>df</th>
+      <td><p>data frame of association results with the columns CHR and POS</p></td>
     </tr>
     <tr>
-      <th>pheno_x</th>
-      <td><p>The name of the phenotype whose effect is plotted on the x axis</p></td>
+      <th>region</th>
+      <td><p>string representing the genetic region (e.g chr16:50693587-50734041)</p></td>
     </tr>
     <tr>
-      <th>pheno_y</th>
-      <td><p>The name of the phenotype whose effect is plotted on the y axis</p></td>
+      <th>chr</th>
+      <td><p>chromosome (e.g. chr16)</p></td>
     </tr>
     <tr>
-      <th>annotate_with</th>
-      <td><p>The name of the column that contains the label for the datapoints (default value is Gene_Symbol)</p></td>
+      <th>xmin</th>
+      <td><p>include variants with POS larger than xmin</p></td>
     </tr>
     <tr>
-      <th>thresh</th>
-      <td><p>Threshold cutoff, datapoints with P2 below this threshold are shown as filled circles whereas datapoints with P2 above this threshold are shown as open circles</p></td>
-    </tr>
-    <tr>
-      <th>ci_thresh</th>
-      <td><p>Show the confidence intervals if the P-value is below this threshold</p></td>
-    </tr>
-    <tr>
-      <th>gene_label_thresh</th>
-      <td><p>Label datapoints with P2 below this threshold</p></td>
-    </tr>
-    <tr>
-      <th>color</th>
-      <td><p>default value is the first of the topr colors</p></td>
+      <th>xmax</th>
+      <td><p>include variants with POS smaller than xmax</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>the variants within the requested region</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>effect_plot</span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span>
+<span class='fu'>get_snps_within_region</span><span class='op'>(</span><span class='va'>dat</span>, <span class='st'>"chr16:50593587-50834041"</span><span class='op'>)</span>
 <span class='op'>}</span>
 
 </div></pre>
