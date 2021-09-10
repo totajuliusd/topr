@@ -54,7 +54,8 @@ add_shades_and_ticks <- function(p1, shades, ticks){
   return(p1)
 }
 
-add_annotation <- function(p1,plot_labels=NULL, nudge_x=0.01, nudge_y=0.01, label_size=3.5, angle=0,annotate_with="Gene_Symbol"){
+add_annotation <- function(p1,plot_labels=NULL, nudge_x=0.01, nudge_y=0.01, label_size=3.5, angle=0,annotate_with="Gene_Symbol", label_color=NULL){
+  if(! is.null(label_color)){plot_labels$color <- label_color}
   if(! is.null(plot_labels)){
     p1 <- p1 + ggrepel::geom_text_repel(data=plot_labels, aes(x=POS, y=log10p, label=(plot_labels %>% dplyr::pull(annotate_with)) ),
                                     nudge_x=nudge_x,nudge_y=ifelse(plot_labels$log10p>0, nudge_y, -nudge_y),size=label_size,
@@ -138,13 +139,28 @@ add_sign_thresh_labels <- function(p1, sign_thresh=1e-09,sign_thresh_color="red"
     #p1+geom_text(data=tmpdf, aes(x=xlabelpos,y=ypos,label=label,color=color),size=sign_thresh_label_size))
 }
 
-add_rsids <- function(p1,dat,rsids,rsids_color="gray40"){
-  rsids_df=data.frame(POS=numeric(),log10p=numeric,ID=character())
-  for(i in seq_along(dat)){
-    ids_found <- dat[[i]] %>% filter(ID %in% rsids)
-    rsids_df <- rbind(rsids_df, ids_found)
+add_rsids <- function(p1,dat,rsids, rsids_color=NULL, nudge_x=0.01, nudge_y=0.01, label_size=3.5, angle=0){
+  rsids_df <- data.frame(matrix(ncol=4,nrow=0, dimnames=list(NULL, c("POS", "log10p", "ID","color"))))
+  if(!is.vector(rsids)){
+    rsids <- c(rsids)
   }
-  p1 <- p1+ggrepel::geom_text_repel(data=rsids_df, aes(x=POS, y=log10p, label=ID,color=rsids_color), nudge_y=0.02,max.iter=10000,direction="both")
+  for(i in seq_along(dat)){
+    ids_found <- dat[[i]] %>% dplyr::filter(ID %in% rsids) %>% dplyr::select(POS,log10p,ID,P,color)
+    rsids_df <- base::rbind(rsids_df, ids_found)
+  }
+  if(length(rsids_df$POS) == 0){
+    print("Could not find any of the requested rsids")
+  }
+  else{
+    rsids_df <- rsids_df %>% dplyr::arrange(P) %>% dplyr::distinct(ID, color, .keep_all=T)
+    if(!is.null(rsids_color)){
+      rsids_df$color <- rsids_color
+    }
+      p1 <- p1+ggrepel::geom_text_repel(data=rsids_df, aes(x=POS, y=log10p, label=ID,color=color), nudge_x=nudge_x, nudge_y=nudge_y, size=label_size, angle=angle,max.iter=10000,direction="both")
+    if(length(rsids_df$POS) < length(rsids)){
+      print("Could not find all the requested rsids. Only showing the ones I could find. ")
+    }
+  }
   return(p1)
 }
 

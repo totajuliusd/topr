@@ -1,6 +1,6 @@
 
 
-get_base_plot <- function(dat, color=get_topr_colors(), show_legend=TRUE, legend_labels=NULL, legend_name=NULL,overview_plot=FALSE,legend_position="right"){
+get_base_plot <- function(dat, color=get_topr_colors(), show_legend=TRUE, legend_labels=NULL, legend_name=NULL,overview_plot=FALSE,legend_position="right",locuszoomplot=FALSE){
   p1 <- ggplot()+theme_bw() #+geom_point(data=dat[[1]]$gwas, aes(dat[[1]]$gwas$pos_adj, dat[[1]]$gwas$log10p),color=colors[1] alpha=0.7,size=1)+theme_bw()
   for(i in seq_along(dat)){
     if(overview_plot){
@@ -16,7 +16,11 @@ get_base_plot <- function(dat, color=get_topr_colors(), show_legend=TRUE, legend
       print("Use the legend_labels argument to change the legend labels from color names to meaningful labels! ")
     }
   }
-  if(length(dat) == 1 || !show_legend) { #no need to use a legend when there is only one phenotype on display
+  if(locuszoomplot){
+    colors <-c("darkblue","turquoise","green","orange","red")
+    p1 <- p1+scale_color_identity(guide = "legend", name="R2",  breaks=colors, labels=c("R2 < 0.2", "0.2< R2 < 0.4", "0.4 < R2 < 0.6","0.6 < R2 <0.8", "0.8 < R2"))
+  }
+  else if(length(dat) == 1 || !show_legend) { #no need to use a legend when there is only one phenotype on display
     p1 <- p1+scale_color_identity(breaks=color[seq_along(dat)])
   }
   else{
