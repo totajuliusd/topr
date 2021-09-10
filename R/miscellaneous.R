@@ -1,7 +1,6 @@
 filter_on_chr <- function(dat,chr){
   chr <- gsub("chr", "", chr)
   for(i in seq_along(dat)){
-  print(chr)
     dat[[i]] <- dat[[i]] %>% dplyr::filter(CHROM==chr)
   }
   return(dat)

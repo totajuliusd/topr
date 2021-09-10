@@ -1,9 +1,11 @@
 
-set_size_shape_alpha <- function(df,size,shape,alpha){
-  df <- set_size(df,size)
-  df <- set_shape(df,shape)
+set_size_shape_alpha <- function(df,size,shape,alpha,locuszoomplot=F){
+  df <- set_size(df,size, locuszoomplot = locuszoomplot)
+  df <- set_shape(df,shape,locuszoomplot = locuszoomplot)
   df <- set_alpha(df,alpha)
-  df <- set_shape_by_impact(df)
+  if(!locuszoomplot){
+    df <- set_shape_by_impact(df)
+  }
   return(df)
 }
 
@@ -45,7 +47,7 @@ set_color <- function(dat,color){
   return(dat)
 }
 
-set_size <- function(dat,size){
+set_size <- function(dat,size, locuszoomplot = locuszoomplot){
   if(is.null(size))
     size <- 1
   for(i in seq_along(dat)){
@@ -54,6 +56,9 @@ set_size <- function(dat,size){
         dat[[i]]$size <- size[i]
       else
         dat[[i]]$size <- size
+    }
+    if(locuszoomplot & ("R2" %in% colnames(dat[[i]]))){
+      dat[[i]]$size <- ifelse(dat[[i]]$R2 == 1, dat[[i]]$size*1.5, dat[[i]]$size)
     }
   }
   return(dat)
@@ -73,7 +78,7 @@ set_alpha <- function(dat,alpha){
   return(dat)
 }
 
-set_shape <- function(dat,shape){
+set_shape <- function(dat,shape,locuszoomplot=F){
   if(is.null(shape))
     shape <- 19
   for(i in seq_along(dat)){
@@ -82,6 +87,9 @@ set_shape <- function(dat,shape){
         dat[[i]]$shape <- shape[i]
       else
         dat[[i]]$shape <- shape
+    }
+    if(locuszoomplot & ("R2" %in% colnames(dat[[i]]))){
+        dat[[i]]$shape <- ifelse(dat[[i]]$R2 == 1, 18, dat[[i]]$shape)
     }
   }
   return(dat)
@@ -110,9 +118,9 @@ get_genes <- function(chr,xmin=0,xmax=NULL,protein_coding_only=FALSE){
     xmax <- chr_lengths[chr_lengths$V1 == chr,]$V2
   }
   if(protein_coding_only)
-    genes <- topr::ENSGENES %>% dplyr::filter(chrom==chr) %>% dplyr::filter(biotype=="protein_coding") %>% dplyr::filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax)
+    genes <- topr::ENSGENES %>% dplyr::filter(chrom==chr) %>% dplyr::filter(biotype=="protein_coding") %>% dplyr::filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax | gene_start == xmin | gene_end == xmax)
   else
-    genes <- topr::ENSGENES %>% dplyr::filter(chrom==chr) %>% dplyr::filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax)
+    genes <- topr::ENSGENES %>% dplyr::filter(chrom==chr) %>% dplyr::filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax | gene_start == xmin | gene_end == xmax)
   return(genes)
 }
 
@@ -256,7 +264,7 @@ get_pos_with_offset <- function(df,offsets){
 #'
 #' @description
 #'
-#' \code{get_best_snp_per_MB()} Get the top SNP per 10 MB
+#' \code{get_best_snp_per_MB()} Get the top SNP per 1 MB region
 #' All other input parameters are optional
 #'
 #' @param df Dataframe
@@ -271,35 +279,46 @@ get_pos_with_offset <- function(df,offsets){
 #' @examples
 #' \dontrun{
 #' data(gwas_CD)
-#' get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region = 10000000)
+#' get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region_size = 10000000)
 #' }
-get_best_snp_per_MB <- function(df, thresh=1e-09,region=1000000,protein_coding_only=FALSE,chr=NULL, .checked=FALSE){
+get_best_snp_per_MB <- function(df, thresh=1e-09,region_size=1000000,protein_coding_only=FALSE,chr=NULL, .checked=FALSE, verbose=F){
   variants <- df[0,]
   dat <- df
   if(is.data.frame(dat)) dat <- list(dat)
+
   if(! .checked){
     dat <- dat_check(dat)
   }
   df <- dat[[1]]
- # df$CHROM=gsub("chr","", df$CHROM)
   if(! is.null(chr)){
     chr <- gsub("chr","", chr)
-    df <- df %>% dplyr::filter(CHROM==chr)
+    df <- df %>% dplyr::filter(CHROM == chr)
   }
+
   df <- df %>% dplyr::filter(P<thresh)
   if(protein_coding_only & ("biotype" %in% colnames(df))){
        df <- df %>% dplyr::filter(biotype == "protein_coding")
   }
   if(nrow(df) > 0){
     df$tmp <- NA
-    for(row in seq_len(nrow(df))){
-      df$tmp <- base::round(df$POS/region)
+    if(max(df$POS)-min(df$POS) < region_size){
+      df$tmp<- 1
+    }else{
+      for(row in seq_len(nrow(df))){
+        df$tmp <- base::round(df$POS/region_size)
+      }
     }
-    lead_snps <- df %>% dplyr::group_by(CHROM,tmp) %>% dplyr::arrange(P) %>% dplyr::filter(P== min(P))
-    if(length(lead_snps)== 0){
-        print(paste("There are no SNPs with a p-value below ",thresh, " in the input. Use the [thresh] argument to adjust the threshold.",sep=""))
-    }
+    lead_snps <- df %>% dplyr::group_by(CHROM,tmp) %>% dplyr::arrange(P) %>% distinct(P, .keep_all=T) %>% dplyr::filter(P == min(P))
     variants <- dplyr::ungroup(lead_snps)%>% dplyr::distinct(CHROM,POS, .keep_all = T)
+    if(verbose){
+      print(paste("Found ",length(variants$POS), " index/lead variants with a p-value below ", thresh, sep=""))
+      print(paste("Index/lead variant: the top variant within a",format(region_size, scientific = F),"bp region_size"), sep="")
+    }
+  }else{
+    print(paste("There are no SNPs with p-values below ",thresh, " in the input dataset. Use the [thresh] argument to lower the threshold.",sep=""))
+  }
+  if("tmp" %in% colnames(variants)){
+    variants <- variants %>% dplyr::select(-tmp)
   }
   return(variants)
 }
@@ -378,7 +397,7 @@ get_legend<-function(p1){
 #'
 #' @description
 #'
-#' \code{get_top_hit()} Get the top hit from the dataframe
+#' \code{get_top_snp()} Get the top hit from the dataframe
 #' All other input parameters are optional
 #'
 #' @param df Dataframe containing association results
@@ -390,10 +409,10 @@ get_legend<-function(p1){
 #' @examples
 #' \dontrun{
 #' data(gwas_CD)
-#' get_top_hit(gwas_CD, chr="chr1")
+#' get_top_snp(gwas_CD, chr="chr1")
 #' }
 #'
-get_top_hit <- function(df, chr=NULL){
+get_top_snp <- function(df, chr=NULL){
   if (!is.null(chr)) {
     chr_tmp <- gsub('chr','',chr)
     chr <- paste("chr",chr_tmp, sep="")
@@ -409,6 +428,9 @@ get_top_hit <- function(df, chr=NULL){
   return(top_hit)
 }
 
+get_top_hit <- function(df, chr=NULL){
+  get_top_snp(df, chr=chr)
+}
 
 
 #' Get the top hit from the dataframe
@@ -427,17 +449,8 @@ get_top_hit <- function(df, chr=NULL){
 #' }
 #'
 get_topr_colors <- function(){
-  return(c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1"))
+  return(c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1","darkgreen","blue","red"))
 }
-
-get_manhattan_options <- function(){
-  print("options(repr.plot.width=12, repr.plot.height=4.5,repr.plot.res = 170)")
-}
-
-get_regionplot_options <- function(){
-  print("options(repr.plot.width=11, repr.plot.height=6.5,repr.plot.res = 170)")
-}
-
 
 set_genes_pos_adj <- function(genes, offsets){
   #CHROM,POS,Gene_Symbol
@@ -446,4 +459,46 @@ set_genes_pos_adj <- function(genes, offsets){
   genes$CHROM <- as.integer(genes$CHROM)
   genes <- genes %>% dplyr::mutate(pos_adj=POS+offsets[CHROM])
   return(genes)
+}
+
+#' Get SNPs/variants within region
+#'
+#' @description
+#'
+#' \code{get_snps_within_region()}
+#'
+#' @param df data frame of association results with the columns CHR and POS
+#' @param region string representing the genetic region (e.g chr16:50693587-50734041)
+#' @param chr chromosome (e.g. chr16)
+#' @param xmin include variants with POS larger than xmin
+#' @param xmax include variants with POS smaller than xmax
+#' @return the variants within the requested region
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' get_snps_within_region(dat, "chr16:50593587-50834041")
+#' }
+#'
+
+get_snps_within_region <- function(df, region, chr=NULL, xmin=NULL, xmax=NULL){
+  snps <- NULL
+  dat <- dat_check(df)
+  if(!is.null(region)){
+    tmp <- unlist(stringr::str_split(region, ":"))
+    chr <- tmp[1]
+    tmp_pos <- unlist(stringr::str_split(tmp[2], "-"))
+    xmin <- tmp_pos[1]
+    xmax <- tmp_pos[2]
+  }
+
+  chr <- gsub("chr", "", chr)
+  chr <- gsub("X", "23", chr)
+  if(!is.null(chr) & !is.null(xmin) & !is.null(xmax)){
+    snps <- dat[[1]] %>% filter(CHROM == chr & POS >= xmin & POS <= xmax)
+    if(length(snps$POS) < 1){
+      print(paste("There are no SNPs within the region: ", chr, ":", xmin, "-", xmax, sep=""))
+    }
+  }
+  return(snps)
 }

@@ -50,7 +50,7 @@ flip_to_positive_allele_for_dat1 <- function(df){
 #' }
 #'
 
-match_alleles <- function(df){
+match_alleles <- function(df, verbose=F){
   df$ID_tmp <- paste(df$CHROM, df$POS, sep="_")
   matched_snps <- df %>% dplyr::filter(REF1 == REF2 & ALT1 == ALT2)
   #check whether ref and alt are reversed
@@ -65,12 +65,14 @@ match_alleles <- function(df){
   }
   #check whether all variants were mached
   not_matched <- df %>% dplyr::filter(! ID_tmp %in% matched_snps$ID_tmp)
-  if(length(not_matched$POS)>0){
-    print(paste("Could not match ",length(not_matched$POS), " snps on their alleles."))
-    print(not_matched)
-    print(paste(length(matched_snps$POS), " SNPs have matching REF and ALT alleles. ", sep=""))
-  }else{
-    print("All SNPs were matched by their REF and ALT alleles")
+  if(verbose){
+    if(length(not_matched$POS)>0){
+      print(paste("Could not match ",length(not_matched$POS), " snps on their alleles."))
+      print(not_matched)
+      print(paste(length(matched_snps$POS), " SNPs have matching REF and ALT alleles. ", sep=""))
+    }else{
+      print("All SNPs were matched by their REF and ALT alleles")
+    }
   }
   return(matched_snps %>% dplyr::select(-ID_tmp))
 }
@@ -92,7 +94,7 @@ match_alleles <- function(df){
 #' get_overlapping_snps_by_pos(dat1, dat2)
 #' }
 #'
-get_overlapping_snps_by_pos <- function(df1, df2){
+get_overlapping_snps_by_pos <- function(df1, df2,verbose=F){
   dat2 <- dat_check(df2)
   dat1 <- dat_check(df1)
   df1 <- dat1[[1]]
@@ -122,14 +124,16 @@ get_overlapping_snps_by_pos <- function(df1, df2){
     print("ID is not in colnames df1")
     print(colnames(df1))
   }
-  print("Overlapping SNPs: ")
-  not_found <- df1 %>% dplyr::filter(! ID_tmp %in% snpset$ID_tmp)
-  print(paste("There are a total of ",length(df1$POS), " SNPs in the first dataset. Thereof [",length(snpset$POS), "] were are also the second dataset (dat2) and [", length(not_found$POS), "] are not.", sep=""))
-  print(paste("SNPs FOUND in dat2: ",length(snpset$POS), sep="" ))
-  print(snpset)
-  if(length(not_found$POS)>0){
-    print(paste("SNPs NOT FOUND in dat2: " ,length(not_found$POS), sep=""))
-    print(not_found)
+  if(verbose){
+    print("Overlapping SNPs: ")
+    not_found <- df1 %>% dplyr::filter(! ID_tmp %in% snpset$ID_tmp)
+    print(paste("There are a total of ",length(df1$POS), " SNPs in the first dataset. Thereof [",length(snpset$POS), "] were are also the second dataset (dat2) and [", length(not_found$POS), "] are not.", sep=""))
+    print(paste("SNPs FOUND in dat2: ",length(snpset$POS), sep="" ))
+    print(snpset)
+    if(length(not_found$POS)>0){
+      print(paste("SNPs NOT FOUND in dat2: " ,length(not_found$POS), sep=""))
+      print(not_found)
+    }
   }
   return(snpset %>% dplyr::select(-ID_tmp))
 }
@@ -144,7 +148,7 @@ get_overlapping_snps_by_pos <- function(df1, df2){
 #' @param df1 The dataframe to extract the top snps from (with p-value below thresh)
 #' @param df2 The dataframe in which to search for overlapping SNPs from dataframe1
 #' @param thresh The p-value threshold used for extracting the top snps from dataset 1
-#' @param region The size of the interval which to extract the top snps from
+#' @param region_size The size of the interval which to extract the top snps from
 #' @param protein_coding_only Set this variable to TRUE to only use protein_coding genes for the annotation
 
 #' @return Dataframe containing the top hit
@@ -156,8 +160,8 @@ get_overlapping_snps_by_pos <- function(df1, df2){
 #' }
 #'
 
-create_snpset <- function(df1, df2, thresh=1e-08,protein_coding_only=TRUE, region=1000000){
-  snpset <- df1 %>% get_best_snp_per_MB(thresh = thresh,region=region) %>% get_overlapping_snps_by_pos(df2) %>% match_alleles() %>% flip_to_positive_allele_for_dat1()
+create_snpset <- function(df1, df2, thresh=1e-08,protein_coding_only=TRUE, region_size=1000000, verbose=F){
+  snpset <- df1 %>% get_best_snp_per_MB(thresh = thresh,region_size=region_size) %>% get_overlapping_snps_by_pos(df2,verbose=verbose) %>% match_alleles(verbose=verbose) %>% flip_to_positive_allele_for_dat1()
   if(! "Gene_Symbol" %in% colnames(df1)  ||  ! "gene_symbol" %in% colnames(df1)){
      snpset <- snpset %>% annotate_with_nearest_gene(protein_coding_only = protein_coding_only)
   }
@@ -179,7 +183,7 @@ create_snpset <- function(df1, df2, thresh=1e-08,protein_coding_only=TRUE, regio
 #' }
 #'
 create_snpset_code <-function(){
-  print("snpset <- df1 %>% get_best_snp_per_MB(thresh = 1e-08,region=1000000) %>% get_overlapping_snps_by_pos(df2) %>% match_alleles() %>% flip_to_positive_allele_for_dat1() %>% annotate_with_nearest_gene(protein_coding_only = TRUE)")
+  print("snpset <- df1 %>% get_best_snp_per_MB(thresh = 1e-08,region_size=1000000) %>% get_overlapping_snps_by_pos(df2) %>% match_alleles() %>% flip_to_positive_allele_for_dat1() %>% annotate_with_nearest_gene(protein_coding_only = TRUE)")
 }
 
 
@@ -205,7 +209,7 @@ create_snpset_code <-function(){
 #' }
 #'
 
-effect_plot <- function(dat,pheno_x="x_pheno", pheno_y="y_pheno", annotate_with="Gene_Symbol", thresh=5E-07, ci_thresh=1,gene_label_thresh = 1e-04, color=get_topr_colors()[1]){
+effect_plot <- function(dat,pheno_x="x_pheno", pheno_y="y_pheno", annotate_with="Gene_Symbol", thresh=1e-08, ci_thresh=1,gene_label_thresh = 1e-08, color=get_topr_colors()[1]){
   ymax <- max(dat$E2)*1.1
   ymin <- abs(min(dat$E2))* (-1.1)
   xmax <- max(dat$E1)*1.1

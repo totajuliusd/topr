@@ -9,7 +9,8 @@
 #' @return ggplot
 #' @export
 #' 
-qqtopr <- function(dat, scale = 1, n_variants = 0, fontfamily = "", breaks = 15,  color=get_topr_colors()) {
+qqtopr <- function(dat, scale = 1, n_variants = 0, fontfamily = "", breaks = 15, title="", color=get_topr_colors()) {
+   #,legend_name="Data:",legend_position="right", legend_labels=NULL
     nvars <- n_variants
     if(is.data.frame(dat)){dat <- list(dat)}
 
@@ -18,17 +19,15 @@ qqtopr <- function(dat, scale = 1, n_variants = 0, fontfamily = "", breaks = 15,
         n_variants <- nvars[i]
         #df$bonf_thres <- if (n_variants > 0) -log10(0.05 / n_variants) else 0
          if (!"exp" %in% colnames(df)) {
-            print("Expected p-values column (exp) not found in data, creating it")
-            if (n_variants == 0) {
-                stop("Missing parameter for total variants (n_variants), which is required for computing expected p-values")
+            print("The Expected P column (exp) was not found in the data, creating it")
+            if (nvars == 0) {
+                n_variants <- length(df$POS)
             }
-
          df <- df %>%
               dplyr::arrange(P) %>%
             dplyr::mutate(rank = rank(P, ties.method = "first"),
                         exp = rank/n_variants)
         }
-
         if (class(df$P) == "character") {
             df$P <- readr::parse_number(df$P)
         }
@@ -56,14 +55,15 @@ qqtopr <- function(dat, scale = 1, n_variants = 0, fontfamily = "", breaks = 15,
     df <- dat[[1]]
      p1 <- ggplot2::ggplot(df, aes(exp, P)) +
       ggplot2::geom_hline(aes(yintercept = val), color = "#606060", lty = 3, size = .5, data = dplyr::tibble(val = df$min_theoretical)) +
-      ggplot2::geom_vline(aes(xintercept = val), color = "#606060", lty = 3, size = .5, data = dplyr::tibble(val = df$in_theoretical)) +
+      ggplot2::geom_vline(aes(xintercept = val), color = "#606060", lty = 3, size = .5, data = dplyr::tibble(val = df$min_theoretical)) +
       ggplot2::geom_smooth(aes(y = exp), method = "lm", se = F, color = "#808080", size = .5, fullrange = T) +
       ggplot2::geom_point(size = scale, color=color[1]) +
       ggplot2::scale_x_continuous(breaks = scales::pretty_breaks(breaks), limits = c(0,NA) ) +
       ggplot2::scale_y_continuous(breaks = scales::pretty_breaks(breaks), limits = c(0,NA) ) +
-      ggplot2::labs(title = "", x = "Theoretical", y = "Observed", color = "Test", caption = caption) +
-      ggplot2::theme_minimal(18*scale, base_family = fontfamily) +
-      ggplot2::theme(legend.position = "right", legend.direction = "vertical")
+      ggplot2::labs(title = title, x = "Theoretical", y = "Observed", color = "Test", caption = caption) +
+      ggplot2::theme_minimal(18*scale, base_family = fontfamily)
+    #+
+     # ggplot2::theme(legend.position = "right", legend.direction = "vertical")
 
     if(length(dat)>1){
         for(i in 2:length(dat)){
@@ -72,7 +72,14 @@ qqtopr <- function(dat, scale = 1, n_variants = 0, fontfamily = "", breaks = 15,
               #ggplot2::geom_smooth(aes(y = exp), method = "lm", se = F, color = color[i], size = .5, fullrange = T)
         }
     }
-
+    #add the legend
+    #if(length(dat) == 1) {
+     #   p1 <- p1+ggplot2::scale_color_identity(breaks=color[seq_along(dat)])
+    #}
+    #else{
+        #p1 <- p1+ggplot2::scale_color_identity(guide = "legend", name=legend_name, breaks=color[seq_along(dat)], labels=legend_labels)+
+        # theme(legend.position = "bottom")
+    #}
     return(p1)
 }
 
