@@ -1,6 +1,8 @@
 
 # topr
 
+# This repo is deprecated and has been moved to https://github.com/GenuityScience/topr and released on CRAN.
+
 See full documentation at <https://wuxi-nextcode.github.io/topr/>
 
 ### Installing from github using devtools
