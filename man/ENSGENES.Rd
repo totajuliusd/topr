@@ -3,9 +3,9 @@
 \docType{data}
 \name{ENSGENES}
 \alias{ENSGENES}
-\title{Ensembl genes build 38}
+\title{Ensembl genes build HG38.104-5-2}
 \format{
-A data frame  with 60,564 rows and 5 variables:
+A data frame  with 40,122 rows and 5 variables:
 \describe{
 \item{chrom}{Chromosome on build version 38 (GRCh38/hg38)}
 \item{gene_start}{genetic position of gene start on build version 38}
@@ -18,6 +18,9 @@ A data frame  with 60,564 rows and 5 variables:
 ENSGENES
 }
 \description{
-Ensembl genes build 38
+https://www.ensembl.info/2021/05/05/ensembl-104-has-been-released/
+}
+\details{
+genes on chrY and chrM were excluded
 }
 \keyword{datasets}

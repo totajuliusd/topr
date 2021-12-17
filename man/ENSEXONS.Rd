@@ -3,9 +3,9 @@
 \docType{data}
 \name{ENSEXONS}
 \alias{ENSEXONS}
-\title{Ensembl exons build 38}
+\title{Ensembl exons build HG38-104-5-2}
 \format{
-A data frame  with 60,006 rows and 7 variables:
+A data frame  with 40,122 rows and 7 variables:
 \describe{
 \item{chrom}{Chromosome on build version 38 (GRCh38/hg38)}
 \item{gene_start}{genetic position of gene start on build version 38}
@@ -19,6 +19,9 @@ A data frame  with 60,006 rows and 7 variables:
 ENSEXONS
 }
 \description{
-chrY and chrM were excluded from the exon dataset
+https://www.ensembl.info/2021/05/05/ensembl-104-has-been-released/
+}
+\details{
+exons on chrY and chrM were excluded from the exon dataset
 }
 \keyword{datasets}

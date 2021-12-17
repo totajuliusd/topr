@@ -2,7 +2,7 @@
 % Please edit documentation in R/locuszoomplot.R
 \name{locuszoom}
 \alias{locuszoom}
-\title{Locuszoom plot}
+\title{Create a locuszoom-like plot}
 \usage{
 locuszoom(
   df,
@@ -52,7 +52,9 @@ locuszoom(
   scale = 1,
   rsids_with_vline = NULL,
   annotate_with_vline = NULL,
-  sign_thresh_size = 0.5
+  sign_thresh_size = 0.5,
+  unit_main = 7,
+  unit_gene = 2
 )
 }
 \arguments{
@@ -151,16 +153,20 @@ locuszoom(
 \item{annotate_with_vline}{A number (p-value). Display annotation and vertical lines for variants with p-values below this threshold}
 
 \item{sign_thresh_size}{A number, sets the size of the horizontal significance threshold line (default = 1)}
+
+\item{unit_main}{the height unit of the main plot (default = 7)}
+
+\item{unit_gene}{the height unit of the gene plot (default= 2 )}
 }
 \value{
 plots using egg (https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html)
 }
 \description{
-\code{locuszoom()} displays the association results for a smaler region within one chromosome
+\code{locuszoom()} displays the association results for a smaller region within one chromosome.
 Required parameter is at least one dataset (dataframe) containing the association data (with columns \code{CHROM,POS,P} in upper or lowercase)
 }
 \examples{
 \dontrun{
-locuszoom(df)
+locuszoom(R2_CD_UKBB)
 }
 }

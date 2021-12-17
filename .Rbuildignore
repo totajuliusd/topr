@@ -13,3 +13,9 @@ Makefile
 vignettes/.gitignore
 ..Rcheck
 pkgdown
+README.html
+README.md
+vignettes
+local
+.idea
+man/figures/topr.gif

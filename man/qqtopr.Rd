@@ -2,7 +2,7 @@
 % Please edit documentation in R/qqtopr.R
 \name{qqtopr}
 \alias{qqtopr}
-\title{QQ Plot}
+\title{Create a QQ plot}
 \usage{
 qqtopr(
   dat,
@@ -57,5 +57,6 @@ qqtopr(
 ggplot
 }
 \description{
-QQ Plot
+\code{qqtopr()} displays QQ plots for association data.
+Required parameter is at least one dataset (dataframe) containing the association data (with columns \code{CHROM,POS,P}
 }

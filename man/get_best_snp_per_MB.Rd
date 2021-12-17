@@ -38,7 +38,7 @@ All other input parameters are optional
 }
 \examples{
 \dontrun{
-get_best_snp_per_MB(CD_UKBB, thresh = 1e-09, region_size = 10000000)
+get_best_snp_per_MB(CD_UKBB)
 }
 
 }
