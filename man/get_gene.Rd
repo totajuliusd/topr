@@ -2,21 +2,21 @@
 % Please edit documentation in R/setters_and_getters.R
 \name{get_gene}
 \alias{get_gene}
-\title{Get the genetic position of a gene or genes by their gene name}
+\title{Get the genetic position of a gene by gene name}
 \usage{
 get_gene(gene_name, chr = NULL)
 }
 \arguments{
-\item{gene_name}{string A gene name (e.g. "FTO")}
+\item{gene_name}{A string representing a gene name (e.g. "FTO")}
 
-\item{chr}{Search for the gene on this chromosome}
+\item{chr}{A string, search for the genes on this chromsome only, (e.g chr="chr1")}
 }
 \value{
 Dataframe of genes
 }
 \description{
-\code{get_gene()} Get gene coordinates by its gene symbol/name
-Required parameters is on gene name or a vector of gene names
+\code{get_gene()} Get the gene coordinates for a gene
+Required parameter is gene name
 }
 \examples{
 \dontrun{

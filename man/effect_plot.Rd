@@ -12,25 +12,28 @@ effect_plot(
   thresh = 1e-08,
   ci_thresh = 1,
   gene_label_thresh = 1e-08,
-  color = get_topr_colors()[1]
+  color = get_topr_colors()[1],
+  scale = 1
 )
 }
 \arguments{
 \item{dat}{The input dataframe (snpset) containing one row per variant and P values (P1 and P2) and effects (E1 and E2) from two datasets/phenotypes}
 
-\item{pheno_x}{The name of the phenotype whose effect is plotted on the x axis}
+\item{pheno_x}{A string representing the name of the phenotype whose effect is plotted on the x axis}
 
-\item{pheno_y}{The name of the phenotype whose effect is plotted on the y axis}
+\item{pheno_y}{A string representing the name of the phenotype whose effect is plotted on the y axis}
 
-\item{annotate_with}{The name of the column that contains the label for the datapoints (default value is Gene_Symbol)}
+\item{annotate_with}{A string, The name of the column that contains the label for the datapoints (default value is Gene_Symbol)}
 
-\item{thresh}{Threshold cutoff, datapoints with P2 below this threshold are shown as filled circles whereas datapoints with P2 above this threshold are shown as open circles}
+\item{thresh}{A number. Threshold cutoff, datapoints with P2 below this threshold are shown as filled circles whereas datapoints with P2 above this threshold are shown as open circles}
 
-\item{ci_thresh}{Show the confidence intervals if the P-value is below this threshold}
+\item{ci_thresh}{A number.Show the confidence intervals if the P-value is below this threshold}
 
-\item{gene_label_thresh}{Label datapoints with P2 below this threshold}
+\item{gene_label_thresh}{A string, label datapoints with P2 below this threshold}
 
-\item{color}{default value is the first of the topr colors}
+\item{color}{A string, default value is the first of the topr colors}
+
+\item{scale}{A number, to change the size of the title and axes labels and ticks at the same time (default = 1)}
 }
 \description{
 \code{effect_plot()}

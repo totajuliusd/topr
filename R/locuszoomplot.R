@@ -1,9 +1,9 @@
 
-#' Locuszoom plot
+#' Create a locuszoom-like plot
 #'
 #' @description
 #'
-#' \code{locuszoom()} displays the association results for a smaler region within one chromosome
+#' \code{locuszoom()} displays the association results for a smaller region within one chromosome.
 #' Required parameter is at least one dataset (dataframe) containing the association data (with columns \code{CHROM,POS,P} in upper or lowercase)
 #'
 #' @inheritParams regionplot
@@ -13,16 +13,17 @@
 #'
 #' @examples
 #' \dontrun{
-#' locuszoom(df)
+#' locuszoom(R2_CD_UKBB)
 #' }
 
 
-locuszoom <- function(df, ntop=3, xmin=0, size=2, shape=19, alpha=1,label_size=4, annotate_with="ID",
+locuszoom <- function(df, annotate=NULL,ntop=3, xmin=0, size=2, shape=19, alpha=1,label_size=4, annotate_with="ID",
                       color=NULL, axis_text_size=11,axis_title_size=12,title_text_size=13, show_genes=FALSE, show_overview=F,
                       show_exons=FALSE, max_genes=200, sign_thresh=5e-09, sign_thresh_color="red", sign_thresh_label_size=3.5,
                       xmax=NULL,ymin=NULL,ymax=NULL,protein_coding_only=FALSE,region_size=1000000,gene_padding=100000,angle=0,legend_title_size=12,legend_text_size=12,
                       nudge_x=0.01,nudge_y=0.01, rsids=NULL, variant=NULL,rsids_color="gray40",legend_name="Data:",legend_position="right",
-                      chr=NULL,vline=NULL,show_gene_names=NULL,legend_labels=NULL,gene=NULL, title=NULL, label_color="gray40",region=NULL){
+                      chr=NULL,vline=NULL,show_gene_names=NULL,legend_labels=NULL,gene=NULL, title=NULL, label_color="gray40",region=NULL,scale=1,
+                      rsids_with_vline=NULL, annotate_with_vline=NULL,sign_thresh_size=0.5,  unit_main=7, unit_gene=2){
   dat <- dat_check(df)
   if(length(unique(dat[[1]]$CHROM)) > 1){
     stop("There are multiple chromosomes in the input dataset. The locuszoom plot only works for a small genetic region_size within one chromosome")
@@ -50,12 +51,13 @@ locuszoom <- function(df, ntop=3, xmin=0, size=2, shape=19, alpha=1,label_size=4
   }
   df <- set_lz_colors(dat)
 
-  regionplot(df, ntop=ntop, annotate=NULL, xmin=xmin, size=size, shape=shape, alpha=alpha,label_size=label_size, annotate_with=annotate_with,
+  regionplot(df, ntop=ntop, annotate=annotate, xmin=xmin, size=size, shape=shape, alpha=alpha,label_size=label_size, annotate_with=annotate_with,
              color=color, axis_text_size=axis_text_size,axis_title_size=axis_title_size,title_text_size=title_text_size, show_genes=show_genes, show_overview=show_overview,
              show_exons=show_exons, max_genes=max_genes, sign_thresh=sign_thresh, sign_thresh_color=sign_thresh_color, sign_thresh_label_size=sign_thresh_label_size,
              xmax=xmax,ymin=ymin,ymax=ymax,protein_coding_only=protein_coding_only,region_size=region_size,gene_padding=gene_padding,angle=angle,legend_title_size=legend_title_size,legend_text_size=legend_text_size,
              nudge_x=nudge_x,nudge_y=nudge_y, rsids=rsids, variant=variant,rsids_color=rsids_color,legend_name=legend_name,legend_position=legend_position,
-             chr=chr,vline=vline,show_gene_names=show_gene_names,legend_labels=legend_labels,gene=gene, title=title, label_color=label_color,locuszoomplot=T,region=region)
+             chr=chr,vline=vline,show_gene_names=show_gene_names,legend_labels=legend_labels,gene=gene, title=title, label_color=label_color,locuszoomplot=T,region=region,
+             scale=scale,rsids_with_vline=rsids_with_vline, annotate_with_vline=annotate_with_vline, sign_thresh_size = sign_thresh_size, unit_main=unit_main, unit_gene=unit_gene )
 }
 
 set_lz_colors <- function(dat){

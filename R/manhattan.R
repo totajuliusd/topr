@@ -1,47 +1,57 @@
-#' Manhattan plot
+#' Create a Manhattan plot
 #'
 #' @description
 #'
-#' \code{manhattan()} displays the association results for the entire genome
+#' \code{manhattan()} displays association results for the entire genome on a Manhattan plot.
 #' Required parameter is at least one dataset (dataframe) containing the association data (with columns \code{CHROM,POS,P} in upper or lowercase)
 #'
 #' All other input parameters are optional
 #'
 #'
 #' @param df Dataframe or a list of dataframes (required columns are \code{CHROM,POS,P}), in upper- or lowercase) of association results.
-#' @param ntop Number of datasets (GWASes) to show on the top plot
-#' @param chr The chromosome to plot (i.e. chr15), only required if the input dataframe contains results from more than one chromosome
-#' @param title Plot title (optional
-#' @param color Optional parameter setting the color of the plot points (default: \code{color="darkblue"})
-#' @param size Optional parameter setting the size of the plot points (default: \code{size=1.2})
+#' @param ntop An integer, number of datasets (GWASes) to show on the top plot
+#' @param chr A string or integer, the chromosome to plot (i.e. chr15), only required if the input dataframe contains results from more than one chromosome
+#' @param title A string
+#' @param color A string or a vector of strings, for setting the color of the datapoints on the plot
+#' @param size An integer setting the size of the plot points (default: \code{size=1.2})
 #' @param alpha A number or vector of numbers setting the transparancy of the plotted points
-#' @param shape A number of vector of numers setting the shape of the plotted points
-#' @param annotate Display annotation for variants with p-values below this threshold
-#' @param annotate_with Annotate the variants with eiher Gene_Symbol or ID (default annotate_with="Gene_Symbol")
-#' @param label_size Optional parameter to set the size of the plot labels (default: \code{label_size=3})
-#' @param label_color Otpional parameter to change the color
-#' @param sign_thresh Optional parameter setting the threshold of the dashed red horizontal line representing the significance threshold (default: \code{sign_thresh=5.1e-9}). Multiple thresholds can be provided in a vector, e.g \code{sign_thresh=c(5.1e-9,1.0e-6)}). Set this parameter to NULL if you dont want this line to appear at all \code{sign_thresh=NULL}
-#' @param sign_thresh_color set the color of the significance threshold line or lines
-#' @param highlight_genes A vector of genes or genes to highlight the datapoints for on the plot
-#' @param highlight_genes_ypos Display the genes at this position on the y-axis (default value is 1)
-#' @param highlight_genes_color Colors for the hihglighted genes (default: green)
-#' @param xmin,xmax Parameters setting the chromosomal range to display on the x-axis
-#' @param ymin,ymax Optional parameters, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})
-#' @param rect Rectangle to add to the plot
-#' @param legend_labels Legend labels
-#' @param legend_name Change the name of the legend (default: None)
-#' @param legend_position Top,bottom,left or right
-#' @param title_text_size Text size of the plot title (default: 13)
-#' @param axis_text_size Text size of the x and y axes tick labels (default: 12)
-#' @param axis_title_size Text size of the x and y title labels (default: 12)
-#' @param legend_title_size Text size of the legend title
-#' @param legend_text_size Text size of the legend text
-#' @param protein_coding_only Set this parameter to TRUE to only use protein coding genes for annotation
-#' @param region_size the size of the region used when annotating the top variant in a region (default value is 10000000 or 10 MB)
-#' @param nudge_x  To vertically adjust the starting position of each gene label (this is a ggrepel parameter)
-#' @param nudge_y  To horizontally adjust the starting position of each gene label (this is a ggrepel parameter)
-#' @param angle The angle of the text label
-#' @param sign_thresh_label_size  Set the text size of the label for the signficance thresholdds (default text sizze is 3.5)
+#' @param shape A number of vector of numbers setting the shape of the plotted points
+#' @param annotate A number (p-value). Display annotation for variants with p-values below this threshold
+#' @param annotate_with A string. Annotate the variants with eiher Gene_Symbol or ID (default: "Gene_Symbol")
+#' @param label_size An number to set the size of the plot labels (default: \code{label_size=3})
+#' @param label_color A string. To change the color of the gene or variant labels
+#' @param sign_thresh A number or vector of numbers, setting the horizontal signicance threshold (default: \code{sign_thresh=5.1e-9}). Set to NULL to hide the significance threshold.
+#' @param sign_thresh_color A string or vector of strings to set the color/s of the significance threshold/s
+#' @param highlight_genes A string or vector of strings, gene or genes to higlight at the bottom of the plot
+#' @param highlight_genes_ypos An integer, controlling where on the y-axis the highlighted genes are placed (default value is 1)
+#' @param highlight_genes_color A string, color for the hihglighted genes (default: green)
+#' @param xmin,xmax Integer, setting the chromosomal range to display on the x-axis
+#' @param ymin,ymax Integer, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})
+#' @param legend_labels A string or vector of strings representing legend labels for the input dataset/s
+#' @param legend_name A string, use to change the name of the legend (default: None)
+#' @param legend_position A string, top,bottom,left or right
+#' @param title_text_size A number, size of the plot title (default: 13)
+#' @param axis_text_size A number, size of the x and y axes tick labels (default: 12)
+#' @param axis_title_size A number, size of the x and y title labels (default: 12)
+#' @param legend_title_size A number, size of the legend title
+#' @param legend_text_size A number, size of the legend text
+#' @param legend_nrow An integer, sets the number of rows allowed for the legend labels
+#' @param protein_coding_only A locical scalar, if TRUE, only protein coding genes are used for annotation
+#' @param region_size An integer (default = 1000000) indicating the window size for variant labelling. Increase this number for sparser annotation and decrease for denser annotation.
+#' @param nudge_x  A number to vertically adjust the starting position of each gene label (this is a ggrepel parameter)
+#' @param nudge_y  A number to horizontally adjust the starting position of each gene label (this is a ggrepel parameter)
+#' @param angle A number, the angle of the text label
+#' @param sign_thresh_label_size  A number setting the text size of the label for the signficance thresholdds (default text size is 3.5)
+#' @param gene_label_size A number setting the size of the gene labels shown at the bottom of the plot
+#' @param gene_label_angle A number setting the angle of the gene label shown at the bottom of the plot (default: 0)
+#' @param scale A number, to change the size of the title and axes labels and ticks at the same time (default = 1)
+#' @param show_legend A logical scalar, set to FALSE to hide the legend (default value is TRUE)
+#' @param sign_thresh_linetype A string, the linetype of the horizontal significance threshold (default = dashed)
+#' @param sign_thresh_size A number, sets the size of the horizontal significance threshold line (default = 1)
+#' @param rsids A string (rsid) or vector of strings to highlight on the plot, e.g. \code{rsids=c("rs1234, rs45898")}
+#' @param rsids_color A string, the color of the variants in variants_id (default color is red)
+#' @param rsids_with_vline  A string (rsid) or vector of strings to highlight on the plot with their rsids and vertical lines further highligthing their positions
+#' @param annotate_with_vline A number (p-value). Display annotation and vertical lines for variants with p-values below this threshold
 #'
 #' @return ggplot object
 #' @export
@@ -51,17 +61,16 @@
 #'
 #' @examples
 #' \dontrun{
-#' data(gwas_CD)
 #' manhattan(gwas_CD)
 #' }
-#'
 
 manhattan <- function(df, ntop=3, title="",annotate=NULL, color=get_topr_colors(),
-                   sign_thresh=5e-09,sign_thresh_color="red", sign_thresh_label_size=3.5, label_size=3, size=1,shape=19,alpha=1,highlight_genes_color="green",highlight_genes_ypos=1,
-                   axis_text_size=11,axis_title_size=12, title_text_size=13,legend_title_size=12,legend_text_size=12, protein_coding_only=TRUE,angle=0,
-                   legend_labels=NULL,gene=NULL,gene_padding=100000, chr=NULL, annotate_with="Gene_Symbol",region_size=1000000,
-                      legend_name=NULL,legend_position="bottom",rect=NULL, nudge_x=0.1,nudge_y=0.2,
-                      xmin=NULL, xmax=NULL,ymin=NULL,ymax=NULL,highlight_genes=NULL,label_color=NULL){
+                   sign_thresh=5e-09,sign_thresh_color="red", sign_thresh_label_size=3.5, label_size=3.5, size=0.8,shape=19,alpha=1,highlight_genes_color="green",highlight_genes_ypos=1,
+                   axis_text_size=12,axis_title_size=14, title_text_size=15,legend_title_size=13,legend_text_size=12, protein_coding_only=TRUE,angle=0,
+                   legend_labels=NULL,chr=NULL, annotate_with="Gene_Symbol",region_size=1000000,
+                      legend_name=NULL,legend_position="bottom", nudge_x=0.1,nudge_y=0.2,
+                      xmin=NULL, xmax=NULL,ymin=NULL,ymax=NULL,highlight_genes=NULL,label_color=NULL,legend_nrow=NULL,gene_label_size=NULL,
+                      gene_label_angle=0,scale=1,show_legend=TRUE,sign_thresh_linetype="dashed", sign_thresh_size=0.5,rsids=NULL, rsids_color=NULL,rsids_with_vline=NULL,annotate_with_vline=NULL){
     top_snps <- NULL
     genes_df <- NULL
     xaxis_label <- "Chromosome"
@@ -70,15 +79,11 @@ manhattan <- function(df, ntop=3, title="",annotate=NULL, color=get_topr_colors(
     if(length(dat) > ntop){
       using_ntop <- TRUE
     }
-    if(! is.null(gene)){
-      gene_df <- get_gene(gene,chr)
-      if(dim(gene_df)[1]==0){  stop(paste("Could not find gene ",gene)) }
-      else{
-        chr <- gene_df$chrom
-        xmin <- gene_df$gene_start-gene_padding
-        xmax <- gene_df$gene_end+gene_padding
-      }
-    }
+  annot_with_vline <- FALSE
+  if(! is.null(annotate_with_vline)){
+    annotate <- annotate_with_vline
+    annot_with_vline <- TRUE
+  }
     if(! is.null(chr)){
       chr <- gsub('X','23',chr)
       dat <- dat %>% filter_on_chr(chr)
@@ -116,9 +121,9 @@ manhattan <- function(df, ntop=3, title="",annotate=NULL, color=get_topr_colors(
       dat <- get_pos_with_offset4list(dat,offsets)
     }
     # Do the plotting
-    main_plot <- get_base_plot(dat,color=color,legend_labels = legend_labels,legend_name=legend_name,legend_position = legend_position)
+    main_plot <- get_base_plot(dat,color=color,legend_labels = legend_labels,legend_name=legend_name, legend_position = legend_position, legend_nrow = legend_nrow, show_legend = show_legend,scale=scale)
       if(! is.null(title)){
-        main_plot <- main_plot %>% add_title(title=title, title_text_size = title_text_size)
+        main_plot <- main_plot %>% add_title(title=title, title_text_size = title_text_size,scale=scale)
     }
     if(is.null(chr)){
       ticks <- get_ticks(dat)
@@ -129,20 +134,35 @@ manhattan <- function(df, ntop=3, title="",annotate=NULL, color=get_topr_colors(
     }
 
   main_plot <- set_axis_labels(main_plot,xaxis_label = xaxis_label)
-  main_plot <- main_plot %>% set_plot_text_sizes(axis_text_size=axis_text_size,axis_title_size = axis_title_size, legend_text_size=legend_text_size, legend_title_size=legend_title_size)
+  main_plot <- main_plot %>% set_plot_text_sizes(axis_text_size=axis_text_size,axis_title_size = axis_title_size, legend_text_size=legend_text_size, legend_title_size=legend_title_size,scale=scale)
 
   #add the significance threshold/s
   if(!is.null(sign_thresh)){
-  main_plot <- main_plot %>% add_sign_thresh(sign_thresh = sign_thresh, sign_thresh_color = sign_thresh_color, using_ntop = using_ntop) %>%
-   add_sign_thresh_labels(sign_thresh = sign_thresh, sign_thresh_color = sign_thresh_color, xmin=xmin, sign_thresh_label_size = sign_thresh_label_size)
+  main_plot <- main_plot %>% add_sign_thresh(sign_thresh = sign_thresh, sign_thresh_color = sign_thresh_color, using_ntop = using_ntop, sign_thresh_linetype = sign_thresh_linetype, sign_thresh_size = sign_thresh_size,scale=scale) %>%
+   add_sign_thresh_labels(sign_thresh = sign_thresh, sign_thresh_color = sign_thresh_color, xmin=xmin, sign_thresh_label_size = sign_thresh_label_size,scale=scale)
   }
      if(using_ntop){
     main_plot <- main_plot %>%  add_zero_hline()
 }
-  main_plot <- main_plot %>%  add_annotation(plot_labels = top_snps,annotate_with=annotate_with,angle=angle,label_size = label_size, label_color=label_color, nudge_x=nudge_x, nudge_y=nudge_y)
 
+  if (! is.null(annotate)){
+    main_plot <- main_plot %>%  add_annotation(plot_labels = top_snps,annotate_with=annotate_with,angle=angle,label_size = label_size, label_color=label_color, nudge_x=nudge_x, nudge_y=nudge_y, scale=scale, annot_with_vline=annot_with_vline)
+  }
   if (! is.null(highlight_genes)){
-    main_plot <- add_genes2plot(main_plot, genes_df, highlight_genes_ypos=highlight_genes_ypos,highlight_genes_color=highlight_genes_color)
+    if(! is.null(gene_label_size)){
+      label_size <- gene_label_size
+    }
+    main_plot <- add_genes2plot(main_plot, genes_df, highlight_genes_ypos=highlight_genes_ypos,highlight_genes_color=highlight_genes_color, label_size=label_size,gene_label_angle = gene_label_angle,scale=scale)
+  }
+
+  with_vline <- FALSE
+  if(! is.null(rsids_with_vline)){
+    rsids <- rsids_with_vline
+    with_vline <- TRUE
+  }
+  if(! is.null(rsids)){
+    rsids_df <- get_rsids_from_df(dat,rsids)
+    main_plot <-main_plot %>% add_rsids(rsids_df, rsids_color=rsids_color, nudge_x=nudge_x, nudge_y=nudge_y, label_size=label_size, angle=angle, label_color=label_color, scale=scale, with_vline = with_vline)
   }
   main_plot <- main_plot %>% set_ymin_ymax(ymin,ymax)
   main_plot <- change_axes(main_plot)

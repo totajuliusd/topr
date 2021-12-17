@@ -8,6 +8,8 @@ match_alleles(df, verbose = F)
 }
 \arguments{
 \item{df}{A dataframe that is in the snpset format (like returned by the get_snpset() function)}
+
+\item{verbose}{A logical scalar (default: FALSE). Assign to TRUE to get information on which alleles are matched and which are not.}
 }
 \value{
 The input dataframe containing only those variants whith matched alleles in the snpset

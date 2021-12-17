@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">topr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0</span>
       </span>
     </div>
 
@@ -71,7 +71,7 @@
   <div class="contents col-md-9">
 <div id="topr" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#topr" class="anchor"></a>topr</h1></div>
+<a href="#topr" class="anchor"></a>topR</h1></div>
 <p>See full documentation at <a href="https://wuxi-nextcode.github.io/topr/" class="uri">https://wuxi-nextcode.github.io/topr/</a></p>
 <div id="installing-from-github-using-devtools" class="section level3">
 <h3 class="hasAnchor">
@@ -165,7 +165,7 @@
 <p>Zoom in on the top hit on a chromosome</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">CHR</span> <span class="op">&lt;-</span> <span class="st">"chr1"</span>
-<span class="va">top_hit</span> <span class="op">&lt;-</span> <span class="fu">get_top_hit</span><span class="op">(</span><span class="va">CD_UKBB</span>,chr<span class="op">=</span><span class="va">CHR</span><span class="op">)</span>
+<span class="va">top_hit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_top_hit.html">get_top_hit</a></span><span class="op">(</span><span class="va">CD_UKBB</span>,chr<span class="op">=</span><span class="va">CHR</span><span class="op">)</span>
 <span class="fu"><a href="reference/regionplot.html">regionplot</a></span><span class="op">(</span><span class="va">CD_UKBB</span>, chr <span class="op">=</span> <span class="va">CHR</span>, xmin<span class="op">=</span><span class="va">top_hit</span><span class="op">$</span><span class="va">POS</span><span class="op">-</span><span class="fl">250000</span> ,xmax<span class="op">=</span> <span class="va">top_hit</span><span class="op">$</span><span class="va">POS</span><span class="op">+</span><span class="fl">250000</span><span class="op">)</span>
 <span class="co">#&gt; [1] "1"</span>
 <span class="co">#&gt; [1] "Zoomed to region:  chr1:66966513-67466513"</span></code></pre></div>
@@ -205,7 +205,7 @@
 <h2 class="hasAnchor">
 <a href="#useful-functions" class="anchor"></a>Useful functions</h2>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">get_top_hit</span><span class="op">(</span><span class="va">CD_UKBB</span>, chr<span class="op">=</span><span class="st">"chr16"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="reference/get_top_hit.html">get_top_hit</a></span><span class="op">(</span><span class="va">CD_UKBB</span>, chr<span class="op">=</span><span class="st">"chr16"</span><span class="op">)</span>
 <span class="va">dat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_best_snp_per_MB.html">get_best_snp_per_MB</a></span><span class="op">(</span><span class="va">CD_UKBB</span>,thresh <span class="op">=</span> <span class="fl">1e-07</span>, region<span class="op">=</span><span class="fl">1000000</span><span class="op">)</span>
 <span class="co">#get overlapping SNPS overlapping in two datasets</span>
 <span class="va">overlapping_snps</span> <span class="op">&lt;-</span> <span class="va">dat1</span> <span class="op">%&gt;%</span> <span class="fu"><a href="reference/get_overlapping_snps_by_pos.html">get_overlapping_snps_by_pos</a></span><span class="op">(</span><span class="va">CD_FINNGEN</span><span class="op">)</span>

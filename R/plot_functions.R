@@ -18,29 +18,29 @@ set_axis_labels <- function(p1,xaxis_label="Chromosome"){
   return(p1)
 }
 
-set_plot_text_sizes <- function(p1, axis_text_size=12, axis_title_size=12, legend_title_size=12,legend_text_size=12){
-  p1 <- p1 + theme(axis.text=element_text(size=axis_text_size),
-              axis.title = element_text(size=axis_title_size),
-              legend.title=element_text(size=legend_title_size),
-              legend.text=element_text(size=legend_text_size))
+set_plot_text_sizes <- function(p1, axis_text_size=12, axis_title_size=12, legend_title_size=12,legend_text_size=11,scale=1){
+  p1 <- p1 + theme(axis.text=element_text(size=axis_text_size*scale),
+              axis.title = element_text(size=axis_title_size*scale),
+              legend.title=element_text(size=legend_title_size*scale),
+              legend.text=element_text(size=legend_text_size*scale))
   return(p1)
 }
-add_title <- function(p1, title="", title_text_size=14){
+add_title <- function(p1, title="", title_text_size=14,scale=1){
   p1 <- p1 + ggtitle(title)
-  p1 <- p1 + theme(plot.title = element_text(size=title_text_size))
+  p1 <- p1 + theme(plot.title = element_text(size=title_text_size*scale))
   return(p1)
 }
 
 
-set_legend_texts <- function(p1, legend_title_size=12,legend_text_size=12){
-  p1 <- p1 + theme(legend.title=element_text(size=legend_title_size),
-                   legend.text=element_text(size=legend_text_size))
+set_legend_texts <- function(p1, legend_title_size=13,legend_text_size=12,scale=1){
+  p1 <- p1 + theme(legend.title=element_text(size=legend_title_size*scale),
+                   legend.text=element_text(size=legend_text_size*scale))
   return(p1)
 }
 
-add_genes2plot <- function(p1,genes,highlight_genes_color="green",highlight_genes_ypos=1){
-  p1 <- p1 + geom_point(data=genes, aes(x=POS, y=highlight_genes_ypos),color=highlight_genes_color, size=2, shape=15) +
-    ggrepel::geom_text_repel(data=genes, aes(x=POS,y=highlight_genes_ypos,label=Gene_Symbol), color="black",size=3,direction="both",nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5)
+add_genes2plot <- function(p1,genes,highlight_genes_color="green",highlight_genes_ypos=1, label_size=3,gene_label_angle=0,scale=scale){
+  p1 <- p1 + geom_point(data=genes, aes(x=POS, y=highlight_genes_ypos),color=highlight_genes_color, size=2*scale, shape=15) +
+    ggrepel::geom_text_repel(data=genes, aes(x=POS,y=highlight_genes_ypos,label=Gene_Symbol), color="black",size=label_size*scale,direction="both",angle=gene_label_angle,nudge_x = 0.01,nudge_y = 0.01,segment.size=0.2,segment.alpha =.5)
   return(p1)
 }
 
@@ -54,13 +54,16 @@ add_shades_and_ticks <- function(p1, shades, ticks){
   return(p1)
 }
 
-add_annotation <- function(p1,plot_labels=NULL, nudge_x=0.01, nudge_y=0.01, label_size=3.5, angle=0,annotate_with="Gene_Symbol", label_color=NULL){
+add_annotation <- function(p1,plot_labels=NULL, nudge_x=0.01, nudge_y=0.01, label_size=3.5, angle=0,annotate_with="Gene_Symbol", label_color=NULL,scale=1, annot_with_vline=FALSE){
   if(! is.null(label_color)){plot_labels$color <- label_color}
   if(! is.null(plot_labels)){
     p1 <- p1 + ggrepel::geom_text_repel(data=plot_labels, aes(x=POS, y=log10p, label=(plot_labels %>% dplyr::pull(annotate_with)) ),
-                                    nudge_x=nudge_x,nudge_y=ifelse(plot_labels$log10p>0, nudge_y, -nudge_y),size=label_size,
+                                    nudge_x=nudge_x,nudge_y=ifelse(plot_labels$log10p>0, nudge_y, -nudge_y),size=label_size*scale,
                                     segment.size=0.2, color=plot_labels$color,segment.color = "black",
                                     max.iter=10000,direction="both",angle=angle)
+  }
+  if(annot_with_vline){
+    p1 <- p1 %>% add_vline(plot_labels$POS)
   }
   return(p1)
 }
@@ -93,7 +96,7 @@ add_annot <- function(p1, angle=0, annotate_with="Gene_Symbol",top_snps=NULL){
 }
 
 
-add_sign_thresh <- function(p1, sign_thresh=1e-09,sign_thresh_color="red",size=0.5, using_ntop=FALSE){
+add_sign_thresh <- function(p1, sign_thresh=1e-09,sign_thresh_color="red", using_ntop=FALSE, sign_thresh_linetype="dashed", sign_thresh_size=0.5, scale=1){
   #add significance threholds to the plot
   if(is.vector(sign_thresh)){
     for(i in seq_along(sign_thresh)){
@@ -101,23 +104,23 @@ add_sign_thresh <- function(p1, sign_thresh=1e-09,sign_thresh_color="red",size=0
       if(!is.null(sign_thresh_color) & (length(sign_thresh) == length(sign_thresh_color))){
         color <- sign_thresh_color[i]
       }
-      p1 <- p1 + geom_hline(yintercept = -log10(as.numeric(sign_thresh[[i]])),size=size, color=color, linetype="dashed")
+      p1 <- p1 + geom_hline(yintercept = -log10(as.numeric(sign_thresh[[i]])),size=sign_thresh_size*scale, color=color, linetype=sign_thresh_linetype)
       if(using_ntop){
-        p1 <- p1 + geom_hline(yintercept = log10(as.numeric(sign_thresh[[i]])),size=size, color=color, linetype="dashed")
+        p1 <- p1 + geom_hline(yintercept = log10(as.numeric(sign_thresh[[i]])),size=sign_thresh_size*scale, color=color, linetype=sign_thresh_linetype)
       }
     }
   }
   else{
-    p1 <- p1+geom_hline(yintercept = -log10(as.numeric(sign_thresh[[i]])),size=size, colour="red", linetype="dashed")
+    p1 <- p1+geom_hline(yintercept = -log10(as.numeric(sign_thresh[[i]])),size=sign_thresh_size*scale, colour="red", linetype=sign_thresh_linetype)
     if(using_ntop){
-      p1 <- p1 + geom_hline(yintercept = log10(as.numeric(sign_thresh[[i]])),size=size, color=color, linetype="dashed")
+      p1 <- p1 + geom_hline(yintercept = log10(as.numeric(sign_thresh[[i]])),size=sign_thresh_size*scale, color=color, linetype=sign_thresh_linetype)
     }
   }
   return(p1)
 }
 
 
-add_sign_thresh_labels <- function(p1, sign_thresh=1e-09,sign_thresh_color="red",xmin=0,sign_thresh_label_size=3.5){
+add_sign_thresh_labels <- function(p1, sign_thresh=1e-09,sign_thresh_color="red",xmin=0,sign_thresh_label_size=3.5,scale=1){
   #add significance threholds label to the plot
   if(is.null(xmin)){
     xmin <- 0
@@ -131,7 +134,7 @@ add_sign_thresh_labels <- function(p1, sign_thresh=1e-09,sign_thresh_color="red"
     tmpdf <- rbind(tmpdf, data.frame(color=color, label=sign_thresh[[i]],ypos=-log10(sign_thresh[[i]])* 1.02,xpos=xmin))
 
   }
-  p1 <- p1+ggrepel::geom_text_repel(data=tmpdf, aes(x=xpos, y=ypos, label=label,color=color), nudge_y=0.02,size=sign_thresh_label_size,
+  p1 <- p1+ggrepel::geom_text_repel(data=tmpdf, aes(x=xpos, y=ypos, label=label,color=color), nudge_y=0.02,size=sign_thresh_label_size*scale,
                                  max.iter=10000,direction="y")
 
 
@@ -139,27 +142,38 @@ add_sign_thresh_labels <- function(p1, sign_thresh=1e-09,sign_thresh_color="red"
     #p1+geom_text(data=tmpdf, aes(x=xlabelpos,y=ypos,label=label,color=color),size=sign_thresh_label_size))
 }
 
-add_rsids <- function(p1,dat,rsids, rsids_color=NULL, nudge_x=0.01, nudge_y=0.01, label_size=3.5, angle=0){
+get_rsids_from_df <- function(dat, rsids){
   rsids_df <- data.frame(matrix(ncol=4,nrow=0, dimnames=list(NULL, c("POS", "log10p", "ID","color"))))
   if(!is.vector(rsids)){
     rsids <- c(rsids)
   }
   for(i in seq_along(dat)){
-    ids_found <- dat[[i]] %>% dplyr::filter(ID %in% rsids) %>% dplyr::select(POS,log10p,ID,P,color)
+    ids_found <- dat[[i]] %>% dplyr::filter(ID %in% rsids) %>% dplyr::select("POS","log10p","ID","P","color")
     rsids_df <- base::rbind(rsids_df, ids_found)
   }
   if(length(rsids_df$POS) == 0){
     print("Could not find any of the requested rsids")
   }
   else{
-    rsids_df <- rsids_df %>% dplyr::arrange(P) %>% dplyr::distinct(ID, color, .keep_all=T)
-    if(!is.null(rsids_color)){
-      rsids_df$color <- rsids_color
-    }
-      p1 <- p1+ggrepel::geom_text_repel(data=rsids_df, aes(x=POS, y=log10p, label=ID,color=color), nudge_x=nudge_x, nudge_y=nudge_y, size=label_size, angle=angle,max.iter=10000,direction="both")
-    if(length(rsids_df$POS) < length(rsids)){
-      print("Could not find all the requested rsids. Only showing the ones I could find. ")
-    }
+    rsids_df <- rsids_df %>% dplyr::arrange(P) %>% distinct(ID,color,.keep_all=T) #%>% dplyr::distinct("ID", "color", .keep_all=T)
+  }
+  if(length(rsids_df$POS) < length(rsids)){
+    print("Could not find all the requested rsids!! ")
+  }
+  return(rsids_df)
+}
+
+
+add_rsids <- function(p1,rsids_df, rsids_color=NULL, nudge_x=0.01, nudge_y=0.01, label_size=3.5, angle=0,label_color=NULL, scale=1, with_vline=F){
+  if(!is.null(label_color)){
+    rsids_df$color <- label_color
+  }
+  if(!is.null(rsids_color)){
+    rsids_df$color <- rsids_color
+  }
+  p1 <- p1+ggrepel::geom_text_repel(data=rsids_df, aes(x=POS, y=log10p, label=ID,color=color), nudge_x=nudge_x, nudge_y=nudge_y, size=label_size*scale, angle=angle,max.iter=10000,direction="both")
+  if(with_vline){
+    p1 <- p1 %>% add_vline(rsids_df$POS)
   }
   return(p1)
 }

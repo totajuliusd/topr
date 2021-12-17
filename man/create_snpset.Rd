@@ -18,18 +18,19 @@ create_snpset(
 
 \item{df2}{The dataframe in which to search for overlapping SNPs from dataframe1}
 
-\item{thresh}{The p-value threshold used for extracting the top snps from dataset 1}
+\item{thresh}{Numeric, the p-value threshold used for extracting the top snps from dataset 1}
 
-\item{protein_coding_only}{Set this variable to TRUE to only use protein_coding genes for the annotation}
+\item{protein_coding_only}{Logical, set this variable to TRUE to only use protein_coding genes for the annotation}
 
-\item{region_size}{The size of the interval which to extract the top snps from}
+\item{region_size}{Ingeter, the size of the interval which to extract the top snps from}
+
+\item{verbose}{Logical, (default: FALSE). Assign to TRUE to get information on which alleles are matched and which are not.}
 }
 \value{
 Dataframe containing the top hit
 }
 \description{
 \code{create_snpset()}
-All other input parameters are optional
 }
 \examples{
 \dontrun{

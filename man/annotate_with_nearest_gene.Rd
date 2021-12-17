@@ -9,7 +9,7 @@ annotate_with_nearest_gene(variants, protein_coding_only = F)
 \arguments{
 \item{variants}{a dataframe of variant positions (CHROM and POS)}
 
-\item{protein_coding_only}{If set to TRUE only annotate with protein coding genes (the default value is FALSE)}
+\item{protein_coding_only}{Logical, if set to TRUE only annotate with protein coding genes (the default value is FALSE)}
 }
 \value{
 the input dataframe with Gene_Symbol as an additional column

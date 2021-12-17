@@ -8,24 +8,50 @@ qqtopr(
   dat,
   scale = 1,
   n_variants = 0,
-  fontfamily = "",
   breaks = 15,
-  title = "",
-  color = get_topr_colors()
+  title = NULL,
+  color = get_topr_colors(),
+  size = 1,
+  legend_name = "",
+  legend_position = "right",
+  legend_labels = NULL,
+  axis_text_size = 11,
+  axis_title_size = 12,
+  title_text_size = 13,
+  legend_title_size = 12,
+  legend_text_size = 12
 )
 }
 \arguments{
 \item{dat}{Dataframe or a list of dataframes (required columns is \code{P})) of association results.}
 
-\item{scale}{plot elements scale, default: 1}
+\item{scale}{An integer, plot elements scale, default: 1}
 
-\item{n_variants}{number of total variants used in the study}
+\item{n_variants}{An integer, total number of variants used in the study}
 
-\item{fontfamily}{font}
+\item{breaks}{A number setting the breaks for the axes}
 
-\item{breaks}{number of breaks for the axes}
+\item{title}{A string}
 
-\item{color}{the color of the datapoints, can be one color or multiple}
+\item{color}{A string or vector of strings setting the color/s for the input datset/s}
+
+\item{size}{An integer setting the size of the plot points (default: \code{size=1.2})}
+
+\item{legend_name}{A string, use to change the name of the legend (default: None)}
+
+\item{legend_position}{A string, top,bottom,left or right}
+
+\item{legend_labels}{A string or vector of strings representing legend labels for the input dataset/s}
+
+\item{axis_text_size}{A number, size of the x and y axes tick labels (default: 12)}
+
+\item{axis_title_size}{A number, size of the x and y title labels (default: 12)}
+
+\item{title_text_size}{A number, size of the plot title (default: 13)}
+
+\item{legend_title_size}{A number, size of the legend title}
+
+\item{legend_text_size}{A number, size of the legend text}
 }
 \value{
 ggplot

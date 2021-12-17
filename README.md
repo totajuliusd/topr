@@ -1,212 +1,176 @@
 
-# topr
+# topr : an R package for viewing and annotating genetic association data
 
-# This repo is deprecated and has been moved to https://github.com/GenuityScience/topr and released on CRAN.
+<img src="man/figures/topr.gif" alt="topr GIF" width="100%">
 
-See full documentation at <https://wuxi-nextcode.github.io/topr/>
 
-### Installing from github using devtools
+## Installation
+<hr>
+
+Install from CRAN:
+
+``` r
+install.packages("topr")
+```
+
+Or from github:
 
 ``` r
 devtools::install_github("wuxi-nextcode/topr")
 ```
 
-## Example
-
-In this example we demonstrate the basic usage of the topr library.
-
-### Load packages
-
-First load the topr package, the tidyverse package is recommended in
-general, but not required for this example
+And then load the package:
 
 ``` r
 library(topr)
-#> 
-#> Attaching package: 'topr'
-#> The following object is masked from 'package:stats':
-#> 
-#>     qqplot
-library(tidyverse)
-#> ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
-#> ✔ ggplot2 3.3.3     ✔ purrr   0.3.4
-#> ✔ tibble  3.1.2     ✔ dplyr   1.0.6
-#> ✔ tidyr   1.1.3     ✔ stringr 1.4.0
-#> ✔ readr   1.4.0     ✔ forcats 0.5.0
-#> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-#> ✖ dplyr::filter() masks stats::filter()
-#> ✖ dplyr::lag()    masks stats::lag()
-library(ggrepel)
 ```
 
-### Loading and exploring prebuilt datasets
 
-Load the gwas\_CD dataset, which is a subset of association results
-(SNPs with P&lt;1e-03) for Crohn´s disease from the UK biobank.
+## Main features and functionality
+<hr>
 
-It is highly recommended to theck the number of datapoints in your
-dataset before you plot, since a very large dataset will take a long
-time to plot.
+### Example input datasets 
+
+See the <a href="../vignettes/input_datasets.nb.html">Input datasets vignette</a> for more detailed information.
+
+Input datasets must include least three columns (<code>CHROM,
+POS</code> and <code>P</code>), where naming of the columns is flexible
+(i.e the chr label can be either chr or chrom and is case insensitive).
+
+topr has 3 in-built datasets (GWASes), take a look at one of them by issuing the following command:
 
 ``` r
-paste("Number of SNPs in the dataset: [", length(CD_UKBB$POS),"]", sep = "")
-#> [1] "Number of SNPs in the dataset: [26821]"
+head(CD_UKBB)
 ```
 
-### Manhattan plots
+The chromosome in the <code>CHROM</code> column can be represented with
+our without the <i>chr</i> suffix, e.g (chr1 or 1)
 
-Get an overview of association results for crohn’s disease (CD) in a
-Manhattan plot
+
+
+### Basic usage 
+<hr>
+
+topr's two main plotting functions are <code>manhattan()</code> and <code>regionplot()</code>
+
+
+
+#### Manhattan
+<hr>
+
+See the <a href="../vignettes/manhattan.nb.html">Manhattan vignette</a> for more detailed examples of how to use the manhattan plot function
+
+View the whole genome association results on a Manhattan plot:
 
 ``` r
 manhattan(CD_UKBB)
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="120%" />
-
-### QQ plots
+Annotate the lead/index variants (with p-values below 5e-09) with their nearest gene:
 
 ``` r
-qqtopr(CD_UKBB,n_variants=length(CD_UKBB$POS))
+manhattan(CD_UKBB, annotate=5e-09)
 ```
 
-### Label the top SNPs with the name of their nearest gene
-
-Use the annotate argument in the manhattan function to label the top
-SNPs with p-values below the annotate threshold with their nearest gene
+Display genes of interest at the bottom of the Manhattan plot to get a visual representation of their position relative to association peaks:
 
 ``` r
-manhattan(CD_UKBB, annotate = 1e-09)
+manhattan(CD_UKBB, annotate=5e-09, highlight_genes=c("IL23R","NOD2","NOTCH4","JAK"))
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="120%" />
+View one chromosome only:
+``` r
+manhattan(CD_UKBB, annotate=5e-09, chr="chr1")
+```
 
-## Highlight genes of interest
+Create a Manhattan of multiple GWAS results (in a list) on the same plot
 
 ``` r
-manhattan(CD_UKBB, annotate = 1e-09, highlight_genes = c("NOD2","IL23R","JAK2"))
+manhattan(list(UC_UKBB, CD_UKBB), legend_labels=c("UC UKBB", "CD UKBB"))
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="120%" />
-
-### View one chromsome only
-
-Take a closer look at the results by chromosome. Here we plot the
-results on chromosome 7 only.
+Use the <code>ntop</code> argument to control how many GWASes are displayed at the top and bottom of the plot:
 
 ``` r
-manhattan(CD_UKBB, annotate = 1e-09, chr = "7")
-#> [1] "7"
+manhattan(list(UC_UKBB, CD_UKBB,CD_FINNGEN), legend_labels=c("UC UKBB", "CD UKBB","CD FINNGEN"), ntop=1)
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="120%" />
+<br>
 
-### Regionplot
+#### Regionplot
+<hr>
+See the <a href="../vignettes/regionplot.nb.html">Regionplot vignette</a> for more detailed examples of how to use the regionplot function.
 
-Zoom in further on the chromosome plot with the regionplot function.
-
-Zoom in on a gene of interest, e.g IKZF1:
+Further zoom-in on a genetic region by gene name:
 
 ``` r
-regionplot(CD_UKBB, gene="IKZF1", annotate= 1e-09)
-#> [1] "7"
-#> [1] "Zoomed to region:  chr7:50204067-50505101"
+regionplot(CD_UKBB, gene="IL23R")
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="120%" />
-
-Zoom in on the top hit on a chromosome
+Label the top variant with it´s ID (rsid):
 
 ``` r
-CHR <- "chr1"
-top_hit <- get_top_hit(CD_UKBB,chr=CHR)
-regionplot(CD_UKBB, chr = CHR, xmin=top_hit$POS-250000 ,xmax= top_hit$POS+250000)
-#> [1] "1"
-#> [1] "Zoomed to region:  chr1:66966513-67466513"
+regionplot(CD_UKBB, gene="IL23R", annotate=5e-09)
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="120%" />
-
-### Display multiple phenotypes/datasets on the same plot
-
-Display the output from more than one GWAS on the same plot
-
-### Manhattan multiple phenotypes
+Denser labelling of top variants (every 100000 kb) with vlines to get a better visual of where the variants are in relation to the genes and exons shown below:
 
 ``` r
-manhattan(list(CD_UKBB,CD_FINNGEN,UC_UKBB),legend_labels = c("CD UKBB","CD Finngen","UC UKBB"),title="IBD")
+regionplot(CD_UKBB, gene="IL23R", annotate_with_vline=5e-09, region_size=100000)
 ```
-
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="120%" />
+View the correlation pattern between the variants within the region in a locuszoom like plot.
+Note that the variant correlation (R2) has to be pre-calculated and included in the input dataframe.
 
 ``` r
-regionplot(list(CD_UKBB,CD_FINNGEN),gene="NOD2", annotate=c(1e-15, 1e-09), legend_labels = c("UKBB", "Finngen"), title="Crohn's disease (CD)")
-#> [1] "16"
-#> [1] "16"
-#> [1] "Zoomed to region:  chr16:50593587-50834041"
+locuszoom(R2_CD_UKBB, gene="IL23R")
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="120%" />
+A region plot of multiple GWASes zoomed in on the IL23R gene
 
 ``` r
-manhattan(list(CD_UKBB,CD_FINNGEN,UC_UKBB),legend_labels = c("CD UKBB","CD Finngen","UC UKBB"),title="IBD")
+regionplot(list(UC_UKBB, CD_UKBB))
 ```
 
-<img src="man/figures/README-unnamed-chunk-14-1.png" width="120%" />
+<br>
 
-#### The ntop argument
+#### Useful functions
+<hr>
 
-Use the ntop argument to set the number of datasets displayed at the top
-(default value is 3)
+Extract lead/index variants from the GWAS dataset (<code>CD_UKBB</code>):
+
+```{r}
+get_best_snp_per_MB(CD_UKBB)
+```
+
+Annotate the lead/index variants with their nearest gene:
+
+```{r}
+get_best_snp_per_MB(CD_UKBB) %>%  annotate_with_nearest_gene()
+```
+
+Get genomic coordinates for a gene:
+
+```{r}
+get_gene(gene_name="IL23R")
+```
+
+Get snps within a region:
+
+```{r}
+get_snps_within_region(CD_UKBB, region = "chr1:67138906-67259979") %>% head(n=10)
+```
+
+Get the top variant on a chromsome:
+```{r}
+get_top_snp(CD_UKBB, chr="chr1")
+```
+
+<br>
+
+#### Get help:
 
 ``` r
-manhattan(list(CD_UKBB,CD_FINNGEN,UC_UKBB),ntop=2,legend_labels = c("CD UKBB","CD Finngen","UC UKBB"),title="IBD")
+?manhattan()
+?regionplot()
+?locuszoom()
 ```
-
-<img src="man/figures/README-unnamed-chunk-15-1.png" width="120%" />
-
-## Useful functions
-
-``` r
-get_top_hit(CD_UKBB, chr="chr16")
-dat1 <- get_best_snp_per_MB(CD_UKBB,thresh = 1e-07, region=1000000)
-#get overlapping SNPS overlapping in two datasets
-overlapping_snps <- dat1 %>% get_overlapping_snps_by_pos(CD_FINNGEN)
-
-overlapping_snps_matched <- overlapping_snps %>% match_alleles()
-overl_snps_matched_pos_allele_dat1 <- overlapping_snps_matched %>% flip_to_positive_allele_for_dat1()
-snpset1 <- overl_snps_matched_pos_allele_dat1 %>% annotate_with_nearest_gene(protein_coding_only = T)
-
-#or do all this in one go, by calling the create_snpset functon
-snpset1 <- create_snpset(CD_FINNGEN, CD_UKBB, thresh = 1e-06)
-snpset2 <- create_snpset(CD_UKBB, CD_FINNGEN, thresh= 1e-06)
-```
-
-``` r
-e1 <- effect_plot(snpset1, pheno_x="CD Finngen", pheno_y="CD UKBB",color=get_topr_colors()[1], gene_label_thresh = 1)
-e2 <- effect_plot(snpset2, pheno_x="CD UKBB", pheno_y="CD Finngen", color=get_topr_colors()[2], gene_label_thresh=1,annotate_with = "ID")
-grid.arrange(e1,e2)
-```
-
-### Plot apperance: setting text sizes
-
-``` r
-manhattan(list(CD_UKBB,CD_FINNGEN), annotate=1e-09,axis_title_size = 20,axis_text_size = 16,label_size = 5, title_text_size = 16, legend_text_size = 20)
-#> [1] "Use the legend_labels argument to change the legend labels from color names to meaningful labels! "
-```
-
-<img src="man/figures/README-unnamed-chunk-18-1.png" width="120%" />
-
-``` r
-regionplot(list(CD_UKBB,CD_FINNGEN), gene="IKZF1", vline=50274703,title="CD UKBB", title_text_size = 16,axis_title_size = 20,axis_text_size = 20,legend_text_size = 20)
-#> [1] "7"
-#> [1] "7"
-#> [1] "Use the legend_labels argument to change the legend labels from color names to meaningful labels! "
-#> Warning in min(dat[[i]]$log10p): no non-missing arguments to min; returning Inf
-#> Warning in max(dat[[i]]$log10p): no non-missing arguments to max; returning -Inf
-#> [1] "Zoomed to region:  chr7:50204067-50505101"
-```
-
-<img src="man/figures/README-unnamed-chunk-19-1.png" width="120%" />
-
-Setting alpha, size and shape
