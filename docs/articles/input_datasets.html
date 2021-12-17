@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Intro into the topr package  • topr</title>
+<title>Intro into topr input datasets  • topr</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Intro into the topr package ">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Intro into topr input datasets ">
 <meta property="og:description" content="topr">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -40,9 +40,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../articles/topr.html">Get started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -56,13 +53,13 @@
       <a href="../articles/input_dataset.html">Intro into the topr package </a>
     </li>
     <li>
-      <a href="../articles/input_datasets.html">Intro into the topr package </a>
+      <a href="../articles/input_datasets.html">Intro into topr input datasets </a>
     </li>
     <li>
-      <a href="../articles/manhattan.html">Intro into the topr::manhattan function </a>
+      <a href="../articles/manhattan.html">Intro into manhattan</a>
     </li>
     <li>
-      <a href="../articles/regionplot.html">Intro into the topr:regionplot function</a>
+      <a href="../articles/regionplot.html">Intro into regionplot</a>
     </li>
   </ul>
 </li>
@@ -90,7 +87,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Intro into the topr package</h1>
+      <h1 data-toc-skip>Intro into topr input datasets</h1>
                         <h4 data-toc-skip class="author">Thorhildur Juliusdottir</h4>
             
       
@@ -103,12 +100,14 @@
     
 <!--
 %\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Intro to the topr package}
+%\VignetteIndexEntry{Intro into topr input datasets}
 -->
 <hr>
 <div class="section level2">
 <h2 id="example-input-datasets">Example input datasets<a class="anchor" aria-label="anchor" href="#example-input-datasets"></a>
 </h2>
+<p>Note!!! It is highly recommended to check the number of datapoints in your dataset before you plot, since a very large dataset will take a long time to plot.</p>
+<p>I usually reduce the size of the GWAS datataset prior to plotting by filtering out variants with <code>P&gt;1e-03</code>.</p>
 <p>topr comes with three example GWAS datasets, one on Ulcerative Colitis retrieved from the UKBB (<code>UC_UKBB</code>), and the other two on Crohn’s disease (<code>CD_UKBB</code> and <code>CD_FINNGEN</code>) obtained from the FinnGen and UK biobanks respectively. topr utilizes gene and exon datasets from Ensembl (GRCh38.pxx) (<code>ENSGENES</code> and <code>ENSEXONS</code>).</p>
 <p>See <a href="https://wuxi-nextcode.github.io/topr/reference/index.html" class="external-link">topr reference</a> for more details on the in-built datasets.</p>
 <p>Input datasets must include least three columns (<code>CHROM, POS</code> and <code>P</code>), where naming of the columns is flexible (i.e the chr label can be either chr or chrom and is case insensitive).</p>
@@ -122,8 +121,23 @@
 4  chr1 1007256  rs76233940 0.000401567 0.579783
 5  chr1 1007256  rs76233940 0.000401567 0.579783
 6  chr1 1341559 rs376494450 0.000151216 1.320130</code></pre>
-The chromosome in the <code>CHROM</code> column can be represented with or without the <i>chr</i> suffix, e.g (chr1 or 1)
-<hr>
+<p>The chromosome in the <code>CHROM</code> column can be represented with or without the <i>chr</i> suffix, e.g (chr1 or 1)</p>
+<p>Input data column names and alternatives understood by topr:</p>
+<pre>
+<i>Required columns and alternative namings:</i>
+CHROM:          CHR,chr,Chrom,chrom,chromosome,CHROMOSOME
+POS:            pos,BP,bp,base_pair_location
+P:              p,PVAL,pval,PVALUE,pvalue,p_value
+
+<i>Optional columns and alternative namings:</i>
+ID:             rsid,rsId,RSID,SNP,snp,rsName,rsname,RSNAME
+Gene_Symbol:    Gene_symbol,GENENAME,geneName,genename,GENE,gene
+Max_Impact:     max_impact,Impact,impact
+REF:            ref
+ALT:            alt
+BETA:           beta,b,B
+OR:             or,odds_ratio
+</pre>
 </div>
   </div>
 

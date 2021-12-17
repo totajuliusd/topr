@@ -16,7 +16,7 @@ install.packages("topr")
 Or from github:
 
 ``` r
-devtools::install_github("wuxi-nextcode/topr")
+devtools::install_github("GenuityScience/topr")
 ```
 
 And then load the package:
@@ -157,7 +157,7 @@ get_gene(gene_name="IL23R")
 Get snps within a region:
 
 ```{r}
-get_snps_within_region(CD_UKBB, region = "chr1:67138906-67259979") %>% head(n=10)
+get_snps_within_region(CD_UKBB, region = "chr1:67138906-67259979")
 ```
 
 Get the top variant on a chromsome:

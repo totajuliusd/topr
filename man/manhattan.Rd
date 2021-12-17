@@ -2,7 +2,7 @@
 % Please edit documentation in R/manhattan.R
 \name{manhattan}
 \alias{manhattan}
-\title{Manhattan plot}
+\title{Create a Manhattan plot}
 \usage{
 manhattan(
   df,
@@ -146,14 +146,13 @@ manhattan(
 ggplot object
 }
 \description{
-\code{manhattan()} displays the association results for the entire genome
+\code{manhattan()} displays association results for the entire genome on a Manhattan plot.
 Required parameter is at least one dataset (dataframe) containing the association data (with columns \code{CHROM,POS,P} in upper or lowercase)
 
 All other input parameters are optional
 }
 \examples{
 \dontrun{
-data(gwas_CD)
 manhattan(gwas_CD)
 }
 }

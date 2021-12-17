@@ -2,7 +2,7 @@
 % Please edit documentation in R/regionplot.R
 \name{regionplot}
 \alias{regionplot}
-\title{Region plot}
+\title{Create a regionplot}
 \usage{
 regionplot(
   df,
@@ -57,7 +57,12 @@ regionplot(
   sign_thresh_linetype = "dashed",
   sign_thresh_size = 0.5,
   rsids_with_vline = NULL,
-  annotate_with_vline = NULL
+  annotate_with_vline = NULL,
+  show_gene_legend = TRUE,
+  unit_main = 7,
+  unit_gene = 2,
+  unit_overview = 1.25,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -166,20 +171,28 @@ regionplot(
 \item{rsids_with_vline}{A string (rsid) or vector of strings to highlight on the plot with their rsids and vertical lines further highligthing their positions}
 
 \item{annotate_with_vline}{A number (p-value). Display annotation and vertical lines for variants with p-values below this threshold}
+
+\item{show_gene_legend}{A logical scalar, set to FALSE to hide the gene legend (default value is TRUE)}
+
+\item{unit_main}{the height unit of the main plot (default = 7)}
+
+\item{unit_gene}{the height unit of the gene plot (default= 2 )}
+
+\item{unit_overview}{the height unit of the overview plot (default = 1.25)}
+
+\item{verbose}{Logical, set to FALSE to get suppress printed information}
 }
 \value{
-plots within ggplotGrobs arranged with egg::gtable_frame)
+plots within ggplotGrobs, arranged with egg::gtable_frame
 }
 \description{
-
-
-\code{regionplot()} displays the association results for a smaler region within one chromosome
-Required parameter is at least one dataset (dataframe) containing the association data (with columns \code{CHROM,POS,P} in upper or lowercase), and either gene, variant or region (represented by chr, xmin and xmax)
+\code{regionplot()} displays the association results for a smaller genetic regions within one chromosome.
+Required parameter is at least one dataset (dataframe) containing the association data (with columns \code{CHROM,POS,P} in upper or lowercase) and either a variant ID, gene name or the genetic region represented as a chromosome together with start and stop positions (either as a single string or as three separate arguments).
 
 All other input parameters are optional
 }
 \examples{
 \dontrun{
-regionplot(df,gene="FTO")
+regionplot(CD_UKBB, gene="IL23R")
 }
 }

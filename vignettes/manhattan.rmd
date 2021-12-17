@@ -1,199 +1,76 @@
 ---
-title: "Intro into the topr package "
+title: "Intro into manhattan"
 author: "Thorhildur Juliusdottir"
 output: html_notebook
 ---
 <!--
 %\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Intro to the topr package}
+%\VignetteIndexEntry{Intro into manhattan}
 -->
 
 ```{r, include=FALSE}
     library(topr)
-    library(knitr)
-    opts_chunk$set(comment=NA, fig.width=12, fig.height=5.5, message=FALSE, tidy=TRUE, dpi=170)
+    library(dplyr)
 ```
 <hr>
-## Example input datasets
+
+## manhattan
 
 
-topr comes with three example GWAS datasets, one on Ulcerative Colitis retrieved from the UKBB (<code>UC_UKBB</code>), and the other two on Crohn’s disease (<code>CD_UKBB</code> and <code>CD_FINNGEN</code>) obtained from the FinnGen and UK biobanks respectively. topr utilizes gene and exon datasets from Ensembl (GRCh38.pxx) (<code>ENSGENES</code> and <code>ENSEXONS</code>).
+Displays GWAS results over the entire genome.
 
-See <a href="https://wuxi-nextcode.github.io/topr/reference/index.html">topr reference</a> for more details on the in-built datasets.
-
-Input datasets must include least three columns (<code>CHROM,
-POS</code> and <code>P</code>), where naming of the columns is flexible
-(i.e the chr label can be either chr or chrom and is case insensitive).
-
-topr has 3 in-built datasets (GWASes), take a look at Crohn's GWAS (<code>CD_UKBB</code>) by issuing the following command:
-
-```{r}
-head(CD_UKBB)
-```
-
-
-The chromosome in the <code>CHROM</code> column can be represented with
-or without the <i>chr</i> suffix, e.g (chr1 or 1)
-<hr>
-
-## Usage
-
-topr's key plotting functions are <code>manhattan()</code> and <code>regionplot()</code>
-
-
-### Manhattan plots
-
-Get an overview of the Crohns association results on a Manhattan plot:
-
-
-```{r manhattan, fig.height = 5.5}
+Get an overview of the in-built Crohn's GWAS results (<code>CD_UKBB</code>):
+```{r, eval=FALSE}
 manhattan(CD_UKBB)
 ```
-
-Label association peaks with the nearest gene and add plot title:
-
-```{r}
-manhattan(CD_UKBB, annotate=5e-09,  title="Crohn's disease")
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('figures/manhattan.jpg')
 ```
 
 
-Add genes of interest to the plot
+Annotate the lead/index variants (with p-values below 5e-09) with their nearest gene and add a title:
+```{r, eval=FALSE}
+manhattan(CD_UKBB, annotate=5e-09,  title="Crohn's disease")
+```
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('figures/manhattan_annotate.jpg')
+```
 
-```{r}
+
+Display genes of interest at the bottom of the Manhattan plot to get a visual representation of their position relative to association peaks:
+```{r, eval=FALSE}
 genes=c("IL23R","NOTCH4","NOD2","JAK2","TTC33")
 manhattan(CD_UKBB, annotate=5e-09, title="Crohn's disease", highlight_genes = genes)
 ```
-
-Change the position of the genes of interest on the plot (the default value is 1):
-
-```{r}
-manhattan(CD_UKBB, annotate=5e-09, title="Crohn's disease", highlight_genes = genes, highlight_genes_ypos = 1.5)
-```
-
-Remove the significance threshold:
-
-```{r}
-
-manhattan(CD_UKBB, annotate=5e-09, title="Crohn's disease", highlight_genes = genes, highlight_genes_ypos = 1.5, sign_thresh = NULL)
-```
-Set multiple significance thresholds in different colors:
-
-```{r}
-
-manhattan(CD_UKBB, annotate=5e-09, title="Crohn's disease", highlight_genes = genes, highlight_genes_ypos = 1.5, sign_thresh =c(1e-8,1e-09,1e-10),sign_thresh_color = c("red","darkorange","magenta"))
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('figures/manhattan_genes.jpg')
 ```
 
 
-Change the scale and plot colors:
-
-```{r}
-manhattan(CD_UKBB, annotate=5e-09, title="Crohn's disease", highlight_genes = genes, highlight_genes_ypos = 1.5, highlight_genes_color ="magenta", color="darkgreen", scale=1.2)
+View one chromosome only:
+```{r, eval=FALSE}
+manhattan(CD_UKBB, annotate=5e-09, chr="chr1")
 ```
-
-Change the color and angle of the labels:
-
-```{r}
-manhattan(CD_UKBB, annotate=5e-09, title="Crohn's disease", highlight_genes = genes, highlight_genes_ypos = 1.5, highlight_genes_color ="magenta", color="darkgreen", label_color = "grey40", angle=90)
-```
-
-Tidy the labels, by moving them using <code>nudge_y</code> and increase the y-axis. Increase the <code>region_size</code> for sparser gene labelling.
-
-```{r}
-manhattan(CD_UKBB, annotate=5e-09, title="Crohn's disease", highlight_genes = genes, highlight_genes_ypos = 1.5, highlight_genes_color ="magenta", color="darkgreen", label_color = "grey40", angle=90,nudge_y=2,ymax=30, region_size = 10000000)
-```
-
-Display multiple GWASes on the same plot:
-
-```{r, fig.height = 6}
-manhattan(list(UC_UKBB,CD_UKBB))
-```
-
-Set the legend labels,annotate and change plot color:
-```{r, fig.height = 6}
-manhattan(list(UC_UKBB,CD_UKBB), legend_labels=c("UC UKBB", "CD UKBB"), annotate=1e-12, region_size=10000000, color = c("darkblue","skyblue2"))
-```
-
-Use the <code>ntop</code> argument to control how many GWASes are shown on the top and how many at the bottom and highlight the genes of interest:
-
-```{r, fig.height = 8}
-manhattan(list(UC_UKBB,CD_UKBB), legend_labels=c("UC UKBB", "CD UKBB"), annotate=1e-12, region_size=10000000, color = c("darkblue","skyblue2"),ntop=1,
-          highlight_genes = genes, highlight_genes_ypos = -0.5 , angle=90, ymax=40, ymin=-30, nudge_y = 2, label_color ="black", scale=1.1)
-```
-
-Show 3 GWASes on the same plot, using different annotation thresholds for each dataset
-```{r, fig.height = 8.5}
-manhattan(list(UC_UKBB,CD_UKBB,CD_FINNGEN), legend_labels=c("UC UKBB", "CD UKBB","CD FINNGEN"), annotate=c(5e-9,5e-9,1e-15), region_size=100000000, ntop=1,
-          highlight_genes = genes, highlight_genes_ypos = -0.5 , angle=90, ymax=40, ymin=-30, nudge_y = 2, title="Inflammatory Bowel Disease")
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('figures/manhattan_chr1.jpg')
 ```
 
 
-### Region plots
+Create a Manhattan of multiple GWAS results (in a list) on the same plot
 
-Zoom-in on the region around the IL23R gene
-
-```{r regionplot, fig.height = 8, fig.width = 12}
-regionplot(CD_UKBB, gene="IL23R")
+```{r eval=FALSE}
+manhattan(list(UC_UKBB, CD_UKBB), legend_labels=c("UC UKBB", "CD UKBB"))
+```
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('figures/manhattan_multi.jpg')
 ```
 
-Annotate the top variant within each 100kb window.
-
-```{r regionplot_annotate, fig.height = 8, fig.width = 12}
-regionplot(CD_UKBB, gene="IL23R", annotate=5e-09, region_size  = 100000)
+Show three GWASes on the same plot, using different annotation thresholds for each dataset. Also, add genes of interest to the plot
+Use the ntop argument to control how many GWASes are displayed at the top and bottom of the plot:
+```{r, eval=FALSE}
+dat <- list(UC_UKBB,CD_UKBB,CD_FINNGEN)
+manhattan(dat, legend_labels=c("UC UKBB", "CD UKBB","CD FINNGEN"), annotate=c(5e-9,5e-9,1e-15), region_size=100000000, ntop=1, highlight_genes = genes, highlight_genes_ypos = -0.5 , angle=90, ymax=40, ymin=-30, nudge_y = 2, title="Inflammatory Bowel Disease")
 ```
-Annotate the top variants and draw a vertical line through their positions to further highlight their position within the genes below.
-
-```{r regionplot_with_vline, fig.height = 8, fig.width = 12}
-regionplot(CD_UKBB, gene="IL23R", annotate_with_vline = 5e-09, region_size = 100000)
-```
-
-Zoom in on the IL23R gene for multiple GWASes
-
-```{r regionplot_multi, fig.height = 8, fig.width = 12}
-regionplot(list(UC_UKBB,CD_UKBB,CD_FINNGEN), gene="IL23R", annotate_with_vline = 5e-06, legend_labels=c("UC UKBB","CD UKBB","CD FINNGEN"))
-```
-
-### Locuszoom-like plots
-
-Locuszoom-like plot. Note that the input dataframe needs to include the R2 column with the pre-calculated r2 values, since topr does not do these calculations.
-
-```{r locuszoom, fig.height = 8, fig.width = 12}
-locuszoom(R2_CD_UKBB)
-```
-
-Annotate the variants with vlines on the plot:
-```{r, fig.height = 8, fig.width = 12}
-locuszoom(R2_CD_UKBB, annotate_with_vline = 1e-09, region_size = 100000)
-```
-
-## Useful functions
-
-Extract lead/index variants from the GWAS dataset (<code>CD_UKBB</code>):
-
-```{r}
-CD_UKBB %>% get_best_snp_per_MB()
-```
-
-
-
-Annotate the lead/index variants with their nearest gene:
-
-```{r}
-CD_UKBB %>% get_best_snp_per_MB() %>%  annotate_with_nearest_gene()
-```
-
-Get genomic coordinates for a gene:
-
-```{r}
-get_gene(gene_name="IL23R")
-```
-
-Get snps within a region:
-
-```{r}
-CD_UKBB %>% get_snps_within_region(region = "chr1:67138906-67259979") %>% head(n=10)
-```
-
-Get the top variant on a chromsome:
-```{r}
-CD_UKBB %>% get_top_snp(chr="chr1")
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('figures/manhattan_multi_ntop.jpg')
 ```
