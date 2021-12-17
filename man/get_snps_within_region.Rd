@@ -9,13 +9,13 @@ get_snps_within_region(df, region, chr = NULL, xmin = NULL, xmax = NULL)
 \arguments{
 \item{df}{data frame of association results with the columns CHR and POS}
 
-\item{region}{string representing the genetic region (e.g chr16:50693587-50734041)}
+\item{region}{A string representing the genetic region (e.g chr16:50693587-50734041)}
 
-\item{chr}{chromosome (e.g. chr16)}
+\item{chr}{A string, chromosome (e.g. chr16)}
 
-\item{xmin}{include variants with POS larger than xmin}
+\item{xmin}{An integer, include variants with POS larger than xmin}
 
-\item{xmax}{include variants with POS smaller than xmax}
+\item{xmax}{An integer, include variants with POS smaller than xmax}
 }
 \value{
 the variants within the requested region

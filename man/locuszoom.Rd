@@ -6,6 +6,7 @@
 \usage{
 locuszoom(
   df,
+  annotate = NULL,
   ntop = 3,
   xmin = 0,
   size = 2,
@@ -47,95 +48,109 @@ locuszoom(
   gene = NULL,
   title = NULL,
   label_color = "gray40",
-  region = NULL
+  region = NULL,
+  scale = 1,
+  rsids_with_vline = NULL,
+  annotate_with_vline = NULL,
+  sign_thresh_size = 0.5
 )
 }
 \arguments{
 \item{df}{Dataframe or a list of dataframes (required columns are \code{CHROM,POS,P}), in upper- or lowercase) of association results.}
 
-\item{ntop}{Number of datasets (GWASes) to show on the top plot}
+\item{annotate}{A number (p-value). Display annotation for variants with p-values below this threshold}
 
-\item{xmin}{Parameters setting the chromosomal range to display on the x-axis}
+\item{ntop}{An integer, number of datasets (GWASes) to show on the top plot}
 
-\item{size}{Optional parameter setting the size of the plot points (default: \code{size=1.2})}
+\item{xmin}{Integer, setting the chromosomal range to display on the x-axis}
 
-\item{shape}{A number of vector of numers setting the shape of the plotted points}
+\item{size}{An integer setting the size of the plot points (default: \code{size=1.2})}
+
+\item{shape}{A number of vector of numbers setting the shape of the plotted points}
 
 \item{alpha}{A number or vector of numbers setting the transparancy of the plotted points}
 
-\item{label_size}{Optional parameter to set the size of the plot labels (default: \code{label_size=3})}
+\item{label_size}{An number to set the size of the plot labels (default: \code{label_size=3})}
 
-\item{annotate_with}{Annotate the variants with eiher Gene_Symbol or ID (default annotate_with="Gene_Symbol")}
+\item{annotate_with}{A string. Annotate the variants with eiher Gene_Symbol or ID (default: "Gene_Symbol")}
 
-\item{color}{Optional parameter setting the color of the plot points (default: \code{color="darkblue"})}
+\item{color}{A string or a vector of strings, for setting the color of the datapoints on the plot}
 
-\item{axis_text_size}{Text size of the x and y axes tick labels (default: 12)}
+\item{axis_text_size}{A number, size of the x and y axes tick labels (default: 12)}
 
-\item{axis_title_size}{Text size of the x and y title labels (default: 12)}
+\item{axis_title_size}{A number, size of the x and y title labels (default: 12)}
 
-\item{title_text_size}{Text size of the plot title (default: 13)}
+\item{title_text_size}{A number, size of the plot title (default: 13)}
 
-\item{show_genes}{Show genes instead of exons (default show_genes=FALSE)}
+\item{show_genes}{A logical scalar, show genes instead of exons (default show_genes=FALSE)}
 
-\item{show_overview}{Show the overview plot (default show_overview=TRUE)}
+\item{show_overview}{A logical scalar, shows/hides the overview plot (default= TRUE)}
 
-\item{show_exons}{Show exons instead of genees (default show_exons=FALSE)}
+\item{show_exons}{A logical scalar, show exons instead of genees (default show_exons=FALSE)}
 
-\item{max_genes}{Only label the genes if they are fewer than max_genes (default values is 200).}
+\item{max_genes}{An integer, only label the genes if they are fewer than max_genes (default values is 200).}
 
-\item{sign_thresh}{Optional parameter setting the threshold of the dashed red horizontal line representing the significance threshold (default: \code{sign_thresh=5.1e-9}). Multiple thresholds can be provided in a vector, e.g \code{sign_thresh=c(5.1e-9,1.0e-6)}). Set this parameter to NULL if you dont want this line to appear at all \code{sign_thresh=NULL}}
+\item{sign_thresh}{A number or vector of numbers, setting the horizontal signicance threshold (default: \code{sign_thresh=5.1e-9}). Set to NULL to hide the significance threshold.}
 
-\item{sign_thresh_color}{set the color of the significance threshold line or lines}
+\item{sign_thresh_color}{A string or vector of strings to set the color/s of the significance threshold/s}
 
-\item{sign_thresh_label_size}{Set the text size of the label for the signficance thresholdds (default text sizze is 3.5)}
+\item{sign_thresh_label_size}{A number setting the text size of the label for the signficance thresholdds (default text size is 3.5)}
 
-\item{xmax}{Parameters setting the chromosomal range to display on the x-axis}
+\item{xmax}{Integer, setting the chromosomal range to display on the x-axis}
 
-\item{ymin}{Optional parameters, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
+\item{ymin}{Integer, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
 
-\item{ymax}{Optional parameters, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
+\item{ymax}{Integer, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
 
-\item{protein_coding_only}{Set this parameter to TRUE to only use protein coding genes for annotation}
+\item{protein_coding_only}{A locical scalar, if TRUE, only protein coding genes are used for annotation}
 
-\item{region_size}{the size of the region used when annotating the top variant in a region (default value is 10000000 or 10 MB)}
+\item{region_size}{An integer (default = 1000000) indicating the window size for variant labelling. Increase this number for sparser annotation and decrease for denser annotation.}
 
-\item{gene_padding}{The size of the region around the gene, if the gene argument was used (default: gene_padding=100000)}
+\item{gene_padding}{An integer representing size of the region around the gene, if the gene argument was used (default = 100000)}
 
-\item{angle}{The angle of the text label}
+\item{angle}{A number, the angle of the text label}
 
-\item{legend_title_size}{Text size of the legend title}
+\item{legend_title_size}{A number, size of the legend title}
 
-\item{legend_text_size}{Text size of the legend text}
+\item{legend_text_size}{A number, size of the legend text}
 
-\item{nudge_x}{To vertically adjust the starting position of each gene label (this is a ggrepel parameter)}
+\item{nudge_x}{A number to vertically adjust the starting position of each gene label (this is a ggrepel parameter)}
 
-\item{nudge_y}{To horizontally adjust the starting position of each gene label (this is a ggrepel parameter)}
+\item{nudge_y}{A number to horizontally adjust the starting position of each gene label (this is a ggrepel parameter)}
 
-\item{rsids}{A vector of rs ids to highlight on the plot, e.g. rsids=c("rs1234, rs45898")}
+\item{rsids}{A string (rsid) or vector of strings to highlight on the plot, e.g. \code{rsids=c("rs1234, rs45898")}}
 
-\item{variant}{Zoom in on this variant. Can be either an rsid, or a dataframe (like returned from get_best_hit())}
+\item{variant}{A string representing the variant to zoom in on. Can be either an rsid, or a dataframe (with the columns CHROM,POS,P)}
 
-\item{rsids_color}{The color of the variants in variants_id (default color is red)}
+\item{rsids_color}{A string, the color of the variants in variants_id (default color is red)}
 
-\item{legend_name}{Change the name of the legend (default: None)}
+\item{legend_name}{A string, use to change the name of the legend (default: None)}
 
-\item{legend_position}{Top,bottom,left or right}
+\item{legend_position}{A string, top,bottom,left or right}
 
-\item{chr}{The chromosome to plot (i.e. chr15), only required if the input dataframe contains results from more than one chromosome}
+\item{chr}{A string or integer, the chromosome to plot (i.e. chr15), only required if the input dataframe contains results from more than one chromosome}
 
-\item{vline}{Parameter (optional) to add a vertical line to the plot at a specific chromosomal position, e.g \code{vline=204000066}. Multiple values can be provided in a vector, e.g  \code{vline=c(204000066,100500188)}}
+\item{vline}{A number or vector of numbers to add a vertical line to the plot at a specific chromosomal position, e.g \code{vline=204000066}. Multiple values can be provided in a vector, e.g  \code{vline=c(204000066,100500188)}}
 
-\item{show_gene_names}{Show the gene names even though they exceed the max_genes count}
+\item{show_gene_names}{A logical scalar, if set to TRUE, gene names are shown even though they exceed the max_genes count}
 
-\item{legend_labels}{Legend labels}
+\item{legend_labels}{A string or vector of strings representing legend labels for the input dataset/s}
 
-\item{gene}{Zoom in on this gene (e.g. gene=FTO)}
+\item{gene}{A string representing the gene to zoom in on (e.g. gene=FTO)}
 
-\item{title}{Plot title (optional}
+\item{title}{A string}
 
-\item{label_color}{Otpional parameter to change the color}
+\item{label_color}{A string. To change the color of the gene or variant labels}
 
-\item{region}{genetic region, e.g. chr1:67038906-67359979}
+\item{region}{A string representing a genetic region, e.g. chr1:67038906-67359979}
+
+\item{scale}{A number, to change the size of the title and axes labels and ticks at the same time (default = 1)}
+
+\item{rsids_with_vline}{A string (rsid) or vector of strings to highlight on the plot with their rsids and vertical lines further highligthing their positions}
+
+\item{annotate_with_vline}{A number (p-value). Display annotation and vertical lines for variants with p-values below this threshold}
+
+\item{sign_thresh_size}{A number, sets the size of the horizontal significance threshold line (default = 1)}
 }
 \value{
 plots using egg (https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html)

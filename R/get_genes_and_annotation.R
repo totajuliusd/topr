@@ -16,17 +16,17 @@ get_genes_in_region <- function(chr=chr, xmin=xmin,xmax=xmax,protein_coding_only
 }
 
 get_main_LD_snp <- function(dat){
-  df <- dat[[1]]
+  #df <- dat[[1]]
   label_cols <-  c("CHROM","POS","P","ID","log10p")
   top_snps <-  data.frame(matrix(nrow = 0, ncol = length(label_cols)))
   colnames(top_snps) <- label_cols
   for(i in seq_along(dat)){
-      top_snps <- rbind(top_snps, dat[[i]] %>% dplyr::filter(R2 == 1) %>% dplyr::distinct(ID, .keep_all=T) %>% dplyr::arrange(P) %>% utils::head(n=1) %>% dplyr::select("CHROM","POS","P","ID","log10p") )
+      top_snps <- rbind(top_snps, dat[[i]] %>% dplyr::filter("R2" >= 1) %>% dplyr::distinct(ID, .keep_all=T) %>% dplyr::arrange(-R2) %>% utils::head(n=1) %>% dplyr::select("CHROM","POS","P","ID","log10p") )
   }
   return(top_snps)
 }
 
-get_annotation <- function(dat, annotate=1e-09, region_size=1000000,distinct_gene_labels=FALSE,protein_coding_only=FALSE){
+get_annotation <- function(dat, annotate=1e-09, region_size=1000000,distinct_gene_labels=FALSE,protein_coding_only=FALSE, verbose=FALSE){
   if(is.data.frame(dat)){dat <- list(dat)}
   if("log10p" %in% colnames(dat[[1]])){
     label_cols <-  c("CHROM","POS","P","ID","Gene_Symbol","biotype", "log10p", "color","alpha","size","shape")
@@ -44,7 +44,7 @@ get_annotation <- function(dat, annotate=1e-09, region_size=1000000,distinct_gen
       annot_thresh <- ifelse(i <= length(annotate),  annotate[i], annotate[length(annotate)])
     }
     else{ annot_thresh <- annotate}
-    tmp_labels <- get_best_snp_per_MB(df, thresh = annot_thresh, region_size=region_size, .checked=TRUE, protein_coding_only = protein_coding_only)
+    tmp_labels <- get_best_snp_per_MB(df, thresh = annot_thresh, region_size=region_size, .checked=TRUE, protein_coding_only = protein_coding_only, verbose=FALSE)
 
     if(nrow(tmp_labels) > 0){
       if(!"biotype" %in% tmp_labels){tmp_labels$biotype <- "unknown"}
@@ -75,7 +75,7 @@ get_annotation <- function(dat, annotate=1e-09, region_size=1000000,distinct_gen
 #' Required parameters is a dataframe of SNPs (with the columns CHROM and POS)
 #'
 #' @param variants a dataframe of variant positions (CHROM and POS)
-#' @param protein_coding_only If set to TRUE only annotate with protein coding genes (the default value is FALSE)
+#' @param protein_coding_only Logical, if set to TRUE only annotate with protein coding genes (the default value is FALSE)
 #' @return the input dataframe with Gene_Symbol as an additional column
 #' @export
 #'

@@ -2,14 +2,14 @@
 % Please edit documentation in R/setters_and_getters.R
 \name{get_genes_by_Gene_Symbol}
 \alias{get_genes_by_Gene_Symbol}
-\title{Get the genetic position of a gene or genes by their gene name}
+\title{Get the genetic position of a gene by its gene name}
 \usage{
 get_genes_by_Gene_Symbol(genes, chr = NULL)
 }
 \arguments{
-\item{genes}{A gene name (e.g. "FTO") or a vector of gene names ( c("FTO","NOD2"))}
+\item{genes}{A string or vector of strings representing gene names, (e.g. "FTO") or  (c("FTO","NOD2"))}
 
-\item{chr}{Search for the genes on this chromsome only}
+\item{chr}{A string, search for the genes on this chromsome only, (e.g chr="chr1")}
 }
 \value{
 Dataframe of genes

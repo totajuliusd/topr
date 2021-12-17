@@ -40,6 +40,7 @@ flip_to_positive_allele_for_dat1 <- function(df){
 #' \code{matched_alleles()}
 #'
 #' @param df A dataframe that is in the snpset format (like returned by the get_snpset() function)
+#' @param verbose A logical scalar (default: FALSE). Assign to TRUE to get information on which alleles are matched and which are not.
 #'
 #' @return The input dataframe containing only those variants whith matched alleles in the snpset
 #' @export
@@ -55,7 +56,7 @@ match_alleles <- function(df, verbose=F){
   matched_snps <- df %>% dplyr::filter(REF1 == REF2 & ALT1 == ALT2)
   #check whether ref and alt are reversed
   if(length(matched_snps$POS) != length(df$POS)){
-    swapped_allele <-  snpset1 %>% dplyr::filter(REF1 == ALT2 & REF2 == ALT1)
+    swapped_allele <-  df %>% dplyr::filter(REF1 == ALT2 & REF2 == ALT1)
     swapped_allele$E2 <- swapped_allele$E2*(-1)
     swapped_allele$REF2tmp <- swapped_allele$REF2
     swapped_allele$REF2 <- swapped_allele$ALT2
@@ -85,6 +86,8 @@ match_alleles <- function(df, verbose=F){
 #'
 #' @param df1 A dataframe of variants, has to contain CHROM and POS
 #' @param df2 A dataframe of variants, has to contain CHROM and POS
+#' @param verbose A logical scalar (default: FALSE). Assign to TRUE to get information on which alleles are matched and which are not.
+#'
 #'
 #' @return The input dataframe containing only those variants whith matched alleles in the snpset
 #' @export
@@ -107,6 +110,9 @@ get_overlapping_snps_by_pos <- function(df1, df2,verbose=F){
   }
   if((! "BETA" %in% colnames(df1)) & ("OR" %in% colnames(df1))){
     df1$BETA <- log(df1$OR)
+  }
+  if((! "REF" %in% colnames(df1)) & (! "REF" %in% colnames(df2))){
+    warning("The input datasets have to include REF and ALT columns to be able to use this function")
   }
   df2 <- df2 %>% dplyr::select(CHROM,POS,REF,ALT,P,BETA) %>% dplyr::rename(P2=P,E2=BETA,ALT2=ALT,REF2=REF)
   if("Gene_Symbol" %in% colnames(df1)){
@@ -143,13 +149,13 @@ get_overlapping_snps_by_pos <- function(df1, df2,verbose=F){
 #' @description
 #'
 #' \code{create_snpset()}
-#' All other input parameters are optional
 #'
 #' @param df1 The dataframe to extract the top snps from (with p-value below thresh)
 #' @param df2 The dataframe in which to search for overlapping SNPs from dataframe1
-#' @param thresh The p-value threshold used for extracting the top snps from dataset 1
-#' @param region_size The size of the interval which to extract the top snps from
-#' @param protein_coding_only Set this variable to TRUE to only use protein_coding genes for the annotation
+#' @param thresh Numeric, the p-value threshold used for extracting the top snps from dataset 1
+#' @param region_size Ingeter, the size of the interval which to extract the top snps from
+#' @param protein_coding_only Logical, set this variable to TRUE to only use protein_coding genes for the annotation
+#' @param verbose Logical, (default: FALSE). Assign to TRUE to get information on which alleles are matched and which are not.
 
 #' @return Dataframe containing the top hit
 #' @export
@@ -194,13 +200,14 @@ create_snpset_code <-function(){
 #' \code{effect_plot()}
 #'
 #' @param dat The input dataframe (snpset) containing one row per variant and P values (P1 and P2) and effects (E1 and E2) from two datasets/phenotypes
-#' @param pheno_x The name of the phenotype whose effect is plotted on the x axis
-#' @param pheno_y The name of the phenotype whose effect is plotted on the y axis
-#' @param annotate_with  The name of the column that contains the label for the datapoints (default value is Gene_Symbol)
-#' @param thresh Threshold cutoff, datapoints with P2 below this threshold are shown as filled circles whereas datapoints with P2 above this threshold are shown as open circles
-#' @param ci_thresh Show the confidence intervals if the P-value is below this threshold
-#' @param gene_label_thresh Label datapoints with P2 below this threshold
-#' @param color default value is the first of the topr colors
+#' @param pheno_x A string representing the name of the phenotype whose effect is plotted on the x axis
+#' @param pheno_y A string representing the name of the phenotype whose effect is plotted on the y axis
+#' @param annotate_with  A string, The name of the column that contains the label for the datapoints (default value is Gene_Symbol)
+#' @param thresh A number. Threshold cutoff, datapoints with P2 below this threshold are shown as filled circles whereas datapoints with P2 above this threshold are shown as open circles
+#' @param ci_thresh A number.Show the confidence intervals if the P-value is below this threshold
+#' @param gene_label_thresh A string, label datapoints with P2 below this threshold
+#' @param color A string, default value is the first of the topr colors
+#' @param scale A number, to change the size of the title and axes labels and ticks at the same time (default = 1)
 #' @export
 #'
 #' @examples
@@ -209,7 +216,7 @@ create_snpset_code <-function(){
 #' }
 #'
 
-effect_plot <- function(dat,pheno_x="x_pheno", pheno_y="y_pheno", annotate_with="Gene_Symbol", thresh=1e-08, ci_thresh=1,gene_label_thresh = 1e-08, color=get_topr_colors()[1]){
+effect_plot <- function(dat,pheno_x="x_pheno", pheno_y="y_pheno", annotate_with="Gene_Symbol", thresh=1e-08, ci_thresh=1,gene_label_thresh = 1e-08, color=get_topr_colors()[1],scale=1){
   ymax <- max(dat$E2)*1.1
   ymin <- abs(min(dat$E2))* (-1.1)
   xmax <- max(dat$E1)*1.1
@@ -249,7 +256,11 @@ effect_plot <- function(dat,pheno_x="x_pheno", pheno_y="y_pheno", annotate_with=
   p1 <- p1+theme(legend.background=element_blank(),legend.key=element_rect(fill="white"))
   p1 <- p1+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
               panel.background = element_blank(), axis.line = element_blank())
-  p1 <- p1+theme(plot.subtitle=element_text(size=12),
+
+  #do this
+  # set_plot_text_sizes <- function(p1, axis_text_size=12, axis_title_size=12, legend_title_size=12,legend_text_size=12,scale=1){
+
+    p1 <- p1+theme(plot.subtitle=element_text(size=12),
               axis.title.x= element_text(size=12), axis.title.y = element_text(size=12),
               legend.text = element_text(size=11))
   p1 <- p1+geom_vline(xintercept=0, colour="grey")+geom_hline(yintercept=0, colour="grey")    #+guides(colour=FALSE)

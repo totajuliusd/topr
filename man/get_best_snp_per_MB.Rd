@@ -17,15 +17,17 @@ get_best_snp_per_MB(
 \arguments{
 \item{df}{Dataframe}
 
-\item{thresh}{P-value threshold, only consider variants with p-values below this threshold (1e-09 by default)}
+\item{thresh}{A number.P -value threshold, only consider variants with p-values below this threshold (1e-09 by default)}
 
-\item{protein_coding_only}{Set this variable to TRUE to only use protein_coding genes for annotation}
+\item{region_size}{An integer (default = 1000000) indicating the window size for variant labelling. Increase this number for sparser annotation and decrease for denser annotation.}
 
-\item{chr}{Use this argument to get the top variants from one chromosome only}
+\item{protein_coding_only}{Logical, set this variable to TRUE to only use protein_coding genes for annotation}
 
-\item{.checked}{If the input data has already been checked, this can be set to TRUE so it wont be checked again (FALSE by default)}
+\item{chr}{String, get the top variants from one chromosome only, e.g. chr="chr1"}
 
-\item{region}{Get the top/best variant (with p-value below thresh) within this region (region=1000000 by default)}
+\item{.checked}{Logical, if the input data has already been checked, this can be set to TRUE so it wont be checked again (FALSE by default)}
+
+\item{verbose}{Logical, set to TRUE to get printed information on number of SNPs extracted}
 }
 \value{
 Dataframe of lead variants. Returns the best variant per MB (by default, change the region size with the region argument) with p-values below the input threshold (thresh=1e-09 by default)
@@ -36,7 +38,7 @@ All other input parameters are optional
 }
 \examples{
 \dontrun{
-data(gwas_CD)
-get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region_size = 10000000)
+get_best_snp_per_MB(CD_UKBB, thresh = 1e-09, region_size = 10000000)
 }
+
 }

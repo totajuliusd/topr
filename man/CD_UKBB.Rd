@@ -10,17 +10,12 @@ A data frame  with 26,824 rows and 10 variables:
 \item{CHROM}{Chromosome, written as for example chr1 or 1}
 \item{POS}{genetic position of the variant}
 \item{ID}{Variant identifier, e.g. rsid }
-\item{REF}{Reference allele}
-\item{ALT}{Alternative allele}
-\item{SE}{Standard Error}
 \item{P}{P-value from Plink run, additive model, reggresion model GLM_FIRTH}
 \item{OR}{Odds Ratio}
-\item{Max_Impact}{Max variant impact (HIGH,MODERATE,LOW or LOWEST)}
-\item{cohort_AF}{variant allele frequency in the UKBB cohort)}
 }
 }
 \source{
-Crohn's UKBB ICD10 code K50 snps with pvalues below p1e-03
+Crohn's UKBB ICD10 code K50, only including variants with P<1e-03
 }
 \usage{
 CD_UKBB

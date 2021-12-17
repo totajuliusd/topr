@@ -74,7 +74,7 @@ All other input parameters are optional" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">topr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0</span>
       </span>
     </div>
 
@@ -148,12 +148,12 @@ Required parameter is at least one dataset (dataframe) containing the associatio
   angle <span class='op'>=</span> <span class='fl'>0</span>,
   legend_labels <span class='op'>=</span> <span class='cn'>NULL</span>,
   gene <span class='op'>=</span> <span class='cn'>NULL</span>,
-  gene_padding <span class='op'>=</span> <span class='fl'>1e+05</span>,
+  gene_region <span class='op'>=</span> <span class='fl'>1e+05</span>,
   chr <span class='op'>=</span> <span class='cn'>NULL</span>,
   annotate_with <span class='op'>=</span> <span class='st'>"Gene_Symbol"</span>,
-  region_size <span class='op'>=</span> <span class='fl'>1e+06</span>,
+  region <span class='op'>=</span> <span class='fl'>1e+07</span>,
   legend_name <span class='op'>=</span> <span class='cn'>NULL</span>,
-  legend_position <span class='op'>=</span> <span class='st'>"bottom"</span>,
+  legend_position <span class='op'>=</span> <span class='cn'>NULL</span>,
   rect <span class='op'>=</span> <span class='cn'>NULL</span>,
   nudge_x <span class='op'>=</span> <span class='fl'>0.1</span>,
   nudge_y <span class='op'>=</span> <span class='fl'>0.2</span>,
@@ -161,8 +161,7 @@ Required parameter is at least one dataset (dataframe) containing the associatio
   xmax <span class='op'>=</span> <span class='cn'>NULL</span>,
   ymin <span class='op'>=</span> <span class='cn'>NULL</span>,
   ymax <span class='op'>=</span> <span class='cn'>NULL</span>,
-  highlight_genes <span class='op'>=</span> <span class='cn'>NULL</span>,
-  label_color <span class='op'>=</span> <span class='cn'>NULL</span>
+  highlight_genes <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -202,7 +201,7 @@ Required parameter is at least one dataset (dataframe) containing the associatio
     </tr>
     <tr>
       <th>label_size</th>
-      <td><p>Optional parameter to set the size of the plot labels (default: <code>label_size=3</code>)</p></td>
+      <td><p>Optional parameter to set the size of the plot labels (default: <code>label_size=3.5</code>)</p></td>
     </tr>
     <tr>
       <th>size</th>
@@ -257,6 +256,14 @@ Required parameter is at least one dataset (dataframe) containing the associatio
       <td><p>Legend labels</p></td>
     </tr>
     <tr>
+      <th>gene</th>
+      <td><p>Zoom in on this gene (e.g. gene=FTO)</p></td>
+    </tr>
+    <tr>
+      <th>gene_region</th>
+      <td><p>The size of the region around the gene, if the gene argument was used (default: gene_region=100000)</p></td>
+    </tr>
+    <tr>
       <th>chr</th>
       <td><p>The chromosome to plot (i.e. chr15), only required if the input dataframe contains results from more than one chromosome</p></td>
     </tr>
@@ -265,7 +272,7 @@ Required parameter is at least one dataset (dataframe) containing the associatio
       <td><p>Annotate the variants with eiher Gene_Symbol or ID (default annotate_with="Gene_Symbol")</p></td>
     </tr>
     <tr>
-      <th>region_size</th>
+      <th>region</th>
       <td><p>the size of the region used when annotating the top variant in a region (default value is 10000000 or 10 MB)</p></td>
     </tr>
     <tr>
@@ -299,10 +306,6 @@ Required parameter is at least one dataset (dataframe) containing the associatio
     <tr>
       <th>highlight_genes</th>
       <td><p>A vector of genes or genes to highlight the datapoints for on the plot</p></td>
-    </tr>
-    <tr>
-      <th>label_color</th>
-      <td><p>Otpional parameter to change the color</p></td>
     </tr>
     </table>
 

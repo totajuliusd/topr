@@ -7,7 +7,7 @@
 dat_column_check_and_set(dat)
 }
 \arguments{
-\item{dat}{The data input, a data frame or a list of data frames}
+\item{dat}{A data frame or a list of data frames}
 }
 \description{
 This function is used to standardize the column names in the input dataframe

@@ -177,9 +177,11 @@ get_ymax <- function(dat){
   ymax <- 0
   if(is.data.frame(dat)) dat <- list(dat)
   for(i in seq_along(dat)){
-    tmp <- max(dat[[i]]$log10p)
-    if(tmp>ymax){
-      ymax <- tmp
+    if(length(dat[[i]]$log10p) > 0){
+      tmp <- max(dat[[i]]$log10p)
+      if(tmp>ymax){
+        ymax <- tmp
+      }
     }
   }
   return(ymax)
@@ -189,15 +191,17 @@ get_ymin <- function(dat){
   ymin <- 5
   if(is.data.frame(dat)) dat <- list(dat)
     for(i in seq_along(dat)){
-      tmp <- min(dat[[i]]$log10p)
-      if(tmp<ymin){
-        ymin <- tmp
+      if(length(dat[[i]]$log10p) > 0){
+        tmp <- min(dat[[i]]$log10p)
+        if(tmp<ymin){
+          ymin <- tmp
       }
+    }
     }
   return(ymin)
 }
 
-get_chr_offsets <- function(include_chrX=F){
+get_chr_lengths_and_offsets <- function(include_chrX=F){
   #create the offsets from the internal chr_lengths data
   chr_lengths$CHROM <- gsub("chr","", chr_lengths$V1)
   chr_lengths <- chr_lengths %>% dplyr::filter(! V1 %in% c("chrM") )
@@ -208,20 +212,29 @@ get_chr_offsets <- function(include_chrX=F){
   if(include_chrX)
     no_chrs <- 23
   chr_lengths <- chr_lengths %>% dplyr::filter(CHROM< no_chrs +1 )
-  tmp <- chr_lengths %>% dplyr::group_by(CHROM) %>% dplyr::summarize(m=V2) %>% dplyr::mutate(offset=cumsum(lag(m, default=0)))
+ chr_lengths_and_offsets <- chr_lengths %>% dplyr::group_by(CHROM) %>% dplyr::summarize(m=V2) %>% dplyr::mutate(offset=cumsum(lag(m, default=0)))
+  return(chr_lengths_and_offsets)
+}
+
+get_chr_offsets <- function(include_chrX=F){
+  tmp <- get_chr_lengths_and_offsets(include_chrX)
   offsets <- stats::setNames(tmp$offset,tmp$CHROM)
   return(offsets)
 }
 
 get_ticknames <- function(df){
   no_chrs <- ifelse("chrX" %in% df$CHROM || "X" %in% df$CHROM || "chr23" %in% df$CHROM || "23" %in% df$CHROM, 23, 22)
+  include_chrX <- T
   if(no_chrs == 23){
     ticknames <- c(1:16, '',18, '',20, '',22, 'X')
   }else{
     ticknames <- c(1:16, '',18, '',20, '',22)
+    include_chrX <- F
   }
-  tickpos <-df %>% dplyr::group_by(CHROM)%>%
-                                dplyr::summarize(pm=mean(POS))%>%
+  chr_lengts_and_offsets <- get_chr_lengths_and_offsets(include_chrX)
+  tickpos <-chr_lengts_and_offsets %>% dplyr::group_by(CHROM)%>%
+                  dplyr::summarize(pm=offset+(m/2))%>%
+    #    dplyr::summarize(pm=mean(POS))
                                 dplyr::pull(pm)
 
   names(tickpos) <- NULL
@@ -232,16 +245,17 @@ get_ticks <- function(dat){
   df <- dat[[1]]
   for(i in seq_along(dat)){ if(length(unique(dat[[i]]$CHROM))  > length(unique(df$CHROM))){ df <- dat[[i]] } }
   no_chrs <- ifelse("chrX" %in% df$CHROM || "X" %in% df$CHROM || "chr23" %in% df$CHROM || "23" %in% df$CHROM, 23, 22)
+  include_chrX <- T
   if(no_chrs == 23){
     ticknames <- c(1:16, '',18, '',20, '',22, 'X')
   }else{
     ticknames <- c(1:16, '',18, '',20, '',22)
+    include_chrX <- F
   }
-  tickpos <- df %>%
-                                dplyr::group_by(CHROM)%>%
-                                dplyr::summarize(pm=mean(POS))%>%
-                                dplyr::pull(pm)
-
+  chr_lengts_and_offsets <- get_chr_lengths_and_offsets(include_chrX)
+  tickpos <-chr_lengts_and_offsets %>% dplyr::group_by(CHROM)%>%
+    dplyr::summarize(pm=offset+(m/2))%>%
+    dplyr::pull(pm)
   names(tickpos) <- NULL
   return(list(names=ticknames, pos=tickpos))
 }
@@ -260,27 +274,29 @@ get_pos_with_offset <- function(df,offsets){
 }
 
 
-#' Get the top SNP per 10 MB
+
+#' Get the index/lead variants
 #'
 #' @description
 #'
-#' \code{get_best_snp_per_MB()} Get the top SNP per 1 MB region
-#' All other input parameters are optional
+#' \code{get_best_snp_per_MB()} Get the top variants within 1 MB windows of the genome with association p-values below the given threshold 
+#'
 #'
 #' @param df Dataframe
-#' @param thresh P-value threshold, only consider variants with p-values below this threshold (1e-09 by default)
-#' @param region Get the top/best variant (with p-value below thresh) within this region (region=1000000 by default)
-#' @param protein_coding_only Set this variable to TRUE to only use protein_coding genes for annotation
-#' @param chr Use this argument to get the top variants from one chromosome only
-#' @param .checked If the input data has already been checked, this can be set to TRUE so it wont be checked again (FALSE by default)
+#' @param thresh A number. P-value threshold, only extract variants with p-values below this threshold (1e-09 by default)
+#' @param protein_coding_only Logical, set this variable to TRUE to only use protein_coding genes for annotation
+#' @param chr String, get the top variants from one chromosome only, e.g. chr="chr1"
+#' @param .checked Logical, if the input data has already been checked, this can be set to TRUE so it wont be checked again (FALSE by default)
+#' @param verbose Logical, set to TRUE to get printed information on number of SNPs extracted
 #' @return Dataframe of lead variants. Returns the best variant per MB (by default, change the region size with the region argument) with p-values below the input threshold (thresh=1e-09 by default)
 #' @export
+#' @inheritParams regionplot
 #'
 #' @examples
 #' \dontrun{
-#' data(gwas_CD)
-#' get_best_snp_per_MB(gwas_CD, thresh = 1e-09, region_size = 10000000)
+#' get_best_snp_per_MB(CD_UKBB)
 #' }
+#'
 get_best_snp_per_MB <- function(df, thresh=1e-09,region_size=1000000,protein_coding_only=FALSE,chr=NULL, .checked=FALSE, verbose=F){
   variants <- df[0,]
   dat <- df
@@ -315,7 +331,8 @@ get_best_snp_per_MB <- function(df, thresh=1e-09,region_size=1000000,protein_cod
       print(paste("Index/lead variant: the top variant within a",format(region_size, scientific = F),"bp region_size"), sep="")
     }
   }else{
-    print(paste("There are no SNPs with p-values below ",thresh, " in the input dataset. Use the [thresh] argument to lower the threshold.",sep=""))
+      print(paste("There are no SNPs with p-values below ",thresh, " in the input dataset. Use the [thresh] argument to lower the threshold.",sep=""))
+    
   }
   if("tmp" %in% colnames(variants)){
     variants <- variants %>% dplyr::select(-tmp)
@@ -323,15 +340,15 @@ get_best_snp_per_MB <- function(df, thresh=1e-09,region_size=1000000,protein_cod
   return(variants)
 }
 
-#' Get the genetic position of a gene or genes by their gene name
+#' Get the genetic position of a gene by its gene name
 #'
 #' @description
 #'
 #' \code{get_genes_by_Gene_Symbol()} Get genes by their gene symbol/name
 #' Required parameters is on gene name or a vector of gene names
 #'
-#' @param genes A gene name (e.g. "FTO") or a vector of gene names ( c("FTO","NOD2"))
-#' @param chr Search for the genes on this chromsome only
+#' @param genes A string or vector of strings representing gene names, (e.g. "FTO") or  (c("FTO","NOD2"))
+#' @param chr A string, search for the genes on this chromsome only, (e.g chr="chr1")
 #' @return Dataframe of genes
 #' @export
 #'
@@ -351,15 +368,15 @@ get_genes_by_Gene_Symbol <- function(genes, chr=NULL){
   return(dist_genes)
 }
 
-#' Get the genetic position of a gene or genes by their gene name
+#' Get the genetic position of a gene by gene name
 #'
 #' @description
 #'
-#' \code{get_gene()} Get gene coordinates by its gene symbol/name
-#' Required parameters is on gene name or a vector of gene names
+#' \code{get_gene()} Get the gene coordinates for a gene
+#' Required parameter is gene name
 #'
-#' @param gene_name string A gene name (e.g. "FTO")
-#' @param chr Search for the gene on this chromosome
+#' @param gene_name A string representing a gene name (e.g. "FTO")
+#' @param chr A string, search for the genes on this chromsome only, (e.g chr="chr1")
 #' @return Dataframe of genes
 #' @export
 #'
@@ -401,7 +418,7 @@ get_legend<-function(p1){
 #' All other input parameters are optional
 #'
 #' @param df Dataframe containing association results
-#' @param chr Get the top hit in the data frame for this chromosome. If chromosome is not provided, the top hit from the entire dataset is returned.
+#' @param chr String, get the top hit in the data frame for this chromosome. If chromosome is not provided, the top hit from the entire dataset is returned.
 
 #' @return Dataframe containing the top hit
 #' @export
@@ -449,7 +466,7 @@ get_top_hit <- function(df, chr=NULL){
 #' }
 #'
 get_topr_colors <- function(){
-  return(c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1","darkgreen","blue","red"))
+  return(c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1","darkgreen","blue","red","magenta","skyblue","grey40","grey60","yello","black"))
 }
 
 set_genes_pos_adj <- function(genes, offsets){
@@ -468,10 +485,10 @@ set_genes_pos_adj <- function(genes, offsets){
 #' \code{get_snps_within_region()}
 #'
 #' @param df data frame of association results with the columns CHR and POS
-#' @param region string representing the genetic region (e.g chr16:50693587-50734041)
-#' @param chr chromosome (e.g. chr16)
-#' @param xmin include variants with POS larger than xmin
-#' @param xmax include variants with POS smaller than xmax
+#' @param region A string representing the genetic region (e.g chr16:50693587-50734041)
+#' @param chr A string, chromosome (e.g. chr16)
+#' @param xmin An integer, include variants with POS larger than xmin
+#' @param xmax An integer, include variants with POS smaller than xmax
 #' @return the variants within the requested region
 #' @export
 #'

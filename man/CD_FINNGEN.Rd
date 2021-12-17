@@ -10,21 +10,17 @@ A data frame  with 29,926rows and 9 variables:
 \item{CHROM}{Chromosome, written as for example chr1 or 1}
 \item{POS}{genetic position of the variant}
 \item{ID}{Variant identifier, e.g. rsid }
-\item{REF}{Reference allele}
-\item{ALT}{Alternative allele}
-\item{SE}{Standard Error}
 \item{P}{P-value from Plink run, additive model, reggresion model GLM_FIRTH}
 \item{beta}{Variant effect}
-\item{cohort_AF}{variant allele frequency in the UKBB cohort)}
 }
 }
 \source{
-CHRONSMALL_968_cases_210300_controls_p_1e-03
+Crohn's small intestines (CHRONSMALL), only including variants with P<1e-03
 }
 \usage{
 CD_FINNGEN
 }
 \description{
-Dataset retrieved from the Finngen database (version 5) including 968 crohn´s cases and 210,300 controls. The dataset has been filtered on variants with P <1e-03.
+Dataset retrieved from the Finngen database (version 5) including 968 crohn´s cases and 210,100 controls. The dataset has been filtered on variants with P <1e-03.
 }
 \keyword{datasets}

@@ -9,7 +9,7 @@ get_top_snp(df, chr = NULL)
 \arguments{
 \item{df}{Dataframe containing association results}
 
-\item{chr}{Get the top hit in the data frame for this chromosome. If chromosome is not provided, the top hit from the entire dataset is returned.}
+\item{chr}{String, get the top hit in the data frame for this chromosome. If chromosome is not provided, the top hit from the entire dataset is returned.}
 }
 \value{
 Dataframe containing the top hit

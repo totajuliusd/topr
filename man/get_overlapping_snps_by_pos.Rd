@@ -10,6 +10,8 @@ get_overlapping_snps_by_pos(df1, df2, verbose = F)
 \item{df1}{A dataframe of variants, has to contain CHROM and POS}
 
 \item{df2}{A dataframe of variants, has to contain CHROM and POS}
+
+\item{verbose}{A logical scalar (default: FALSE). Assign to TRUE to get information on which alleles are matched and which are not.}
 }
 \value{
 The input dataframe containing only those variants whith matched alleles in the snpset
