@@ -4,12 +4,14 @@
 \alias{annotate_with_nearest_gene}
 \title{Get the nearest gene for one or more snps}
 \usage{
-annotate_with_nearest_gene(variants, protein_coding_only = F)
+annotate_with_nearest_gene(variants, protein_coding_only = FALSE, build = 38)
 }
 \arguments{
 \item{variants}{a dataframe of variant positions (CHROM and POS)}
 
 \item{protein_coding_only}{Logical, if set to TRUE only annotate with protein coding genes (the default value is FALSE)}
+
+\item{build}{A number representing the genome build. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).}
 }
 \value{
 the input dataframe with Gene_Symbol as an additional column
@@ -19,7 +21,7 @@ the input dataframe with Gene_Symbol as an additional column
 Required parameters is a dataframe of SNPs (with the columns CHROM and POS)
 }
 \examples{
-\dontrun{
+variants <-get_lead_snps(CD_UKBB)
 annotate_with_nearest_gene(variants)
-}
+
 }

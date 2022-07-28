@@ -9,9 +9,7 @@ get_exonplot_coords <- function(df, xmin, xmax){
     x1_exon <- vector(); x2_exon <- vector(); y1_exon <- vector(); y2_exon <- vector(); biotype <- vector();
     current_level <- 1
     gene_struct <- data.frame(gene_end=integer(),level=integer(),gene=character())
-
     for(i in seq_along(df$gene_symbol)){
-
      gene_start <- df$gene_start[i]
       gene_end <- df$gene_end[i]
       gene_name <- df$gene_symbol[i]

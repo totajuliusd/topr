@@ -4,12 +4,14 @@
 \alias{get_genes_by_Gene_Symbol}
 \title{Get the genetic position of a gene by its gene name}
 \usage{
-get_genes_by_Gene_Symbol(genes, chr = NULL)
+get_genes_by_Gene_Symbol(genes, chr = NULL, build = 38)
 }
 \arguments{
 \item{genes}{A string or vector of strings representing gene names, (e.g. "FTO") or  (c("FTO","NOD2"))}
 
-\item{chr}{A string, search for the genes on this chromsome only, (e.g chr="chr1")}
+\item{chr}{A string, search for the genes on this chromosome only, (e.g chr="chr1")}
+
+\item{build}{A string, genome build, choose between builds 37 (GRCh37) and 38 (GRCh38) (default is 38)}
 }
 \value{
 Dataframe of genes

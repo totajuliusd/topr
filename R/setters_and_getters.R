@@ -111,26 +111,28 @@ set_log10p <- function(dat, ntop){
 
 ## Getters
 
-get_genes <- function(chr,xmin=0,xmax=NULL,protein_coding_only=FALSE){
+get_genes <- function(chr,xmin=0,xmax=NULL,protein_coding_only=FALSE, build=38){
   chr <- gsub("chr", "", chr)
   chr <- paste("chr",chr,sep="")
+  #todo: add ENSGENES_37
   if(is.null(xmax)){
     xmax <- chr_lengths[chr_lengths$V1 == chr,]$V2
   }
   if(protein_coding_only)
-    genes <- topr::ENSGENES %>% dplyr::filter(chrom==chr) %>% dplyr::filter(biotype=="protein_coding") %>% dplyr::filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax | gene_start == xmin | gene_end == xmax)
+    genes <- toprdata::ENSGENES %>% dplyr::filter(chrom==chr) %>% dplyr::filter(biotype=="protein_coding") %>% dplyr::filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax | gene_start == xmin | gene_end == xmax)
   else
-    genes <- topr::ENSGENES %>% dplyr::filter(chrom==chr) %>% dplyr::filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax | gene_start == xmin | gene_end == xmax)
+    genes <- toprdata::ENSGENES %>% dplyr::filter(chrom==chr) %>% dplyr::filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax | gene_start == xmin | gene_end == xmax)
   return(genes)
 }
 
-get_exons <- function(chr,xmin=0,xmax=NULL,protein_coding_only=FALSE){
+get_exons <- function(chr,xmin=0,xmax=NULL,protein_coding_only=FALSE, build=38){
   genes <- get_genes(chr,xmin,xmax)
+  #todo: add ENSGENES_37
   if(protein_coding_only)
-    exons <- merge(topr::ENSEXONS, genes %>% dplyr::select(gene_symbol,biotype,chrom,gene_start,gene_end) %>% dplyr::filter(biotype=="protein_coding"), by=c("gene_symbol","chrom","gene_start","gene_end"))
+    exons <- merge(toprdata::ENSEXONS, genes %>% dplyr::select(gene_symbol,biotype,chrom,gene_start,gene_end) %>% dplyr::filter(biotype=="protein_coding"), by=c("gene_symbol","chrom","gene_start","gene_end"))
   else
-    exons <- merge(topr::ENSEXONS, genes %>% dplyr::select(gene_symbol,biotype,chrom,gene_start,gene_end), by=c("gene_symbol","chrom","gene_start","gene_end"))
-    #rename chromstart exon_chromstart | rename chromend exon_chromend)",sep=""))
+    exons <- merge(toprdata::ENSEXONS, genes %>% dplyr::select(gene_symbol,biotype,chrom,gene_start,gene_end), by=c("gene_symbol","chrom","gene_start","gene_end"))
+  #rename chromstart exon_chromstart | rename chromend exon_chromend)",sep=""))
   return(exons)
 }
 
@@ -274,34 +276,37 @@ get_pos_with_offset <- function(df,offsets){
 }
 
 
-
 #' Get the index/lead variants
 #'
 #' @description
 #'
-#' \code{get_best_snp_per_MB()} Get the top variants within 1 MB windows of the genome with association p-values below the given threshold 
+#' \code{get_lead_snps()} Get the top variants within 1 MB windows of the genome with association p-values below the given threshold 
 #'
 #'
 #' @param df Dataframe
-#' @param thresh A number. P-value threshold, only extract variants with p-values below this threshold (1e-09 by default)
+#' @param thresh A number. P-value threshold, only extract variants with p-values below this threshold (5e-09 by default)
 #' @param protein_coding_only Logical, set this variable to TRUE to only use protein_coding genes for annotation
 #' @param chr String, get the top variants from one chromosome only, e.g. chr="chr1"
 #' @param .checked Logical, if the input data has already been checked, this can be set to TRUE so it wont be checked again (FALSE by default)
 #' @param verbose Logical, set to TRUE to get printed information on number of SNPs extracted
-#' @return Dataframe of lead variants. Returns the best variant per MB (by default, change the region size with the region argument) with p-values below the input threshold (thresh=1e-09 by default)
+#' @param keep_chr Logical, set to FALSE to remove the "chr" prefix before each chromosome if present (TRUE by default) 
+#' @return Dataframe of lead variants. Returns the best variant per MB (by default, change the region size with the region argument) with p-values below the input threshold (thresh=5e-09 by default)
 #' @export
 #' @inheritParams regionplot
-#'
 #' @examples
-#' \dontrun{
-#' get_best_snp_per_MB(CD_UKBB)
-#' }
+#' get_lead_snps(CD_UKBB)
 #'
-get_best_snp_per_MB <- function(df, thresh=1e-09,region_size=1000000,protein_coding_only=FALSE,chr=NULL, .checked=FALSE, verbose=F){
+get_lead_snps <- function(df, thresh=5e-09,region_size=1000000,protein_coding_only=FALSE,chr=NULL, .checked=FALSE, verbose=NULL, keep_chr=TRUE){
   variants <- df[0,]
   dat <- df
   if(is.data.frame(dat)) dat <- list(dat)
-
+  chrPrefix=0
+  if("CHROM" %in% colnames(dat[[1]])){
+    if(!is.integer(dat[[1]][1,"CHROM"])){chrPrefix=1}
+  }
+  if(! is.numeric(region_size)){
+    region_size <- convert_region_size(region_size)
+  }
   if(! .checked){
     dat <- dat_check(dat)
   }
@@ -310,14 +315,14 @@ get_best_snp_per_MB <- function(df, thresh=1e-09,region_size=1000000,protein_cod
     chr <- gsub("chr","", chr)
     df <- df %>% dplyr::filter(CHROM == chr)
   }
-
+  
   df <- df %>% dplyr::filter(P<thresh)
   if(protein_coding_only & ("biotype" %in% colnames(df))){
-       df <- df %>% dplyr::filter(biotype == "protein_coding")
+    df <- df %>% dplyr::filter(biotype == "protein_coding")
   }
   if(nrow(df) > 0){
     df$tmp <- NA
-    if(max(df$POS)-min(df$POS) < region_size){
+    if(max(df$POS)-min(df$POS) <= region_size){
       df$tmp<- 1
     }else{
       for(row in seq_len(nrow(df))){
@@ -326,19 +331,30 @@ get_best_snp_per_MB <- function(df, thresh=1e-09,region_size=1000000,protein_cod
     }
     lead_snps <- df %>% dplyr::group_by(CHROM,tmp) %>% dplyr::arrange(P) %>% distinct(P, .keep_all=T) %>% dplyr::filter(P == min(P))
     variants <- dplyr::ungroup(lead_snps)%>% dplyr::distinct(CHROM,POS, .keep_all = T)
-    if(verbose){
-      print(paste("Found ",length(variants$POS), " index/lead variants with a p-value below ", thresh, sep=""))
-      print(paste("Index/lead variant: the top variant within a",format(region_size, scientific = F),"bp region_size"), sep="")
+    if(! is.null(verbose)){
+      if(verbose){
+        print(paste("Found ",length(variants$POS), " index/lead variants with a p-value below ", thresh, sep=""))
+        print(paste("Index/lead variant: the top variant within a",format(region_size, scientific = F),"bp region_size"), sep="")
+      }
     }
   }else{
+    if(is.null(verbose)){
       print(paste("There are no SNPs with p-values below ",thresh, " in the input dataset. Use the [thresh] argument to lower the threshold.",sep=""))
+    }else if(verbose){
+      print(paste("There are no SNPs with p-values below ",thresh, " in the input dataset. Use the [thresh] argument to lower the threshold.",sep=""))
+    }
     
   }
   if("tmp" %in% colnames(variants)){
     variants <- variants %>% dplyr::select(-tmp)
   }
+  if(keep_chr & chrPrefix){
+    variants$CHROM <- gsub("(chr|CHR|Chr)","", variants$CHROM)
+    variants$CHROM  <- paste0("chr", variants$CHROM)
+  }
   return(variants)
 }
+
 
 #' Get the genetic position of a gene by its gene name
 #'
@@ -348,7 +364,8 @@ get_best_snp_per_MB <- function(df, thresh=1e-09,region_size=1000000,protein_cod
 #' Required parameters is on gene name or a vector of gene names
 #'
 #' @param genes A string or vector of strings representing gene names, (e.g. "FTO") or  (c("FTO","NOD2"))
-#' @param chr A string, search for the genes on this chromsome only, (e.g chr="chr1")
+#' @param chr A string, search for the genes on this chromosome only, (e.g chr="chr1")
+#' @param build A string, genome build, choose between builds 37 (GRCh37) and 38 (GRCh38) (default is 38)
 #' @return Dataframe of genes
 #' @export
 #'
@@ -357,43 +374,56 @@ get_best_snp_per_MB <- function(df, thresh=1e-09,region_size=1000000,protein_cod
 #' get_genes_by_Gene_Symbol(c("FTO","THADA"))
 #' }
 #'
-get_genes_by_Gene_Symbol <- function(genes, chr=NULL){
-    genes_df <- topr::ENSGENES %>% dplyr::filter(gene_symbol %in% genes)
-    if(! is.null(chr)){
-      chr <- gsub('chr','',chr)
-      genes_df <- genes_df %>% dplyr::filter(chrom == paste("chr",chr,sep=""))
+get_genes_by_Gene_Symbol <- function(genes, chr=NULL, build=38){
+  if(build == "38"){
+    genes_df <- toprdata::ENSGENES %>% dplyr::filter(gene_symbol %in% genes)
+  }else if(build == "37"){ #genes_df <- toprdata::ENSGENES_37 %>% dplyr::filter(gene_symbol %in% genes)
+  }else{
+    warning(paste("Build [",build,"] not found!!!!!!  Using build 38 GRCh38 instead ", sep=""))
+    genes_df <- toprdata::ENSGENES %>% dplyr::filter(gene_symbol %in% genes)
+  }
+  
+  if(! is.null(chr)){
+    chr <- gsub('chr','',chr)
+    genes_df <- genes_df %>% dplyr::filter(chrom == paste("chr",chr,sep=""))
   }
   genes_df <- genes_df %>% dplyr::mutate(POS = gene_start + round((gene_end-gene_start)/2)) %>% dplyr::rename(Gene_Symbol=gene_symbol,CHROM=chrom)
   dist_genes <- genes_df %>% dplyr::distinct(CHROM,gene_start,gene_end, .keep_all = T)
   return(dist_genes)
 }
 
+
 #' Get the genetic position of a gene by gene name
 #'
 #' @description
 #'
-#' \code{get_gene()} Get the gene coordinates for a gene
+#' \code{get_gene_coords()} Get the gene coordinates for a gene
 #' Required parameter is gene name
 #'
 #' @param gene_name A string representing a gene name (e.g. "FTO")
-#' @param chr A string, search for the genes on this chromsome only, (e.g chr="chr1")
-#' @return Dataframe of genes
+#' @param chr A string, search for the genes on this chromosome only, (e.g chr="chr1")
+#' @param build A string, genome build, choose between builds 37 (GRCh37) and 38 (GRCh38) (default is 38)
+#' @return Dataframe with the gene name and its genetic coordinates
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' get_gene("FTO")
-#' }
+#' get_gene_coords("FTO")
 #'
 
-get_gene  <- function(gene_name,chr=NULL){
+get_gene_coords  <- function(gene_name,chr=NULL, build=38){
   if(! is.null(chr)){
     chr <- gsub("chr", "", chr)
     chr <- paste("chr",chr,sep="")
-    gene <- topr::ENSGENES %>% dplyr::filter(chrom == chr) %>% dplyr::filter(gene_symbol == gene_name)
+    if(build=="38")
+      gene <- toprdata::ENSGENES %>% dplyr::filter(chrom == chr) %>% dplyr::filter(gene_symbol == gene_name)
+    # else if(build=="37")
+    #  gene <- toprdata::ENSGENES_37 %>% dplyr::filter(chrom == chr) %>% dplyr::filter(gene_symbol == gene_name)
   }
   else{
-    gene <- topr::ENSGENES %>% dplyr::filter(gene_symbol == gene_name)
+    if(build=="38")
+      gene <- toprdata::ENSGENES %>% dplyr::filter(gene_symbol == gene_name)
+    #else if(build=="37")
+    # gene <- toprdata::ENSGENES_37 %>% dplyr::filter(gene_symbol == gene_name)
   }
   if(is.null(gene)){
     print(paste("Could not find a gene with the gene name: [", gene_name, "]", sep=""))
@@ -445,10 +475,6 @@ get_top_snp <- function(df, chr=NULL){
   return(top_hit)
 }
 
-get_top_hit <- function(df, chr=NULL){
-  get_top_snp(df, chr=chr)
-}
-
 
 #' Get the top hit from the dataframe
 #'
@@ -466,7 +492,7 @@ get_top_hit <- function(df, chr=NULL){
 #' }
 #'
 get_topr_colors <- function(){
-  return(c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1","darkgreen","blue","red","magenta","skyblue","grey40","grey60","yello","black"))
+  return(c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1","darkgreen","blue","red","magenta","skyblue","grey40","grey60","yellow","black","purple","orange","pink","green","cyan"))
 }
 
 set_genes_pos_adj <- function(genes, offsets){
@@ -489,17 +515,19 @@ set_genes_pos_adj <- function(genes, offsets){
 #' @param chr A string, chromosome (e.g. chr16)
 #' @param xmin An integer, include variants with POS larger than xmin
 #' @param xmax An integer, include variants with POS smaller than xmax
+#' @param keep_chr Logical, set to FALSE to remove the "chr" prefix before each chromosome if present (TRUE by default) 
 #' @return the variants within the requested region
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' get_snps_within_region(dat, "chr16:50593587-50834041")
-#' }
+#' get_snps_within_region(CD_UKBB, "chr16:50593587-50834041")
 #'
 
-get_snps_within_region <- function(df, region, chr=NULL, xmin=NULL, xmax=NULL){
+get_snps_within_region <- function(df, region, chr=NULL, xmin=NULL, xmax=NULL, keep_chr=TRUE){
   snps <- NULL
+  if(is.data.frame(df)) df <- list(df)
+  if("CHROM" %in% colnames(df[[1]])) chrPrefix <- base::startsWith(df[[1]][1,"CHROM"], "chr")
+  
   dat <- dat_check(df)
   if(!is.null(region)){
     tmp <- unlist(stringr::str_split(region, ":"))
@@ -516,6 +544,10 @@ get_snps_within_region <- function(df, region, chr=NULL, xmin=NULL, xmax=NULL){
     if(length(snps$POS) < 1){
       print(paste("There are no SNPs within the region: ", chr, ":", xmin, "-", xmax, sep=""))
     }
+  }
+  if(chrPrefix & keep_chr){
+    snps$CHROM <- gsub("(chr|CHR|Chr)","", snps$CHROM)
+    snps$CHROM  <- paste0("chr", snps$CHROM)
   }
   return(snps)
 }
