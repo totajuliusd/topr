@@ -5,13 +5,16 @@
 \alias{CD_UKBB}
 \title{UKBB Crohns disease (ICD 10 code K50)}
 \format{
-A data frame  with 26,824 rows and 10 variables:
+A data frame  with 26,824 rows and 8 variables:
 \describe{
 \item{CHROM}{Chromosome, written as for example chr1 or 1}
 \item{POS}{genetic position of the variant}
+\item{REF}{the reference allele}
+\item{ALT}{the alternative allele}
 \item{ID}{Variant identifier, e.g. rsid }
-\item{P}{P-value from Plink run, additive model, reggresion model GLM_FIRTH}
+\item{P}{P-value from Plink run, additive model, regression model GLM_FIRTH}
 \item{OR}{Odds Ratio}
+\item{AF}{Allele frequency}
 }
 }
 \source{

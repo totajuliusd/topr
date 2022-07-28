@@ -65,23 +65,3 @@ plot_exons <- function(shades=shades,genes=genes,genes_coords=genes_coords, leve
   }
   return(p1)
 }
-
-#gene_plot <- function(shades=shades, genes=genes, label_size=3,show_gene_legend=TRUE){
-  #Do the plotting
- # p1 <- ggplot(data =  genes)+theme_bw()
- # if(nrow(genes)>0){
- #   p1 <- p1+geom_text(data=genes, aes(x=gene_start,y=as.numeric(y),label=gene_symbol),hjust=0, vjust=0, size=label_size)
- #   if(exons){
- #     p1 <- p1+geom_segment(data=genes_coords, aes(x=x1,y=y1,xend=x2,yend=y2))
- #   }
-  #  p1 <- p1+geom_rect(data=shades, mapping=aes(ymax=y2,xmin=x1, xmax=x2, ymin=y1,fill=biotype))
-  #  if(show_gene_legend){
-  #    p1 <- p1 +labs(fill="Biotype")
-  #  }
-
-  #}
-  #p1 <- p1+theme(axis.text.y=element_blank(), axis.title.y=element_blank(),axis.ticks.y=element_blank())
-  #p1=p1+xlab(paste("Position on chr",chr, sep=""))
-  #p1 <- p1+coord_cartesian(xlim=c(xmin, xmax), ylim=c(1,level_count+1))
-  #return(p1)
-#}

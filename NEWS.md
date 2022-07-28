@@ -1,3 +1,7 @@
+# 1.1.0
+
+* Update to increase control over plot aesthetics and variant labeling along with minor bug fixes. Includes genome builds 38 (GRCh38.p13) and 37 (GRCh37.p13).
+
 # 1.0.0
 
 * First official release of topr

@@ -6,7 +6,7 @@
 \usage{
 regionplot(
   df,
-  ntop = 3,
+  ntop = 10,
   annotate = NULL,
   xmin = 0,
   size = 2,
@@ -18,7 +18,7 @@ regionplot(
   axis_text_size = 11,
   axis_title_size = 12,
   title_text_size = 13,
-  show_genes = FALSE,
+  show_genes = NULL,
   show_overview = TRUE,
   show_exons = FALSE,
   max_genes = 200,
@@ -62,7 +62,20 @@ regionplot(
   unit_main = 7,
   unit_gene = 2,
   unit_overview = 1.25,
-  verbose = TRUE
+  verbose = NULL,
+  gene_color = NULL,
+  segment.size = 0.2,
+  segment.color = "black",
+  segment.linetype = "solid",
+  max.overlaps = 10,
+  unit_ratios = NULL,
+  extract_plots = FALSE,
+  label_fontface = "plain",
+  label_family = "",
+  gene_label_fontface = "plain",
+  gene_label_family = "",
+  build = 38,
+  label_alpha = 1
 )
 }
 \arguments{
@@ -72,17 +85,17 @@ regionplot(
 
 \item{annotate}{A number (p-value). Display annotation for variants with p-values below this threshold}
 
-\item{xmin}{Integer, setting the chromosomal range to display on the x-axis}
+\item{xmin, xmax}{Integer, setting the chromosomal range to display on the x-axis}
 
-\item{size}{An integer setting the size of the plot points (default: \code{size=1.2})}
+\item{size}{A number or a vector of numbers, setting the size of the plot points (default: \code{size=1.2})}
 
-\item{shape}{A number of vector of numbers setting the shape of the plotted points}
+\item{shape}{A number of a vector of numbers setting the shape of the plotted points}
 
-\item{alpha}{A number or vector of numbers setting the transparancy of the plotted points}
+\item{alpha}{A number or a vector of numbers setting the transparency of the plotted points}
 
 \item{label_size}{An number to set the size of the plot labels (default: \code{label_size=3})}
 
-\item{annotate_with}{A string. Annotate the variants with eiher Gene_Symbol or ID (default: "Gene_Symbol")}
+\item{annotate_with}{A string. Annotate the variants with either Gene_Symbol or ID (default: "Gene_Symbol")}
 
 \item{color}{A string or a vector of strings, for setting the color of the datapoints on the plot}
 
@@ -96,25 +109,21 @@ regionplot(
 
 \item{show_overview}{A logical scalar, shows/hides the overview plot (default= TRUE)}
 
-\item{show_exons}{A logical scalar, show exons instead of genees (default show_exons=FALSE)}
+\item{show_exons}{Deprecated : A logical scalar, show exons instead of genees (default show_exons=FALSE)}
 
 \item{max_genes}{An integer, only label the genes if they are fewer than max_genes (default values is 200).}
 
-\item{sign_thresh}{A number or vector of numbers, setting the horizontal signicance threshold (default: \code{sign_thresh=5.1e-9}). Set to NULL to hide the significance threshold.}
+\item{sign_thresh}{A number or vector of numbers, setting the horizontal significance threshold (default: \code{sign_thresh=5.1e-9}). Set to NULL to hide the significance threshold.}
 
 \item{sign_thresh_color}{A string or vector of strings to set the color/s of the significance threshold/s}
 
-\item{sign_thresh_label_size}{A number setting the text size of the label for the signficance thresholdds (default text size is 3.5)}
+\item{sign_thresh_label_size}{A number setting the text size of the label for the significance thresholds (default text size is 3.5)}
 
-\item{xmax}{Integer, setting the chromosomal range to display on the x-axis}
+\item{ymin, ymax}{Integer, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
 
-\item{ymin}{Integer, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
+\item{protein_coding_only}{A logical scalar, if TRUE, only protein coding genes are used for annotation}
 
-\item{ymax}{Integer, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})}
-
-\item{protein_coding_only}{A locical scalar, if TRUE, only protein coding genes are used for annotation}
-
-\item{region_size}{An integer (default = 1000000) indicating the window size for variant labelling. Increase this number for sparser annotation and decrease for denser annotation.}
+\item{region_size}{An integer (default = 1000000) (or a string represented as 100kb or 1MB) indicating the window size for variant labeling. Increase this number for sparser annotation and decrease for denser annotation.}
 
 \item{gene_padding}{An integer representing size of the region around the gene, if the gene argument was used (default = 100000)}
 
@@ -144,11 +153,11 @@ regionplot(
 
 \item{show_gene_names}{A logical scalar, if set to TRUE, gene names are shown even though they exceed the max_genes count}
 
-\item{legend_labels}{A string or vector of strings representing legend labels for the input dataset/s}
+\item{legend_labels}{A string or vector of strings representing legend labels for the input dataset's}
 
 \item{gene}{A string representing the gene to zoom in on (e.g. gene=FTO)}
 
-\item{title}{A string}
+\item{title}{A string to set the plot title}
 
 \item{label_color}{A string. To change the color of the gene or variant labels}
 
@@ -164,11 +173,11 @@ regionplot(
 
 \item{show_legend}{A logical scalar, set to FALSE to hide the legend (default value is TRUE)}
 
-\item{sign_thresh_linetype}{A string, the linetype of the horizontal significance threshold (default = dashed)}
+\item{sign_thresh_linetype}{A string, the line-type of the horizontal significance threshold (default = dashed)}
 
 \item{sign_thresh_size}{A number, sets the size of the horizontal significance threshold line (default = 1)}
 
-\item{rsids_with_vline}{A string (rsid) or vector of strings to highlight on the plot with their rsids and vertical lines further highligthing their positions}
+\item{rsids_with_vline}{A string (rsid) or vector of strings to highlight on the plot with their rsids and vertical lines further highlighting their positions}
 
 \item{annotate_with_vline}{A number (p-value). Display annotation and vertical lines for variants with p-values below this threshold}
 
@@ -181,6 +190,32 @@ regionplot(
 \item{unit_overview}{the height unit of the overview plot (default = 1.25)}
 
 \item{verbose}{Logical, set to FALSE to get suppress printed information}
+
+\item{gene_color}{A string representing a color, can be used to change the color of the genes/exons on the geneplot}
+
+\item{segment.size}{line segment color (ggrepel argument)}
+
+\item{segment.color}{line segment thickness (ggrepel argument)}
+
+\item{segment.linetype}{line segment solid, dashed, etc.(ggrepel argument)}
+
+\item{max.overlaps}{Exclude text labels that overlap too many things. Defaults to 10 (ggrepel argument)}
+
+\item{unit_ratios}{A string of three numbers separated by ":", for the overview, main and gene plots height ratios e.g  1.25:7:2}
+
+\item{extract_plots}{Logical, FALSE by default. Set to TRUE to extract the three plots separately in a list}
+
+\item{label_fontface}{Label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
+
+\item{label_family}{Label font name (default ggrepel argument is "")}
+
+\item{gene_label_fontface}{Gene label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
+
+\item{gene_label_family}{Gene label font name (default ggrepel argument is "")}
+
+\item{build}{A number representing the genome build. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).}
+
+\item{label_alpha}{An number or vector of numbers to set the transparency of the plot labels (default: \code{label_alpha=1})}
 }
 \value{
 plots within ggplotGrobs, arranged with egg::gtable_frame

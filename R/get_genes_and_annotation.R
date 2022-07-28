@@ -1,32 +1,27 @@
 
 get_genes_in_region <- function(chr=chr, xmin=xmin,xmax=xmax,protein_coding_only=F, show_exons=F,show_genes=T){
+  #  if (!missing("show_exons"))
+  #   warning("show_exons is argument deprecated")
   if(show_genes){
     genes <- get_genes(chr,xmin,xmax,protein_coding_only = protein_coding_only )
-  }else if(show_exons){
-    genes <- get_exons(chr,xmin,xmax,protein_coding_only = protein_coding_only)
   }else{
-    if(xmax-xmin < 1000001){
-      genes <- get_exons(chr,xmin,xmax,protein_coding_only = protein_coding_only )
-    }
-    else{
-      genes <- get_genes(chr,xmin,xmax,protein_coding_only = protein_coding_only )
-    }
+    genes <- get_exons(chr,xmin,xmax,protein_coding_only = protein_coding_only)
   }
   return(genes)
 }
 
-get_main_LD_snp <- function(dat){
-  #df <- dat[[1]]
-  label_cols <-  c("CHROM","POS","P","ID","log10p")
+get_main_LD_snp <- function(dat, nudge_x=0.1,nudge_y=0.1,angle=0,label_fontface="plain",label_family="",label_alpha=1){
+  label_cols <-  c("CHROM","POS","P","ID","log10p", "alpha","shape","nudge_x","nudge_y","angle","fontface","family")
   top_snps <-  data.frame(matrix(nrow = 0, ncol = length(label_cols)))
   colnames(top_snps) <- label_cols
   for(i in seq_along(dat)){
-      top_snps <- rbind(top_snps, dat[[i]] %>% dplyr::filter("R2" >= 1) %>% dplyr::distinct(ID, .keep_all=T) %>% dplyr::arrange(-R2) %>% utils::head(n=1) %>% dplyr::select("CHROM","POS","P","ID","log10p") )
+    top_snps <- rbind(top_snps, dat[[i]] %>% dplyr::filter("R2" >= 1) %>% dplyr::distinct(ID, .keep_all=T) %>% dplyr::arrange(-R2) %>% utils::head(n=1) %>% dplyr::select("CHROM","POS","P","ID","log10p") )
   }
+  top_snps$nudge_x <- nudge_x; top_snps$nudge_y=nudge_y; top_snps$fontface<- label_fontface; top_snps$family <- label_family; top_snps$angle <- angle; top_snps$alpha=label_alpha;
   return(top_snps)
 }
-
-get_annotation <- function(dat, annotate=1e-09, region_size=1000000,distinct_gene_labels=FALSE,protein_coding_only=FALSE, verbose=FALSE){
+get_annotation <- function(dat, annotate=5e-09, region_size=1000000,distinct_gene_labels=FALSE,protein_coding_only=FALSE, verbose=NULL,nudge_x=0.1,nudge_y=0.1,
+                           angle=0,label_fontface="plain",label_family="",build=38, label_alpha=1){
   if(is.data.frame(dat)){dat <- list(dat)}
   if("log10p" %in% colnames(dat[[1]])){
     label_cols <-  c("CHROM","POS","P","ID","Gene_Symbol","biotype", "log10p", "color","alpha","size","shape")
@@ -37,22 +32,57 @@ get_annotation <- function(dat, annotate=1e-09, region_size=1000000,distinct_gen
   plot_labels <-  data.frame(matrix(nrow = 0, ncol = length(label_cols)))
   colnames(plot_labels) <- label_cols
   #retrieve the top variants
-
+  
   for(i in seq_along(dat)){
     df <- as.data.frame(dat[[i]])
+    if(is.vector(region_size)){
+      region_size_tmp <- ifelse(i <= length(region_size),  region_size[i], region_size[length(region_size)])
+    }else{region_size_tmp=region_size}
     if(is.vector(annotate)){
       annot_thresh <- ifelse(i <= length(annotate),  annotate[i], annotate[length(annotate)])
+    } else{ annot_thresh <- annotate}
+    if(is.vector(nudge_x)){
+      nudge_x_tmp <- ifelse(i <= length(nudge_x),  nudge_x[i], nudge_x[length(nudge_x)])
+    }else{nudge_x_tmp <- nudge_x}
+    if(is.vector(nudge_y)){
+      nudge_y_tmp <- ifelse(i <= length(nudge_y),  nudge_y[i], nudge_y[length(nudge_y)])
+    }else{nudge_y_tmp <- nudge_y}
+    
+    if(is.vector(angle)){
+      angle_tmp <- ifelse(i <= length(angle),  angle[i], angle[length(angle)])
+    }else{angle_tmp <- angle}
+    
+    if(is.vector(label_fontface)){
+      label_fontface_tmp <- ifelse(i <= length(label_fontface),  label_fontface[i], label_fontface[length(label_fontface)])
+    }else{label_fontface_tmp <- label_fontface}
+    
+    if(is.vector(label_alpha)){
+      alpha_tmp <- ifelse(i <= length(label_alpha),  label_alpha[i], label_alpha[length(label_alpha)])
+    }else{alpha_tmp <- label_alpha}
+    
+    
+    if(is.vector(label_family)){
+      label_family_tmp <- ifelse(i <= length(label_family),  label_family[i], label_family[length(label_family)])
+    }else{label_family_tmp <- label_family}
+    if(! is.null(verbose)){
+      if(verbose){
+        print(paste0("Dataset: [",i,"]:"))
+      }
     }
-    else{ annot_thresh <- annotate}
-    tmp_labels <- get_best_snp_per_MB(df, thresh = annot_thresh, region_size=region_size, .checked=TRUE, protein_coding_only = protein_coding_only, verbose=FALSE)
-
+    tmp_labels <- get_lead_snps(df, thresh = annot_thresh, region_size=region_size_tmp, .checked=TRUE, protein_coding_only = protein_coding_only, verbose=verbose, keep_chr=FALSE)
     if(nrow(tmp_labels) > 0){
+      tmp_labels$nudge_x <- nudge_x_tmp
+      tmp_labels$nudge_y <- nudge_y_tmp
+      tmp_labels$angle <- angle_tmp
+      tmp_labels$fontface <- label_fontface_tmp
+      tmp_labels$family <- label_family_tmp
+      tmp_labels$alpha <- alpha_tmp
       if(!"biotype" %in% tmp_labels){tmp_labels$biotype <- "unknown"}
       if(! "Gene_Symbol" %in% colnames(tmp_labels)){
-        tmp_labels <- annotate_with_nearest_gene(tmp_labels, protein_coding_only=protein_coding_only)
+        tmp_labels <- annotate_with_nearest_gene(tmp_labels, protein_coding_only=protein_coding_only, build=build)
       }
       if("log10p" %in% colnames(dat[[1]])){
-      tmp_labels <- tmp_labels %>% dplyr::select("CHROM","POS","P","ID","Gene_Symbol","biotype", "log10p", "color","alpha","size","shape")
+        tmp_labels <- tmp_labels %>% dplyr::select("CHROM","POS","P","ID","Gene_Symbol","biotype", "log10p", "color","alpha","size","shape","nudge_x","nudge_y","angle","fontface","family")
       }
       else{
         tmp_labels <- tmp_labels %>% dplyr::select("CHROM","POS","P","ID","Gene_Symbol","biotype")
@@ -67,6 +97,7 @@ get_annotation <- function(dat, annotate=1e-09, region_size=1000000,distinct_gen
 }
 
 
+
 #' Get the nearest gene for one or more snps
 #'
 #' @description
@@ -76,17 +107,18 @@ get_annotation <- function(dat, annotate=1e-09, region_size=1000000,distinct_gen
 #'
 #' @param variants a dataframe of variant positions (CHROM and POS)
 #' @param protein_coding_only Logical, if set to TRUE only annotate with protein coding genes (the default value is FALSE)
+#' @param build A number representing the genome build. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).
 #' @return the input dataframe with Gene_Symbol as an additional column
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' variants <-get_lead_snps(CD_UKBB)
 #' annotate_with_nearest_gene(variants)
-#' }
-annotate_with_nearest_gene <- function(variants, protein_coding_only=F){
+#' 
+annotate_with_nearest_gene <- function(variants, protein_coding_only=FALSE, build=38){
   if("POS" %in% colnames(variants) & "CHROM" %in% colnames(variants)){
     if(length(variants$POS) > 1000){
-      warning(paste("The dataset includes [",length(variants$POS),"] variants. This may take a while...", sep=""))
+      print(paste("The dataset includes [",length(variants$POS),"] variants. This may take a while...", sep=""))
     }
     for(i in seq_along(variants$POS)){
       if(length(variants$POS) > 1000){
@@ -99,7 +131,13 @@ annotate_with_nearest_gene <- function(variants, protein_coding_only=F){
       variant <- variants[i,]
       chr <- gsub("chr", "", variant$CHROM)
       chr <- paste("chr",chr,sep="")
-      genes_on_chr <- topr::ENSGENES %>% dplyr::filter(chrom == chr) %>% dplyr::arrange(gene_start)
+      if(build == "38"){
+        genes_on_chr <- toprdata::ENSGENES %>% dplyr::filter(chrom == chr) %>% dplyr::arrange(gene_start)
+      }else if(build == "37"){
+        #genes_on_chr <- toprdata::ENSGENES_37 %>% dplyr::filter(chrom == chr) %>% dplyr::arrange(gene_start)
+      }else{warning(paste("Build [",build,"] not found!!!!!!  Using build 38 GRCh38 instead ", sep=""))
+        genes_on_chr <- toprdata::ENSGENES %>% dplyr::filter(chrom == chr) %>% dplyr::arrange(gene_start)
+      }
       if(protein_coding_only){
         genes_on_chr <- genes_on_chr %>% dplyr::filter(biotype == "protein_coding")
       }

@@ -3,24 +3,27 @@
 \docType{data}
 \name{CD_FINNGEN}
 \alias{CD_FINNGEN}
-\title{Finngen v5 Crohn‘s disease (CHRONSMALL)}
+\title{Finngen r7 Crohn‘s disease (K11_CROHNS)}
 \format{
-A data frame  with 29,926rows and 9 variables:
+A data frame  with 41,095 rows and 8 variables:
 \describe{
 \item{CHROM}{Chromosome, written as for example chr1 or 1}
 \item{POS}{genetic position of the variant}
+\item{REF}{the reference allele}
+\item{ALT}{the alternative allele}
+\item{P}{P-value from Plink run, additive model, regression model GLM_FIRTH}
+\item{BETA}{Variant effect}
 \item{ID}{Variant identifier, e.g. rsid }
-\item{P}{P-value from Plink run, additive model, reggresion model GLM_FIRTH}
-\item{beta}{Variant effect}
+\item{AF}{Allele frequency}
 }
 }
 \source{
-Crohn's small intestines (CHRONSMALL), only including variants with P<1e-03
+Crohn's K50 (K11_CROHNS), only including variants with P<1e-03
 }
 \usage{
 CD_FINNGEN
 }
 \description{
-Dataset retrieved from the Finngen database (version 5) including 968 crohn´s cases and 210,100 controls. The dataset has been filtered on variants with P <1e-03.
+Dataset retrieved from the Finngen database (version 7) including 3147 crohn´s cases (K50) and 296,100 controls. The dataset has been filtered on variants with P <1e-03.
 }
 \keyword{datasets}

@@ -19,3 +19,5 @@ vignettes
 local
 .idea
 man/figures/topr.gif
+lastMiKTeXException
+.RDataTmp

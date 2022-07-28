@@ -160,7 +160,7 @@ Get snps within a region:
 get_snps_within_region(CD_UKBB, region = "chr1:67138906-67259979")
 ```
 
-Get the top variant on a chromsome:
+Get the top variant on a chromosome:
 ```{r}
 get_top_snp(CD_UKBB, chr="chr1")
 ```

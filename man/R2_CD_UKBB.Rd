@@ -5,12 +5,12 @@
 \alias{R2_CD_UKBB}
 \title{Example dataset including the R2 column for the locuszoom plot function}
 \format{
-A data frame  with 26,824 rows and 10 variables:
+A data frame  with 329 rows and 5 variables:
 \describe{
 \item{CHROM}{Chromosome, written as for example chr1 or 1}
 \item{POS}{genetic position of the variant}
 \item{ID}{Variant identifier, e.g. rsid }
-\item{P}{P-value from Plink run, additive model, reggresion model GLM_FIRTH}
+\item{P}{P-value from Plink run, additive model, regression model GLM_FIRTH}
 \item{R2}{variant correlation (r^2)}
 }
 }

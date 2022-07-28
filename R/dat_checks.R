@@ -20,6 +20,16 @@ dat_chr_check <- function(dat){
   return(dat)
 }
 
+convert_region_size <- function(region_size){
+  region_size <- gsub("(\\d+)(kb|KB|Kb)","\\1000", region_size)
+  region_size <- gsub("(\\d+)(mb|MB|Mb)","\\1000000", region_size)
+  if(! is.numeric(region_size)){
+    region_size <- as.numeric(region_size)
+    
+  }
+  return(region_size)
+}
+
 
 #' dat_column_check_and_set
 #'
@@ -100,7 +110,7 @@ dat_column_check_and_set <- function(dat){
     if("alt" %in% colnames(df)) df <- df %>%  dplyr::rename(ALT = "alt")
     if( (!"CHROM" %in% colnames(df)) || (!"POS" %in% colnames(df)) || (!"P" %in% colnames(df) ))
       stop("Some columns are missing from the dataset. Required columns are CHROM,POS and P. Add the required columns and try again, or rename existing columns, e.g. df=df %>% dplyr::rename(CHROM=yourColname)")
-
+    df$P <- as.numeric(df$P)
     df <- df[!is.na(df$P), ]
     dat[[i]] <- df
   }
