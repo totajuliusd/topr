@@ -19,7 +19,8 @@ qqtopr(
   axis_title_size = 12,
   title_text_size = 13,
   legend_title_size = 12,
-  legend_text_size = 12
+  legend_text_size = 12,
+  verbose = NULL
 )
 }
 \arguments{
@@ -52,6 +53,8 @@ qqtopr(
 \item{legend_title_size}{A number, size of the legend title}
 
 \item{legend_text_size}{A number, size of the legend text}
+
+\item{verbose}{A logical scalar (default: NULL). Set to FALSE to suppress printed messages}
 }
 \value{
 ggplot

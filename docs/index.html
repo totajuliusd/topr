@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">topr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -43,7 +43,7 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -63,7 +63,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/wuxi-nextcode/topr/" class="external-link">
+  <a href="https://github.com/GenuityScience/topr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -83,7 +83,7 @@
 <div class="section level1">
 <div class="page-header"><h1 id="topr--an-r-package-for-viewing-and-annotating-genetic-association-data">topr : an R package for viewing and annotating genetic association data<a class="anchor" aria-label="anchor" href="#topr--an-r-package-for-viewing-and-annotating-genetic-association-data"></a>
 </h1></div>
-<p><img src="reference/figures/topr.gif" alt="topr GIF" width="100%"></p>
+<p><img src="reference/figures/topr_v.1.1.0.gif" alt="topr GIF" width="100%"></p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -93,10 +93,10 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"topr"</span><span class="op">)</span></code></pre></div>
 <p>Or from github:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"wuxi-nextcode/topr"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"GenuityScience/topr"</span><span class="op">)</span></code></pre></div>
 <p>And then load the package:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wuxi-nextcode/topr" class="external-link">topr</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/GenuityScience/topr" class="external-link">topr</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="main-features-and-functionality">Main features and functionality<a class="anchor" aria-label="anchor" href="#main-features-and-functionality"></a>
@@ -105,7 +105,7 @@
 <div class="section level3">
 <h3 id="example-input-datasets">Example input datasets<a class="anchor" aria-label="anchor" href="#example-input-datasets"></a>
 </h3>
-<p>See the <a href="../vignettes/input_datasets.nb.html">Input datasets vignette</a> for more detailed information.</p>
+<p>See the <a href="https://genuityscience.github.io/topr/articles/input_datasets.html" class="external-link">Input datasets vignette</a> for more detailed information.</p>
 <p>Input datasets must include least three columns (<code>CHROM, POS</code> and <code>P</code>), where naming of the columns is flexible (i.e the chr label can be either chr or chrom and is case insensitive).</p>
 <p>topr has 3 in-built datasets (GWASes), take a look at one of them by issuing the following command:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -121,7 +121,7 @@
 <h4 id="manhattan">Manhattan<a class="anchor" aria-label="anchor" href="#manhattan"></a>
 </h4>
 <hr>
-<p>See the <a href="../vignettes/manhattan.nb.html">Manhattan vignette</a> for more detailed examples of how to use the manhattan plot function</p>
+<p>See the <a href="https://genuityscience.github.io/topr/articles/manhattan.html" class="external-link">Manhattan vignette</a> for more detailed examples of how to use the manhattan plot function</p>
 <p>View the whole genome association results on a Manhattan plot:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="va">CD_UKBB</span><span class="op">)</span></code></pre></div>
@@ -146,7 +146,7 @@
 <h4 id="regionplot">Regionplot<a class="anchor" aria-label="anchor" href="#regionplot"></a>
 </h4>
 <hr>
-<p>See the <a href="../vignettes/regionplot.nb.html">Regionplot vignette</a> for more detailed examples of how to use the regionplot function.</p>
+<p>See the <a href="https://genuityscience.github.io/topr/articles/regionplot.html" class="external-link">Regionplot vignette</a> for more detailed examples of how to use the regionplot function.</p>
 <p>Further zoom-in on a genetic region by gene name:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/regionplot.html">regionplot</a></span><span class="op">(</span><span class="va">CD_UKBB</span>, gene<span class="op">=</span><span class="st">"IL23R"</span><span class="op">)</span></code></pre></div>
@@ -176,7 +176,7 @@
 <pre class="{r}"><code><span class="fu"><a href="reference/get_gene.html">get_gene</a></span><span class="op">(</span>gene_name<span class="op">=</span><span class="st">"IL23R"</span><span class="op">)</span></code></pre>
 <p>Get snps within a region:</p>
 <pre class="{r}"><code><span class="fu"><a href="reference/get_snps_within_region.html">get_snps_within_region</a></span><span class="op">(</span><span class="va">CD_UKBB</span>, region <span class="op">=</span> <span class="st">"chr1:67138906-67259979"</span><span class="op">)</span></code></pre>
-<p>Get the top variant on a chromsome:</p>
+<p>Get the top variant on a chromosome:</p>
 <pre class="{r}"><code><span class="fu"><a href="reference/get_top_snp.html">get_top_snp</a></span><span class="op">(</span><span class="va">CD_UKBB</span>, chr<span class="op">=</span><span class="st">"chr1"</span><span class="op">)</span></code></pre>
 <p><br></p>
 </div>
@@ -197,8 +197,9 @@
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/wuxi-nextcode/topr/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/wuxi-nextcode/topr/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://cloud.r-project.org/package=topr" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/GenuityScience/topr/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/GenuityScience/topr/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -240,7 +241,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>

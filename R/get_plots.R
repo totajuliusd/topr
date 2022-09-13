@@ -41,13 +41,12 @@ get_base_plot <- function(dat, color=get_topr_colors(), show_legend=TRUE, legend
 
 
 get_gene_plot <- function(df,label_size=3.5,xmin=xmin,xmax=xmax, show_gene_names=NULL,scale=1,show_gene_legend=TRUE, gene_color=NULL,gene_label_fontface="plain",gene_label_family=""){
-  if(is.null(gene_color)){
-    color="#00AFBB"
+   if(is.null(gene_color)){
+       color="#00AFBB"
   }else{
     color=gene_color
     show_gene_legend=FALSE
   }
-  
   p1 <- ggplot(data=df$genes)+theme_bw()
   if(is.null(show_gene_names)){  #if the user wants to view the gene names even though the region is large, he/she can do so by setting show_gene_names to TRUE
     if(xmax-xmin > 10000000){
@@ -66,7 +65,7 @@ get_gene_plot <- function(df,label_size=3.5,xmin=xmin,xmax=xmax, show_gene_names
         p1 <- p1+geom_rect(data=df$shades, mapping=aes(ymax=y2,xmin=x1, xmax=x2, ymin=y1,fill=biotype))+labs(fill="Biotype")
       }
       else{
-         p1 <- p1+geom_rect(data=df$shades, mapping=aes(ymax=y2,xmin=x1, xmax=x2, ymin=y1), color="#00AFBB", fill="#00AFBB")
+         p1 <- p1+geom_rect(data=df$shades, mapping=aes(ymax=y2,xmin=x1, xmax=x2, ymin=y1), color=color, fill=color)
        }
     } #make the genes a bit thicker, since there doesnt have to be room for the text
     else{
@@ -74,7 +73,7 @@ get_gene_plot <- function(df,label_size=3.5,xmin=xmin,xmax=xmax, show_gene_names
         p1 <- p1+geom_rect(data=df$shades, mapping=aes(ymax=y2+1,xmin=x1, xmax=x2, ymin=y1+1,fill=biotype))+labs(fill="Biotype")
       }
       else{
-        p1 <- p1+geom_rect(data=df$shades, mapping=aes(ymax=y2+1,xmin=x1, xmax=x2, ymin=y1+1), color="#00AFBB", fill="#00AFBB")
+        p1 <- p1+geom_rect(data=df$shades, mapping=aes(ymax=y2+1,xmin=x1, xmax=x2, ymin=y1+1), color=color, fill=color)
       }
     }
   }

@@ -17,8 +17,8 @@
 #' 
 qqtopr <- function(dat, scale = 1, n_variants = 0, breaks = 15, title=NULL, color=get_topr_colors(),size=1,
                    legend_name="",legend_position="right", legend_labels=NULL,
-                   axis_text_size=11,axis_title_size=12, title_text_size=13,legend_title_size=12,legend_text_size=12) {
-    dat <- dat_check(dat) 
+                   axis_text_size=11,axis_title_size=12, title_text_size=13,legend_title_size=12,legend_text_size=12,verbose=NULL) {
+    dat <- dat_check(dat,verbose=verbose) 
     nvars <- n_variants
     if(is.data.frame(dat)){dat <- list(dat)}
     if(is.null(legend_labels)){

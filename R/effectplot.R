@@ -121,8 +121,8 @@ match_by_alleles <- function(df, verbose=NULL, show_full_output=FALSE){
 #' }
 #'
 match_by_pos <- function(df1, df2, verbose=NULL, show_full_output=FALSE){
-  dat2 <- dat_check(df2)
-  dat1 <- dat_check(df1)
+  dat2 <- dat_check(df2, verbose=verbose)
+  dat1 <- dat_check(df1, verbose=verbose)
   df1 <- dat1[[1]]
   df1_orig <- df1
   df2 <- dat2[[1]]
@@ -252,11 +252,12 @@ get_snpset_code <-function(){
 #' @param annotate_with  A string, The name of the column that contains the label for the datapoints (default value is Gene_Symbol)
 #' @param thresh A number. Threshold cutoff, datapoints with P2 below this threshold are shown as filled circles whereas datapoints with P2 above this threshold are shown as open circles
 #' @param ci_thresh A number.Show the confidence intervals if the P-value is below this threshold
-#' @param gene_label_thresh A string, label datapoints with P2 below this threshold
+#' @param gene_label_thresh Deprecated: A number, label datapoints with P2 below this threshold
 #' @param color A string, default value is the first of the topr colors
 #' @param subtitle_text_size A number setting the text size of the subtitle (default: 11)
 #' @param snpset_thresh A number representing the threshold used to create the snpset used for plotting (Only applicable if the input dataframe is a list containing two datasets)
 #' @param snpset_region_size A number representing the region size to use when creating the snpset used for plotting (Only applicable if the input dataframe is a list containing two datasets)
+#' @param annotate A number, label datapoints with p-value below below this number (in the second df) by their nearest gene
 #' @inheritParams manhattan
 #' @return ggplot object
 #' @export
@@ -271,11 +272,12 @@ effectplot <- function(df,pheno_x="x_pheno", pheno_y="y_pheno", annotate_with="G
                        color=get_topr_colors()[1],scale=1, build=38,label_fontface="italic",label_family="",nudge_y=0.001,nudge_x=0.001,size=2,
                        segment.size=0.2,segment.linetype="solid",segment.color="transparent",angle=0,title=NULL,
                        axis_text_size=10,axis_title_size=12, title_text_size=13,subtitle_text_size=11,gene_label_size=3.2,snpset_thresh=1e-08,
-                       snpset_region_size=1000000,max.overlaps=10){
-  dat <- df
+                       snpset_region_size=1000000,max.overlaps=10, annotate=0,label_color=NULL){
+  if (!missing(gene_label_thresh)) deprecated_argument_msg(gene_label_thresh)
+   dat <- df
   if(is.list(dat) & length(dat)==2){
     if(is.data.frame(dat[[1]]) & is.data.frame(dat[[2]])){
-       snpset <- create_snpset(df1=dat[[1]],df2=dat[[2]],thresh=snpset_thresh, region_size = snpset_region_size)
+       snpset <- get_snpset(df1=dat[[1]],df2=dat[[2]],thresh=snpset_thresh, region_size = snpset_region_size, build=build)
        dat <- snpset$matched
     }
   }
@@ -306,18 +308,23 @@ effectplot <- function(df,pheno_x="x_pheno", pheno_y="y_pheno", annotate_with="G
     dat$C1_x <- ifelse(dat$x_P<ci_thresh,dat$x_Effect-1.96*dat$sigma_x,dat$x_Effect)
     dat$C2_x <- ifelse(dat$x_P<ci_thresh,dat$x_Effect+1.96*dat$sigma_x,dat$x_Effect)
     if(annotate_with %in% colnames(dat)){
-      dat$label <- ifelse(dat$y_P < gene_label_thresh, dat %>% pull(annotate_with), "")
-    } else if("ID" %in% colnames(dat)){
-      print("Could not find Gene_Symbol in the input data, so using ID to label the datapoints instead")
-      dat$label <- ifelse(dat$y_P < gene_label_thresh, dat$ID, "")
+      dat$label <- ifelse(dat$y_P < annotate, dat %>% pull(annotate_with), "")
+    } else if("ID" %in% colnames(dat) & annotate_with =="ID"){
+      dat$label <- ifelse(dat$y_P < annotate, dat$ID, "")
     } else{
-      dat$label <- ifelse(dat$y_P < gene_label_thresh, paste(dat$CHROM, dat$POS, sep="_"), "")
-      print("Could not find Gene_Symbol nor ID in the input data, so using CHROM and POS to label the datapoints instead")
-    }
+      #annotate the data
+      dat_tmp <- dat %>% select(CHROM,POS)
+      dat_annot <- annotate_with_nearest_gene(dat_tmp, build=build)
+      dat <- merge(dat, dat_annot%>% select(CHROM,POS,Gene_Symbol), by=c("CHROM","POS"))
+      dat$label <- ifelse(dat$y_P < annotate, dat$Gene_Symbol, "")
+      }
     p1 <- ggplot(data=dat, aes(y=y_Effect,x=x_Effect)) #+geom_point(data=dat[[1]]$gwas, aes(dat[[1]]$gwas$pos_adj, dat[[1]]$gwas$log10p),color=colors[1] alpha=0.7,size=1)+theme_bw()
-    p1 <- p1+geom_errorbar(data=dat,mapping=aes(ymin=C1,ymax=C2),width=0.002,color="grey",alpha=0.4)
+    
+    
+    p1 <- p1+geom_errorbar(data=dat,mapping=aes(ymin=C1,ymax=C2),color="grey",alpha=0.4)
     #horizontal errorbar
     p1 <- p1+geom_errorbarh(data=dat,mapping=aes(xmin=C1_x,xmax=C2_x),color="grey",alpha=0.4)
+    
     p1 <- p1+geom_point(data=P1, aes(x=x_Effect, y=y_Effect),color=color,shape=19,stroke=1.5,alpha=1,size=size)
     p1 <- p1+geom_point(data=P2, aes(x=x_Effect, y=y_Effect),color=color,shape=1,stroke=1.5, alpha=0.5,size=size)
     p1 <- p1+geom_point(data=P3, aes(x=x_Effect, y=y_Effect),color="#CCCCCC",shape=19,stroke=1.5,alpha=0.1,size=size)
@@ -331,10 +338,14 @@ effectplot <- function(df,pheno_x="x_pheno", pheno_y="y_pheno", annotate_with="G
     
     p1 <- p1+theme(plot.subtitle=element_text(size=subtitle_text_size*size),plot.title = element_text(size=title_text_size*scale), 
                    axis.title= element_text(size= axis_title_size*scale), axis.text.x = element_text(size=axis_text_size*scale))
-    
+    sign_col="black"
+    nonsign_col="grey"
+    if(! is.null(label_color)){
+      sign_col <- label_color; nonsign_col <-label_color
+    }
     p1 <- p1+ggrepel::geom_text_repel(aes(label=label),segment.color = segment.color,fontface=label_fontface,family=label_family,angle=angle,
                                       nudge_y=nudge_y,nudge_x=nudge_x,size=gene_label_size*scale,show.legend = FALSE,segment.size=segment.size,segment.linetype=segment.linetype,
-                                      colour=ifelse(dat$y_P<gene_label_thresh,"black","grey"),max.overlaps=max.overlaps)
+                                      colour=ifelse(dat$y_P<thresh,sign_col,nonsign_col),max.overlaps=max.overlaps)
     
     p1 <-p1+geom_abline(slope=1,intercept=0,color="grey44", size=0.2)
     

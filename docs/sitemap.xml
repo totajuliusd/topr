@@ -67,6 +67,9 @@
     <loc>/reference/effect_plot.html</loc>
   </url>
   <url>
+    <loc>/reference/effectplot.html</loc>
+  </url>
+  <url>
     <loc>/reference/flip_to_positive_allele_for_dat1.html</loc>
   </url>
   <url>
@@ -76,13 +79,28 @@
     <loc>/reference/get_gene.html</loc>
   </url>
   <url>
+    <loc>/reference/get_gene_coords.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_genes_by_Gene_Symbol.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_genes_in_region.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_lead_snps.html</loc>
   </url>
   <url>
     <loc>/reference/get_overlapping_snps_by_pos.html</loc>
   </url>
   <url>
     <loc>/reference/get_snps_within_region.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_snpset.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_snpset_code.html</loc>
   </url>
   <url>
     <loc>/reference/get_top_hit.html</loc>
@@ -104,6 +122,12 @@
   </url>
   <url>
     <loc>/reference/match_alleles.html</loc>
+  </url>
+  <url>
+    <loc>/reference/match_by_alleles.html</loc>
+  </url>
+  <url>
+    <loc>/reference/match_by_pos.html</loc>
   </url>
   <url>
     <loc>/reference/pipe.html</loc>

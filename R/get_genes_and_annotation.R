@@ -1,11 +1,37 @@
+#' Get SNPs/variants within region
+#'
+#' @description
+#'
+#' \code{get_genes_in_region()}
+#'
+#' @param region A string representing the genetic region (e.g chr16:50693587-50734041)
+#' @param chr A string, chromosome (e.g. chr16)
+#' @param xmin An integer representing genetic position 
+#' @param xmax An integer representing genetic position
+#' @param show_genes A logical scalar, show genes instead of exons (default show_genes=FALSE)
+#' @param show_exons Deprecated : A logical scalar, show exons instead of genees (default show_exons=FALSE)
+#' @inheritParams manhattan
+#' @return the genes the requested region
+#' @export
+#'
+#' @examples
+#' get_genes_in_region(region="chr16:50593587-50834041")
+#'
 
-get_genes_in_region <- function(chr=chr, xmin=xmin,xmax=xmax,protein_coding_only=F, show_exons=F,show_genes=T){
-  #  if (!missing("show_exons"))
-  #   warning("show_exons is argument deprecated")
+
+get_genes_in_region <- function(chr=chr, xmin=xmin,xmax=xmax,protein_coding_only=F, show_exons=F,show_genes=T, build=38, region=NULL){
+  if (!missing(show_exons)) deprecated_argument_msg(show_exons)
+   if(!is.null(region)){
+    tmp <- unlist(stringr::str_split(region, ":"))
+    chr <- tmp[1]
+    tmp_pos <- unlist(stringr::str_split(tmp[2], "-"))
+    xmin <- tmp_pos[1]
+    xmax <- tmp_pos[2]
+   }
   if(show_genes){
-    genes <- get_genes(chr,xmin,xmax,protein_coding_only = protein_coding_only )
+    genes <- get_genes(chr,xmin,xmax,protein_coding_only = protein_coding_only, build=build)
   }else{
-    genes <- get_exons(chr,xmin,xmax,protein_coding_only = protein_coding_only)
+    genes <- get_exons(chr,xmin,xmax,protein_coding_only = protein_coding_only, build=build)
   }
   return(genes)
 }
@@ -134,7 +160,7 @@ annotate_with_nearest_gene <- function(variants, protein_coding_only=FALSE, buil
       if(build == "38"){
         genes_on_chr <- toprdata::ENSGENES %>% dplyr::filter(chrom == chr) %>% dplyr::arrange(gene_start)
       }else if(build == "37"){
-        #genes_on_chr <- toprdata::ENSGENES_37 %>% dplyr::filter(chrom == chr) %>% dplyr::arrange(gene_start)
+        genes_on_chr <- toprdata::ENSGENES_37 %>% dplyr::filter(chrom == chr) %>% dplyr::arrange(gene_start)
       }else{warning(paste("Build [",build,"] not found!!!!!!  Using build 38 GRCh38 instead ", sep=""))
         genes_on_chr <- toprdata::ENSGENES %>% dplyr::filter(chrom == chr) %>% dplyr::arrange(gene_start)
       }

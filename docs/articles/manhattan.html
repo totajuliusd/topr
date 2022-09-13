@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">topr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -43,7 +43,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -63,7 +63,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/wuxi-nextcode/topr/" class="external-link">
+  <a href="https://github.com/GenuityScience/topr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -82,10 +82,11 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Intro into manhattan</h1>
-                        <h4 data-toc-skip class="author">Thorhildur Juliusdottir</h4>
+                        <h4 data-toc-skip class="author">Thorhildur
+Juliusdottir</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/wuxi-nextcode/topr/blob/HEAD/vignettes/manhattan.rmd" class="external-link"><code>vignettes/manhattan.rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/GenuityScience/topr/blob/HEAD/vignettes/manhattan.rmd" class="external-link"><code>vignettes/manhattan.rmd</code></a></small>
       <div class="hidden name"><code>manhattan.rmd</code></div>
 
     </div>
@@ -101,15 +102,19 @@
 <h2 id="manhattan">manhattan<a class="anchor" aria-label="anchor" href="#manhattan"></a>
 </h2>
 <p>Displays GWAS results over the entire genome.</p>
-<p>Get an overview of the in-built Crohn’s GWAS results (<code>CD_UKBB</code>):</p>
+<p>Get an overview of the in-built Crohn’s GWAS results
+(<code>CD_UKBB</code>):</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="va">CD_UKBB</span><span class="op">)</span></code></pre></div>
 <p><img src="figures/manhattan.jpg" width="100%"></p>
-<p>Annotate the lead/index variants (with p-values below 5e-09) with their nearest gene and add a title:</p>
+<p>Annotate the lead/index variants (with p-values below 5e-09) with
+their nearest gene and add a title:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="va">CD_UKBB</span>, annotate<span class="op">=</span><span class="fl">5e-09</span>,  title<span class="op">=</span><span class="st">"Crohn's disease"</span><span class="op">)</span></code></pre></div>
 <p><img src="figures/manhattan_annotate.jpg" width="100%"></p>
-<p>Display genes of interest at the bottom of the Manhattan plot to get a visual representation of their position relative to association peaks:</p>
+<p>Display genes of interest at the bottom of the Manhattan plot to get
+a visual representation of their position relative to association
+peaks:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">genes</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"IL23R"</span>,<span class="st">"NOTCH4"</span>,<span class="st">"NOD2"</span>,<span class="st">"JAK2"</span>,<span class="st">"TTC33"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="va">CD_UKBB</span>, annotate<span class="op">=</span><span class="fl">5e-09</span>, title<span class="op">=</span><span class="st">"Crohn's disease"</span>, highlight_genes <span class="op">=</span> <span class="va">genes</span><span class="op">)</span></code></pre></div>
@@ -118,11 +123,15 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="va">CD_UKBB</span>, annotate<span class="op">=</span><span class="fl">5e-09</span>, chr<span class="op">=</span><span class="st">"chr1"</span><span class="op">)</span></code></pre></div>
 <p><img src="figures/manhattan_chr1.jpg" width="100%"></p>
-<p>Create a Manhattan of multiple GWAS results (in a list) on the same plot</p>
+<p>Create a Manhattan of multiple GWAS results (in a list) on the same
+plot</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">UC_UKBB</span>, <span class="va">CD_UKBB</span><span class="op">)</span>, legend_labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UC UKBB"</span>, <span class="st">"CD UKBB"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="figures/manhattan_multi.jpg" width="100%"></p>
-<p>Show three GWASes on the same plot, using different annotation thresholds for each dataset. Also, add genes of interest to the plot Use the ntop argument to control how many GWASes are displayed at the top and bottom of the plot:</p>
+<p>Show three GWASes on the same plot, using different annotation
+thresholds for each dataset. Also, add genes of interest to the plot Use
+the ntop argument to control how many GWASes are displayed at the top
+and bottom of the plot:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">UC_UKBB</span>,<span class="va">CD_UKBB</span>,<span class="va">CD_FINNGEN</span><span class="op">)</span>
 <span class="fu"><a href="../reference/manhattan.html">manhattan</a></span><span class="op">(</span><span class="va">dat</span>, legend_labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UC UKBB"</span>, <span class="st">"CD UKBB"</span>,<span class="st">"CD FINNGEN"</span><span class="op">)</span>, annotate<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5e-9</span>,<span class="fl">5e-9</span>,<span class="fl">1e-15</span><span class="op">)</span>, region_size<span class="op">=</span><span class="fl">100000000</span>, ntop<span class="op">=</span><span class="fl">1</span>, highlight_genes <span class="op">=</span> <span class="va">genes</span>, highlight_genes_ypos <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span> , angle<span class="op">=</span><span class="fl">90</span>, ymax<span class="op">=</span><span class="fl">40</span>, ymin<span class="op">=</span><span class="op">-</span><span class="fl">30</span>, nudge_y <span class="op">=</span> <span class="fl">2</span>, title<span class="op">=</span><span class="st">"Inflammatory Bowel Disease"</span><span class="op">)</span></code></pre></div>
@@ -147,7 +156,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>

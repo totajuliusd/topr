@@ -159,7 +159,7 @@ regionplot(
 
 \item{title}{A string to set the plot title}
 
-\item{label_color}{A string. To change the color of the gene or variant labels}
+\item{label_color}{A string or a vector of strings. To change the color of the gene or variant labels}
 
 \item{locuszoomplot}{A logical scalar set to FALSE. Only set to TRUE by calling the locuszoom function}
 
@@ -205,9 +205,9 @@ regionplot(
 
 \item{extract_plots}{Logical, FALSE by default. Set to TRUE to extract the three plots separately in a list}
 
-\item{label_fontface}{Label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
+\item{label_fontface}{A string or a vector of strings. Label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
 
-\item{label_family}{Label font name (default ggrepel argument is "")}
+\item{label_family}{A stirng or a vector of strings. Label font name (default ggrepel argument is "")}
 
 \item{gene_label_fontface}{Gene label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
 
