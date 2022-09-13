@@ -10,7 +10,6 @@ get_snpset_code()
 Dataframe containing the top hit
 }
 \description{
-llllll
 \code{get_snpset_code()}
 }
 \examples{

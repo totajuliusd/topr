@@ -10,7 +10,7 @@ get_snps_within_region(
   chr = NULL,
   xmin = NULL,
   xmax = NULL,
-  keep_chr = TRUE
+  keep_chr = NULL
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ get_snps_within_region(
 
 \item{xmax}{An integer, include variants with POS smaller than xmax}
 
-\item{keep_chr}{Logical, set to FALSE to remove the "chr" prefix before each chromosome if present (TRUE by default)}
+\item{keep_chr}{Deprecated: Logical, set to FALSE to remove the "chr" prefix before each chromosome if present (TRUE by default)}
 }
 \value{
 the variants within the requested region

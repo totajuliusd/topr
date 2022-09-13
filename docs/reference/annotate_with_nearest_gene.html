@@ -18,7 +18,7 @@ Required parameters is a dataframe of SNPs (with the columns CHROM and POS)"><!-
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">topr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -27,7 +27,7 @@ Required parameters is a dataframe of SNPs (with the columns CHROM and POS)"><!-
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -43,7 +43,7 @@ Required parameters is a dataframe of SNPs (with the columns CHROM and POS)"><!-
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/wuxi-nextcode/topr/" class="external-link">
+  <a href="https://github.com/GenuityScience/topr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -58,7 +58,7 @@ Required parameters is a dataframe of SNPs (with the columns CHROM and POS)"><!-
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get the nearest gene for one or more snps</h1>
-    <small class="dont-index">Source: <a href="https://github.com/wuxi-nextcode/topr/blob/HEAD/R/get_genes_and_annotation.R" class="external-link"><code>R/get_genes_and_annotation.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/GenuityScience/topr/blob/HEAD/R/get_genes_and_annotation.R" class="external-link"><code>R/get_genes_and_annotation.R</code></a></small>
     <div class="hidden name"><code>annotate_with_nearest_gene.Rd</code></div>
     </div>
 
@@ -68,7 +68,7 @@ Required parameters is a dataframe of SNPs (with the columns CHROM and POS)</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">annotate_with_nearest_gene</span><span class="op">(</span><span class="va">variants</span>, protein_coding_only <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">annotate_with_nearest_gene</span><span class="op">(</span><span class="va">variants</span>, protein_coding_only <span class="op">=</span> <span class="cn">FALSE</span>, build <span class="op">=</span> <span class="fl">38</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -77,6 +77,8 @@ Required parameters is a dataframe of SNPs (with the columns CHROM and POS)</p>
 <dd><p>a dataframe of variant positions (CHROM and POS)</p></dd>
 <dt>protein_coding_only</dt>
 <dd><p>Logical, if set to TRUE only annotate with protein coding genes (the default value is FALSE)</p></dd>
+<dt>build</dt>
+<dd><p>A number representing the genome build. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -85,9 +87,21 @@ Required parameters is a dataframe of SNPs (with the columns CHROM and POS)</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">variants</span> <span class="op">&lt;-</span><span class="fu"><a href="get_lead_snps.html">get_lead_snps</a></span><span class="op">(</span><span class="va">CD_UKBB</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">annotate_with_nearest_gene</span><span class="op">(</span><span class="va">variants</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   CHROM       POS ID       REF   ALT          P    OR     AF Gene_Symbol biotype</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> chr6   31<span style="text-decoration: underline;">660</span>620 rs14884… T     A     1.47<span style="color: #949494;">e</span><span style="color: #BB0000;">-24</span> 2.43  0.010<span style="text-decoration: underline;">3</span> C6orf47     protei…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> chr16  50<span style="text-decoration: underline;">729</span>867 rs20668… G     GC    7.37<span style="color: #949494;">e</span><span style="color: #BB0000;">-24</span> 2.14  0.015<span style="text-decoration: underline;">9</span> NOD2        protei…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> chr1   67<span style="text-decoration: underline;">216</span>513 rs11576… G     A     8.04<span style="color: #949494;">e</span><span style="color: #BB0000;">-20</span> 0.777 0.441  C1orf141    protei…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> chr16  50<span style="text-decoration: underline;">485</span>831 rs76176… A     G     8.18<span style="color: #949494;">e</span><span style="color: #BB0000;">-16</span> 1.75  0.022<span style="text-decoration: underline;">7</span> NKD1        protei…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> chr6   32<span style="text-decoration: underline;">708</span>532 rs14461… A     C     1.28<span style="color: #949494;">e</span><span style="color: #BB0000;">-15</span> 1.80  0.020<span style="text-decoration: underline;">0</span> MTCO3P1     unproc…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> chr7   50<span style="text-decoration: underline;">274</span>703 rs22193… T     G     8.52<span style="color: #949494;">e</span><span style="color: #BB0000;">-14</span> 1.23  0.593  IKZF1       protei…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> chr9    4<span style="text-decoration: underline;">984</span>530 rs18874… G     C     5.04<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 0.833 0.633  JAK2        protei…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> chr5   40<span style="text-decoration: underline;">439</span>961 rs77132… C     T     7.43<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 1.20  0.602  TTC33       protei…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> chr2  233<span style="text-decoration: underline;">237</span>298 rs13418… A     C     1.70<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 1.18  0.506  ATG16L1     protei…</span>
+<span class="r-in"></span>
 </code></pre></div>
     </div>
   </div>
@@ -102,7 +116,7 @@ Required parameters is a dataframe of SNPs (with the columns CHROM and POS)</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">topr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -26,7 +26,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -42,7 +42,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/wuxi-nextcode/topr/" class="external-link">
+  <a href="https://github.com/GenuityScience/topr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get SNPs/variants within region</h1>
-    <small class="dont-index">Source: <a href="https://github.com/wuxi-nextcode/topr/blob/HEAD/R/setters_and_getters.R" class="external-link"><code>R/setters_and_getters.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/GenuityScience/topr/blob/HEAD/R/setters_and_getters.R" class="external-link"><code>R/setters_and_getters.R</code></a></small>
     <div class="hidden name"><code>get_snps_within_region.Rd</code></div>
     </div>
 
@@ -66,7 +66,14 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_snps_within_region</span><span class="op">(</span><span class="va">df</span>, <span class="va">region</span>, chr <span class="op">=</span> <span class="cn">NULL</span>, xmin <span class="op">=</span> <span class="cn">NULL</span>, xmax <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_snps_within_region</span><span class="op">(</span>
+  <span class="va">df</span>,
+  <span class="va">region</span>,
+  chr <span class="op">=</span> <span class="cn">NULL</span>,
+  xmin <span class="op">=</span> <span class="cn">NULL</span>,
+  xmax <span class="op">=</span> <span class="cn">NULL</span>,
+  keep_chr <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -81,6 +88,8 @@
 <dd><p>An integer, include variants with POS larger than xmin</p></dd>
 <dt>xmax</dt>
 <dd><p>An integer, include variants with POS smaller than xmax</p></dd>
+<dt>keep_chr</dt>
+<dd><p>Deprecated: Logical, set to FALSE to remove the "chr" prefix before each chromosome if present (TRUE by default)</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -89,9 +98,174 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">get_snps_within_region</span><span class="op">(</span><span class="va">dat</span>, <span class="st">"chr16:50593587-50834041"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">get_snps_within_region</span><span class="op">(</span><span class="va">CD_UKBB</span>, <span class="st">"chr16:50593587-50834041"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     CHROM      POS          ID     REF       ALT           P       OR      AF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   chr16 50598560  rs72796315       C         G 3.58473e-09 1.346800 0.05833</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   chr16 50612997  rs74460821       G         A 2.85497e-12 1.553170 0.03117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   chr16 50612997  rs74460821       G         A 2.85497e-12 1.553170 0.03117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   chr16 50627053 rs146528649       G         T 7.91289e-18 1.827460 0.02144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   chr16 50627362   rs9673419       A         C 4.73158e-05 1.131810 0.23684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   chr16 50644278  rs76870746       G         A 9.50954e-04 0.829220 0.06980</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   chr16 50658453   rs1109863       G         A 8.87619e-04 0.909189 0.70176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   chr16 50660100   rs2357623       A         G 1.49239e-04 0.894224 0.72593</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   chr16 50664160  rs62029061       G         C 1.73488e-06 1.206140 0.12973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  chr16 50664160  rs62029061       G         C 1.73488e-06 1.206140 0.12973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  chr16 50669105  rs74017766       C         T 2.51719e-04 0.571285 0.01341</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  chr16 50669105  rs74017766       C         T 2.51719e-04 0.571285 0.01341</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  chr16 50671044 rs113593279       A         C 6.13604e-06 1.535360 0.01353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  chr16 50671044 rs113593279       A         C 6.13604e-06 1.535360 0.01353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  chr16 50675812      rs6596       G         A 2.42868e-10 1.237170 0.16487</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  chr16 50675812      rs6596       G         A 2.42868e-10 1.237170 0.16487</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  chr16 50681274   rs2066848       G         A 6.47450e-04 0.910247 0.40705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  chr16 50685832 rs113593463       G         A 1.89708e-04 1.409160 0.01573</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  chr16 50691282   rs7194886       C         T 3.73388e-05 0.893024 0.41111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  chr16 50692911 rs111164073       G         A 4.43509e-05 1.436840 0.01657</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21  chr16 50696318   rs2066850       G         A 1.38360e-10 1.203300 0.27591</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22  chr16 50696535   rs4785224       G         A 6.82391e-05 0.894211 0.38552</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23  chr16 50697185   rs2076752       G         A 1.49487e-10 1.202640 0.27884</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  chr16 50699463   rs2076753       G         T 1.11539e-11 1.216120 0.27385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25  chr16 50699948   rs2067085       C         G 4.73868e-05 0.892037 0.38631</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  chr16 50702030   rs8045009       C         T 1.73347e-04 0.900101 0.37979</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27  chr16 50702745   rs6500328       A         G 1.45419e-05 0.885959 0.39350</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28  chr16 50703587   rs7500036       C         T 1.05973e-12 1.225730 0.27853</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29  chr16 50704532  rs71715899       C        CT 3.15880e-05 0.885554 0.37391</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30  chr16 50704919  rs11649521       G         A 1.29633e-12 1.224780 0.27753</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31  chr16 50705539  rs62027635       G         A 1.49707e-12 1.223930 0.27758</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32  chr16 50705671  rs17221417       C         G 2.31980e-12 1.220750 0.28288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33  chr16 50706853  rs11642482       C         G 6.21162e-05 0.893965 0.38409</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34  chr16 50707275  rs11642646       C         A 7.78535e-05 0.895319 0.38396</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35  chr16 50707551  rs17312836       A         C 5.82419e-05 0.893611 0.38461</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36  chr16 50708770  rs13380733       G         A 3.18412e-12 1.220770 0.27891</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37  chr16 50708770  rs13380733       G         A 3.18412e-12 1.220770 0.27891</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38  chr16 50709027  rs13380741       G         A 3.07955e-12 1.220930 0.27889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39  chr16 50709027  rs13380741       G         A 3.07955e-12 1.220930 0.27889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40  chr16 50709420  rs11647841       G         A 1.00487e-04 0.896854 0.38301</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41  chr16 50709420  rs11647841       G         A 1.00487e-04 0.896854 0.38301</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42  chr16 50710008  rs34133110       C         T 1.02050e-04 0.896942 0.38298</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43  chr16 50710008  rs34133110       C         T 1.02050e-04 0.896942 0.38298</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44  chr16 50710713   rs2066842       C         T 3.37052e-11 1.213830 0.25718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45  chr16 50710713   rs2066842       C         T 3.37052e-11 1.213830 0.25718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46  chr16 50711288   rs2066843       C         T 2.75401e-11 1.214430 0.25873</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47  chr16 50711288   rs2066843       C         T 2.75401e-11 1.214430 0.25873</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48  chr16 50711672   rs1861759       T         G 3.33584e-04 0.904377 0.37990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49  chr16 50711672   rs1861759       T         G 3.33584e-04 0.904377 0.37990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50  chr16 50712015   rs2066844       C         T 5.93912e-12 1.455510 0.04507</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51  chr16 50712015   rs2066844       C         T 5.93912e-12 1.455510 0.04507</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52  chr16 50713793  rs17313265       C         T 2.32706e-11 1.215370 0.26023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53  chr16 50713793  rs17313265       C         T 2.32706e-11 1.215370 0.26023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54  chr16 50713828  rs72796355       C         G 1.62154e-11 1.217060 0.25944</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55  chr16 50713828  rs72796355       C         G 1.62154e-11 1.217060 0.25944</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56  chr16 50715420  rs67189633      CT         C 3.34680e-05 0.889256 0.38543</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57  chr16 50715420  rs67189633      CT         C 3.34680e-05 0.889256 0.38543</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58  chr16 50715497  rs62029863       G         T 3.71978e-11 1.212980 0.25910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59  chr16 50715497  rs62029863       G         T 3.71978e-11 1.212980 0.25910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60  chr16 50717487    rs748855       A         G 3.10796e-04 0.903845 0.37970</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61  chr16 50717487    rs748855       A         G 3.10796e-04 0.903845 0.37970</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62  chr16 50717876   rs1861758       G         A 3.67778e-04 0.904828 0.37835</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63  chr16 50717876   rs1861758       G         A 3.67778e-04 0.904828 0.37835</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64  chr16 50718253  rs62029864       G         A 9.78587e-12 1.224300 0.24162</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65  chr16 50718253  rs62029864       G         A 9.78587e-12 1.224300 0.24162</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66  chr16 50718904   rs1861757       T         C 6.72056e-04 0.909167 0.37735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67  chr16 50719513   rs7203691       G         A 3.34468e-04 0.904294 0.37862</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68  chr16 50721366  rs34103974      GT         G 3.79479e-06 0.878895 0.40463</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69  chr16 50721798  rs10521209       T         G 7.36602e-05 0.895627 0.39450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70  chr16 50722629   rs2066845       G         C 2.09283e-10 1.825030 0.01147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71  chr16 50722629   rs2066845       G         C 2.09283e-10 1.825030 0.01147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72  chr16 50722863   rs5743289       C         T 1.37425e-11 1.252000 0.16818</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73  chr16 50722863   rs5743289       C         T 1.37425e-11 1.252000 0.16818</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74  chr16 50722970   rs2076756       A         G 9.33259e-12 1.224290 0.24209</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75  chr16 50722970   rs2076756       A         G 9.33259e-12 1.224290 0.24209</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76  chr16 50724938    rs749910       G         A 6.74142e-12 1.225950 0.24182</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77  chr16 50724938    rs749910       G         A 6.74142e-12 1.225950 0.24182</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78  chr16 50725356 rs138198313      AC         A 7.68901e-04 0.906595 0.36626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79  chr16 50725356 rs138198313      AC         A 7.68901e-04 0.906595 0.36626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80  chr16 50725358   rs4990643       T         A 6.43316e-05 0.894343 0.39302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81  chr16 50725358   rs4990643       T         A 6.43316e-05 0.894343 0.39302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82  chr16 50725820   rs5743292       T         A 1.09294e-14 1.585560 0.03425</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83  chr16 50725820   rs5743292       T         A 1.09294e-14 1.585560 0.03425</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84  chr16 50727523   rs8061960       C         T 1.17834e-04 0.898637 0.39789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85  chr16 50727523   rs8061960       C         T 1.17834e-04 0.898637 0.39789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86  chr16 50729867   rs2066847       G        GC 7.36933e-24 2.142320 0.01588</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87  chr16 50729867   rs2066847       G        GC 7.36933e-24 2.142320 0.01588</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88  chr16 50730925   rs2357791       G         A 3.28541e-05 0.889765 0.38091</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89  chr16 50730925   rs2357791       G         A 3.28541e-05 0.889765 0.38091</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90  chr16 50732216   rs3135499       A         C 8.33704e-06 0.883837 0.40962</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91  chr16 50732216   rs3135499       A         C 8.33704e-06 0.883837 0.40962</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92  chr16 50732975   rs3135500       G         A 5.35117e-06 0.880675 0.39709</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93  chr16 50732975   rs3135500       G         A 5.35117e-06 0.880675 0.39709</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94  chr16 50733736   rs8056611       A         G 3.06573e-04 0.907128 0.50553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95  chr16 50733736   rs8056611       A         G 3.06573e-04 0.907128 0.50553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96  chr16 50734311   rs2357792       A         G 5.95341e-04 0.911784 0.51925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97  chr16 50734311   rs2357792       A         G 5.95341e-04 0.911784 0.51925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98  chr16 50735351   rs7205423       C         G 9.77490e-04 0.915371 0.53108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99  chr16 50735351   rs7205423       C         G 9.77490e-04 0.915371 0.53108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100 chr16 50735652    rs718226       A         G 1.45649e-04 0.901090 0.41444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101 chr16 50735652    rs718226       A         G 1.45649e-04 0.901090 0.41444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102 chr16 50741834    rs751919       T         G 2.19091e-04 0.903676 0.41082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103 chr16 50741834    rs751919       T         G 2.19091e-04 0.903676 0.41082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104 chr16 50741834    rs751919       T         G 2.19091e-04 0.903676 0.41082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 105 chr16 50745428   rs1548990       T         C 1.28810e-04 0.902741 0.51627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 106 chr16 50745428   rs1548990       T         C 1.28810e-04 0.902741 0.51627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 107 chr16 50745428   rs1548990       T         C 1.28810e-04 0.902741 0.51627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 108 chr16 50746641   rs9940175       C         T 1.60859e-04 0.900960 0.39562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 109 chr16 50746641   rs9940175       C         T 1.60859e-04 0.900960 0.39562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110 chr16 50746641   rs9940175       C         T 1.60859e-04 0.900960 0.39562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 111 chr16 50747891   rs8060598       T         C 1.39281e-04 0.900889 0.41064</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 112 chr16 50752261 rs147180604  GACAAA         G 2.47400e-04 0.903473 0.39550</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 113 chr16 50753236   rs3785142       G         A 2.01029e-04 0.905481 0.51428</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 114 chr16 50753572   rs7342715       A         G 1.49745e-04 0.903764 0.52869</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 115 chr16 50755339  rs34552113       G         C 2.54017e-04 0.904540 0.40830</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 116 chr16 50756247  rs12324931       A         C 4.39824e-12 1.468620 0.04335</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 117 chr16 50756788   rs3135501       A         G 1.32366e-04 0.903080 0.52888</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 118 chr16 50757339   rs3135503       T         G 2.37112e-04 0.904215 0.40796</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 119 chr16 50757543  rs34683241       A        AT 4.12225e-04 0.907373 0.40419</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 120 chr16 50758357   rs4785450       C         T 1.52681e-04 0.900614 0.39567</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 121 chr16 50761610  rs34464167       T         A 2.56073e-04 0.907051 0.52689</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 122 chr16 50765018   rs2066851       A         G 1.53099e-04 0.901419 0.41082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 123 chr16 50766736   rs9925070       T         G 4.31606e-04 0.908085 0.40613</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 124 chr16 50767466   rs3064635       A        AT 3.88371e-04 0.903345 0.39994</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 125 chr16 50770376   rs8053457       A         G 1.72508e-04 0.904619 0.52863</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 126 chr16 50770520   rs6500329       G         A 1.90299e-04 0.902816 0.41182</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 127 chr16 50771058 rs200527746    TCTC         T 4.92930e-07 1.524820 0.01755</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 128 chr16 50773868   rs1420872       C         T 2.23816e-04 0.903543 0.40889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 129 chr16 50774391   rs4785451       G         A 1.41361e-04 0.902812 0.51887</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 130 chr16 50782749  rs17314341       C         T 2.64552e-04 0.904710 0.40949</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 131 chr16 50782749  rs17314341       C         T 2.64552e-04 0.904710 0.40949</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 132 chr16 50783133   rs3785140       C         T 2.62262e-04 0.904621 0.40965</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 133 chr16 50783133   rs3785140       C         T 2.62262e-04 0.904621 0.40965</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 134 chr16 50783308   rs9938976       A         G 4.05501e-04 0.907546 0.40742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 135 chr16 50783308   rs9938976       A         G 4.05501e-04 0.907546 0.40742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 136 chr16 50783638   rs8061821       A         C 1.25165e-04 0.899955 0.41297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 137 chr16 50783638   rs8061821       A         C 1.25165e-04 0.899955 0.41297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 138 chr16 50784021   rs8062540       A         G 1.25676e-04 0.899957 0.41293</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 139 chr16 50784021   rs8062540       A         G 1.25676e-04 0.899957 0.41293</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 140 chr16 50786167  rs17314544       C         T 1.86025e-04 0.902329 0.41086</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 141 chr16 50786167  rs17314544       C         T 1.86025e-04 0.902329 0.41086</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 142 chr16 50786352  rs17223195       A         G 2.02727e-04 0.902912 0.41144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 143 chr16 50786352  rs17223195       A         G 2.02727e-04 0.902912 0.41144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 144 chr16 50786495  rs13337656       C         T 2.11097e-04 0.903129 0.41130</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 145 chr16 50786495  rs13337656       C         T 2.11097e-04 0.903129 0.41130</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146 chr16 50786522  rs57664295       G GGCCGAGGT 3.51626e-04 0.905562 0.40642</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147 chr16 50786522  rs57664295       G GGCCGAGGT 3.51626e-04 0.905562 0.40642</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148 chr16 50793898   rs7194167       T         C 1.18888e-06 1.526230 0.01617</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149 chr16 50793898   rs7194167       T         C 1.18888e-06 1.526230 0.01617</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150 chr16 50795942   rs2160683       A         T 5.29620e-04 0.909446 0.41000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 151 chr16 50795942   rs2160683       A         T 5.29620e-04 0.909446 0.41000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 152 chr16 50807573   rs1054987       G         A 4.12024e-04 0.907763 0.41762</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 153 chr16 50807573   rs1054987       G         A 4.12024e-04 0.907763 0.41762</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 154 chr16 50807884   rs9635531       C         T 7.75911e-04 0.911478 0.40667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 155 chr16 50807884   rs9635531       C         T 7.75911e-04 0.911478 0.40667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 156 chr16 50808150  rs11374168       C        CA 2.96528e-04 0.906213 0.43467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 157 chr16 50808150  rs11374168       C        CA 2.96528e-04 0.906213 0.43467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 158 chr16 50808602   rs4785454       T         A 5.24705e-04 0.909156 0.41720</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 159 chr16 50808756   rs4785455       G         A 5.30835e-04 0.909213 0.41714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 160 chr16 50808898 rs398029326 CAAAAAA         C 1.26678e-04 0.900266 0.56746</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 161 chr16 50809050  rs13332720       A         G 4.14194e-04 0.907474 0.41723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 162 chr16 50815062  rs12922698       C         T 1.49365e-06 0.846676 0.21017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 163 chr16 50816225   rs7200038       T         G 2.44828e-04 0.857351 0.13179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 164 chr16 50816471  rs12932778       T         C 8.86300e-05 0.849376 0.13431</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 165 chr16 50817415  rs12932365       G         A 7.74248e-04 0.867370 0.12828</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 166 chr16 50833006  rs72798422       T         C 2.85310e-06 1.363100 0.03197</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
@@ -107,7 +281,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

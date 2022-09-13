@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">topr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -26,7 +26,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -42,7 +42,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/wuxi-nextcode/topr/" class="external-link">
+  <a href="https://github.com/GenuityScience/topr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>UKBB Ulcerative colitis (ICD 10 code K51)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/wuxi-nextcode/topr/blob/HEAD/R/data.R" class="external-link"><code>R/data.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/GenuityScience/topr/blob/HEAD/R/data.R" class="external-link"><code>R/data.R</code></a></small>
     <div class="hidden name"><code>UC_UKBB.Rd</code></div>
     </div>
 
@@ -71,20 +71,29 @@
 
     <div id="format">
     <h2>Format</h2>
-    <p>A data frame  with 57,383 rows and 10 variables</p><dl><dt>CHROM</dt>
+    <p>A data frame  with 57,383 rows and 8 variables</p><dl><dt>CHROM</dt>
 <dd><p>Chromosome, written as for example chr1 or 1</p></dd>
 
 <dt>POS</dt>
 <dd><p>genetic position of the variant</p></dd>
 
+<dt>REF</dt>
+<dd><p>the reference allele</p></dd>
+
+<dt>ALT</dt>
+<dd><p>the alternative allele</p></dd>
+
 <dt>ID</dt>
 <dd><p>Variant identifier, e.g. rsid</p></dd>
 
 <dt>P</dt>
-<dd><p>P-value from Plink run, additive model, reggresion model GLM_FIRTH</p></dd>
+<dd><p>P-value from Plink run, additive model, regression model GLM_FIRTH</p></dd>
 
 <dt>OR</dt>
 <dd><p>Odds Ratio</p></dd>
+
+<dt>AF</dt>
+<dd><p>Allele frequency</p></dd>
 
 
 </dl></div>
@@ -105,7 +114,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

@@ -51,7 +51,7 @@ manhattan(
   rsids_color = NULL,
   rsids_with_vline = NULL,
   annotate_with_vline = NULL,
-  shades_color = "#D3D3D3",
+  shades_color = NULL,
   shades_alpha = 0.1,
   segment.size = 0.2,
   segment.color = "black",
@@ -132,7 +132,7 @@ manhattan(
 
 \item{highlight_genes}{A string or vector of strings, gene or genes to highlight at the bottom of the plot}
 
-\item{label_color}{A string. To change the color of the gene or variant labels}
+\item{label_color}{A string or a vector of strings. To change the color of the gene or variant labels}
 
 \item{legend_nrow}{An integer, sets the number of rows allowed for the legend labels}
 
@@ -168,9 +168,9 @@ manhattan(
 
 \item{max.overlaps}{Exclude text labels that overlap too many things. Defaults to 10 (ggrepel argument)}
 
-\item{label_fontface}{Label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
+\item{label_fontface}{A string or a vector of strings. Label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
 
-\item{label_family}{Label font name (default ggrepel argument is "")}
+\item{label_family}{A stirng or a vector of strings. Label font name (default ggrepel argument is "")}
 
 \item{gene_label_fontface}{Gene label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
 

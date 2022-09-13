@@ -62,14 +62,17 @@ regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alp
     annotate <- annotate_with_vline
     annot_with_vline <- TRUE
   }
+
   if(is.null(gene) & is.null(variant) & is.null(region) & (is.null(chr)  & is.null(xmax))){
     stop("Regional argument is missing (either gene, variant, region or the 3 arguments (chr,xmin,xmax) has to be provided as input to this function")
   }
   else{
-  dat <- dat_check(df) %>% set_log10p(ntop)  %>% set_size_shape_alpha(size, shape, alpha, locuszoomplot = locuszoomplot)
-    if(! locuszoomplot){
+    dat <- dat_check(df,verbose=verbose,locuszoomplot=locuszoomplot) %>% set_log10p(ntop)  %>% set_size_shape_alpha(size, shape, alpha, locuszoomplot = locuszoomplot)
+   if(! locuszoomplot){
       dat <- dat %>% set_color(color)
     }
+  
+  
   top_snps <- NULL
   using_ntop <- FALSE
   if(length(dat) > ntop){
@@ -199,7 +202,7 @@ if(!is.null(sign_thresh)){
   ngenes <- 0
 
   #get the genes in the region
-  genes <- get_genes_in_region(chr=chr,xmin=xmin,xmax=xmax,protein_coding_only=protein_coding_only,show_genes=show_genes)
+  genes <- get_genes_in_region(chr=chr,xmin=xmin,xmax=xmax,protein_coding_only=protein_coding_only,show_genes=show_genes, build=build)
     ngenes <- length(genes$gene_symbol)
     if(ngenes>100){show_gene_names <- FALSE}
     if(ngenes < max_genes){

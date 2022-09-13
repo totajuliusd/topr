@@ -19,7 +19,7 @@
 #' @param annotate A number (p-value). Display annotation for variants with p-values below this threshold
 #' @param annotate_with A string. Annotate the variants with either Gene_Symbol or ID (default: "Gene_Symbol")
 #' @param label_size An number to set the size of the plot labels (default: \code{label_size=3})
-#' @param label_color A string. To change the color of the gene or variant labels
+#' @param label_color A string or a vector of strings. To change the color of the gene or variant labels
 #' @param sign_thresh A number or vector of numbers, setting the horizontal significance threshold (default: \code{sign_thresh=5.1e-9}). Set to NULL to hide the significance threshold.
 #' @param sign_thresh_color A string or vector of strings to set the color/s of the significance threshold/s
 #' @param highlight_genes A string or vector of strings, gene or genes to highlight at the bottom of the plot
@@ -58,8 +58,8 @@
 #' @param segment.color line segment thickness (ggrepel argument)
 #' @param segment.linetype line segment solid, dashed, etc.(ggrepel argument)
 #' @param max.overlaps Exclude text labels that overlap too many things. Defaults to 10 (ggrepel argument)
-#' @param label_fontface  Label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)
-#' @param label_family Label font name (default ggrepel argument is "")
+#' @param label_fontface  A string or a vector of strings. Label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)
+#' @param label_family A stirng or a vector of strings. Label font name (default ggrepel argument is "")
 #' @param gene_label_fontface  Gene label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)
 #' @param gene_label_family Gene label font name (default ggrepel argument is "")
 #' @param build A number representing the genome build. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).
@@ -84,13 +84,13 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
                    legend_position="bottom", nudge_x=0.1,nudge_y=0.2,xmin=NULL, xmax=NULL,ymin=NULL,ymax=NULL,
                    highlight_genes=NULL,label_color=NULL,legend_nrow=NULL,gene_label_size=NULL,gene_label_angle=0,
                    scale=1,show_legend=TRUE,sign_thresh_linetype="dashed", sign_thresh_size=0.5,rsids=NULL, rsids_color=NULL,
-                  rsids_with_vline=NULL,annotate_with_vline=NULL,shades_color="#D3D3D3",shades_alpha=0.1,segment.size=0.2, 
+                  rsids_with_vline=NULL,annotate_with_vline=NULL,shades_color=NULL,shades_alpha=0.1,segment.size=0.2, 
                   segment.color="black",segment.linetype="solid",max.overlaps=10,label_fontface="plain",label_family="",
                   gene_label_fontface="plain",gene_label_family="",build=38,verbose=NULL,label_alpha=1,shades_line_alpha=1){
     top_snps <- NULL
     genes_df <- NULL
     xaxis_label <- "Chromosome"
-    dat <- dat_check(df) %>% set_size_shape_alpha(size, shape, alpha) %>% set_color(color) %>% set_log10p(ntop)
+    dat <- dat_check(df, verbose=verbose) %>% set_size_shape_alpha(size, shape, alpha) %>% set_color(color) %>% set_log10p(ntop)
     using_ntop <- FALSE
     if(length(dat) > ntop){
       using_ntop <- TRUE
@@ -124,7 +124,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
       if(is.data.frame(highlight_genes)){
         genes_df <- highlight_genes
       }else{
-        genes_df <- get_genes_by_Gene_Symbol(highlight_genes,chr)
+        genes_df <- get_genes_by_Gene_Symbol(highlight_genes,chr, build=build)
       }
     }
     if(length(unique(dat[[1]]$CHROM))>1 & is.null(chr)){  #Manhattan plot

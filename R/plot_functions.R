@@ -48,10 +48,18 @@ add_zero_hline <- function(p1){
   return(p1 + geom_hline(yintercept = 0,size=0.2, color="grey54"))
 }
 
-add_shades_and_ticks <- function(p1, shades, ticks,shades_color="#D3D3D3",shades_alpha=0.1, shades_line_alpha=1){
-  p1 <- p1 + geom_rect(data=shades, mapping=aes(ymax=y2,xmin=x1, xmax=x2, ymin=y1),color=alpha(shades_color,shades_line_alpha),fill=shades_color, alpha=shades_alpha, size=0.1)+
+add_shades_and_ticks <- function(p1, shades, ticks,shades_color=NULL,shades_alpha=0.1, shades_line_alpha=1){
+  if(is.null(shades_color)){
+    shades_color="#D3D3D3"
+    p1 <- p1 + geom_rect(data=shades, mapping=aes(ymax=y2,xmin=x1, xmax=x2, ymin=y1),color=alpha(shades_color,shades_line_alpha), alpha=shades_alpha, size=0.1)+
     scale_x_continuous(breaks=ticks$pos, labels=ticks$names,expand=c(.01,.01)) + scale_y_continuous(expand=c(.02,.02))
-  return(p1)
+    
+  }else{
+    p1 <- p1 + geom_rect(data=shades, mapping=aes(ymax=y2,xmin=x1, xmax=x2, ymin=y1),color=alpha(shades_color,shades_line_alpha),
+                         fill=alpha(shades_color, shades_alpha), size=0.1)+
+   scale_x_continuous(breaks=ticks$pos, labels=ticks$names,expand=c(.01,.01)) + scale_y_continuous(expand=c(.02,.02))
+  }
+   return(p1)
 }
 
 add_annotation <- function(p1,plot_labels=NULL, nudge_x=0.01, nudge_y=0.01, label_size=3.5, angle=0,annotate_with="Gene_Symbol", label_color=NULL,scale=1, 

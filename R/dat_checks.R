@@ -1,7 +1,7 @@
 
-dat_check <- function(dat){
+dat_check <- function(dat, verbose=TRUE,locuszoomplot=FALSE){
   if(is.data.frame(dat)) dat <- list(dat)
-  dat <- dat_column_check_and_set(dat) %>% dat_chr_check()
+  dat <- dat_column_check_and_set(dat, verbose=verbose,locuszoomplot=locuszoomplot) %>% dat_chr_check()
   return(dat)
 }
 
@@ -30,57 +30,32 @@ convert_region_size <- function(region_size){
   return(region_size)
 }
 
+dat_column_chr_pos_check <- function(df){
+  df <- df %>% 
+    rename_with(~ "CHROM", matches(c("chrom","chr","chromosome"), ignore.case = TRUE)) %>% 
+    rename_with(~ "POS", matches(c("pos","bp","base_pair_location"), ignore.case = TRUE))
+  return(df)
+}
 
-#' dat_column_check_and_set
-#'
-#' @description
-#'
-#' This function is used to standardize the column names in the input dataframe
-#'
-#'
-#' @param dat  A data frame or a list of data frames
-#'
-
-dat_column_check_and_set <- function(dat){
+dat_column_check_and_set <- function(dat, verbose=TRUE,locuszoomplot=FALSE){
   for(i in seq_along(dat)){
     df <- as.data.frame(dat[[i]])
-    if("pos" %in% colnames(df)) df <- df %>%  dplyr::rename(POS="pos")
-    else if("BP" %in% colnames(df)) df <- df %>%  dplyr::rename(POS="BP")
-    else if("bp" %in% colnames(df)) df <- df %>%  dplyr::rename(POS="BP")
-    else if("base_pair_location" %in% colnames(df)) df <- df %>%  dplyr::rename(POS="base_pair_location")
-
-    if("chrom" %in% colnames(df)) df <- df %>%  dplyr::rename(CHROM="chrom")
-    else if("Chrom" %in% colnames(df)) df <- df %>%  dplyr::rename(CHROM="Chrom")
-    else if("CHR" %in% colnames(df)) df <- df %>%  dplyr::rename(CHROM="CHR")
-    else if("chr" %in% colnames(df)) df <- df %in%  dplyr::rename(CHROM="chr")
-    else if("chromosome" %in% colnames(df)) df <- df %in%  dplyr::rename(CHROM="chromosome")
-    else if("CHROMOSOME" %in% colnames(df)) df <- df %in%  dplyr::rename(CHROM="CHROMOSOME")
-
-    if("rsid" %in% colnames(df)) df <- df %>%  dplyr::rename(ID="rsid")
-    else if("rsId" %in% colnames(df)) df <- df %>%  dplyr::rename(ID="rsId")
-    else if("RSID" %in% colnames(df)) df <- df %>%  dplyr::rename(ID="RSID")
-    else if("rsName" %in% colnames(df)) df <- df %>%  dplyr::rename(ID="rsName")
-    else if("rsname" %in% colnames(df)) df <- df %>%  dplyr::rename(ID="rsname")
-    else if("RSNAME" %in% colnames(df)) df <- df %>%  dplyr::rename(ID="RSNAME")
-    else if("SNP" %in% colnames(df)) df <- df %>%  dplyr::rename(ID="SNP")
-    else if("snp" %in% colnames(df)) df <- df %>%  dplyr::rename(ID="snp")
-
-    if("gene_symbol" %in% colnames(df)) df <- df %>%  dplyr::rename(Gene_Symbol = "gene_symbol")
-    if("Gene_symbol" %in% colnames(df)) df <- df %>%  dplyr::rename(Gene_Symbol = "Gene_symbol")
-    else if("GENE_SYMBOL" %in% colnames(df)) df <- df %>%  dplyr::rename(Gene_Symbol = "GENE_SYMBOL")
-    else if("gene" %in% colnames(df)) df <- df %>%  dplyr::rename(Gene_Symbol = "gene")
-    else if("GENE" %in% colnames(df)) df <- df %>%  dplyr::rename(Gene_Symbol = "GENE")
-    else if("geneName" %in% colnames(df)) df <- df %>%  dplyr::rename(Gene_Symbol = "geneName")
-    else if("genename" %in% colnames(df)) df <- df %>%  dplyr::rename(Gene_Symbol = "genename")
-    else if("GENENAME" %in% colnames(df)) df <- df %>%  dplyr::rename(Gene_Symbol = "GENENAME")
-
+    if(locuszoomplot)
+      dfwithcolor=df
+    df <- df %>% 
+      dplyr::rename_with(~ "ID", matches(c("rsid","rsname","snp"), ignore.case = TRUE)) %>% 
+      dplyr::rename_with(~ "Gene_Symbol", matches(c("gene_symbol","gene","genename","gene_name"), ignore.case = TRUE)) %>%
+      dplyr::rename_with(~ "Max_Impact", matches(c("max_impact","impact"), ignore.case = TRUE)) %>% 
+      dplyr::rename_with(~ "OR", matches(c("odds_ratio","or"), ignore.case = TRUE)) %>% 
+      dplyr::rename_with(~ "BETA", matches(c("beta"), ignore.case=TRUE)) %>% 
+      dplyr::rename_with(~ "REF", matches(c("ref"), ignore.case=TRUE)) %>% 
+      dplyr::rename_with(~ "ALT", matches(c("alt"), ignore.case=TRUE)) 
+    if(locuszoomplot)
+        df$color <- dfwithcolor$color
+   
     if(! "P" %in% colnames(df)){
-      if("pval" %in% colnames(df)) df <- df %>%  dplyr::rename(P = "pval")
-      if("PVAL" %in% colnames(df)) df <- df %>%  dplyr::rename(P = "PVAL")
-      else if("p" %in% colnames(df)) df <- df %>%  dplyr::rename(P = "p")
-      else if("pvalue" %in% colnames(df)) df <- df %>%  dplyr::rename(P = "pvalue")
-      else if("PVALUE" %in% colnames(df)) df <- df %>%  dplyr::rename(P = "PVALUE")
-      else if("p_value" %in% colnames(df)) df <- df %>%  dplyr::rename(P = "p_value")
+      df <- df %>% 
+        dplyr::rename_with(~ "P", matches(c("pval","pvalue","p_value","p"), ignore.case = TRUE)) 
     }
     if(! "ID" %in% colnames(df)){
       if("CHROM" %in% colnames(df)){
@@ -95,26 +70,20 @@ dat_column_check_and_set <- function(dat){
       df$Gene_Symbol <- sub(",.*","", df$Gene_Symbol)
       df$Gene_Symbol <- ifelse(df$Gene_Symbol == ".",df$ID, df$Gene_Symbol)
     }
-    if("max_impact" %in% colnames(df)) df <- df %>%  dplyr::rename(Max_Impact = "max_impact")
-    if("MAX_IMPACT" %in% colnames(df)) df <- df %>%  dplyr::rename(Max_Impact = "MAX_IMPACT")
-    if(! "Max_Impact" %in% colnames(df)){
-      if("Impact" %in% colnames(df)) df <- df %>%  dplyr::rename(Max_Impact = "Impact")
-      if("impact" %in% colnames(df)) df <- df %>%  dplyr::rename(Max_Impact = "impact")
-      if("IMPACT" %in% colnames(df)) df <- df %>%  dplyr::rename(Max_Impact = "IMPACT")
-    }
-    #only needed for the effect plot
-    if("or" %in% colnames(df)) df <- df %>%  dplyr::rename(OR = "or")
-    else if("odds_ratio" %in% colnames(df)) df <- df %>%  dplyr::rename(OR = "odds_ratio")
-    if("beta" %in% colnames(df)) df <- df %>%  dplyr::rename(BETA = "beta")
-    if("ref" %in% colnames(df)) df <- df %>%  dplyr::rename(REF = "ref")
-    if("alt" %in% colnames(df)) df <- df %>%  dplyr::rename(ALT = "alt")
     if( (!"CHROM" %in% colnames(df)) || (!"POS" %in% colnames(df)) || (!"P" %in% colnames(df) ))
       stop("Some columns are missing from the dataset. Required columns are CHROM,POS and P. Add the required columns and try again, or rename existing columns, e.g. df=df %>% dplyr::rename(CHROM=yourColname)")
+     zero_pvals <- dplyr::filter(df, P <= .Machine$double.xmin )
+    caption <- ""
+    if (nrow(zero_pvals) > 0) {
+      exclusion_list <- with(zero_pvals, paste(CHROM, POS, REF, ALT, sep = ":", collapse = ", "))
+      exclusion_list <- stringr::str_trunc(exclusion_list, width = 100)
+      caption <- stringr::str_glue("{nrow(zero_pvals)} zero-value p-value{if(nrow(zero_pvals) > 1) 's' else ''} removed from plot: {exclusion_list}")
+      if(is.null(verbose) || verbose==TRUE ){ print(caption) }
+    }
+    df <- df %>% dplyr::filter(P > .Machine$double.xmin) 
     df$P <- as.numeric(df$P)
     df <- df[!is.na(df$P), ]
     dat[[i]] <- df
   }
-  #Finally remove rows where P is NA
-
   return(dat)
 }

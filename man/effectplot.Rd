@@ -32,7 +32,9 @@ effectplot(
   gene_label_size = 3.2,
   snpset_thresh = 1e-08,
   snpset_region_size = 1e+06,
-  max.overlaps = 10
+  max.overlaps = 10,
+  annotate = 0,
+  label_color = NULL
 )
 }
 \arguments{
@@ -48,7 +50,7 @@ effectplot(
 
 \item{ci_thresh}{A number.Show the confidence intervals if the P-value is below this threshold}
 
-\item{gene_label_thresh}{A string, label datapoints with P2 below this threshold}
+\item{gene_label_thresh}{Deprecated: A number, label datapoints with P2 below this threshold}
 
 \item{color}{A string, default value is the first of the topr colors}
 
@@ -56,9 +58,9 @@ effectplot(
 
 \item{build}{A number representing the genome build. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).}
 
-\item{label_fontface}{Label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
+\item{label_fontface}{A string or a vector of strings. Label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
 
-\item{label_family}{Label font name (default ggrepel argument is "")}
+\item{label_family}{A stirng or a vector of strings. Label font name (default ggrepel argument is "")}
 
 \item{nudge_y}{A number to horizontally adjust the starting position of each gene label (this is a ggrepel parameter)}
 
@@ -91,6 +93,10 @@ effectplot(
 \item{snpset_region_size}{A number representing the region size to use when creating the snpset used for plotting (Only applicable if the input dataframe is a list containing two datasets)}
 
 \item{max.overlaps}{Exclude text labels that overlap too many things. Defaults to 10 (ggrepel argument)}
+
+\item{annotate}{A number, label datapoints with p-value below below this number (in the second df) by their nearest gene}
+
+\item{label_color}{A string or a vector of strings. To change the color of the gene or variant labels}
 }
 \value{
 ggplot object

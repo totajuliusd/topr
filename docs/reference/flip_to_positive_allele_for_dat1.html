@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">topr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -26,7 +26,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -42,7 +42,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/wuxi-nextcode/topr/" class="external-link">
+  <a href="https://github.com/GenuityScience/topr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Flip to the positive allele for dataset 1</h1>
-    <small class="dont-index">Source: <a href="https://github.com/wuxi-nextcode/topr/blob/HEAD/R/effectplot.R" class="external-link"><code>R/effectplot.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/GenuityScience/topr/blob/HEAD/R/effectplot.R" class="external-link"><code>R/effectplot.R</code></a></small>
     <div class="hidden name"><code>flip_to_positive_allele_for_dat1.Rd</code></div>
     </div>
 
@@ -81,9 +81,24 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">flip_to_positive_allele_for_dat1</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
+<span class="r-in"><span class="va">CD_UKBB_index_snps</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_lead_snps.html">get_lead_snps</a></span><span class="op">(</span><span class="va">CD_UKBB</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">snpset</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_snpset.html">create_snpset</a></span><span class="op">(</span><span class="va">CD_UKBB_index_snps</span>, <span class="va">CD_FINNGEN</span><span class="op">)</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'create_snpset' is deprecated.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Use 'get_snpset' instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> See help("Deprecated")</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'match_alleles' is deprecated.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Use 'match_by_alleles' instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> See help("Deprecated")</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'get_overlapping_snps_by_pos' is deprecated.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Use 'match_by_pos' instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> See help("Deprecated")</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'get_best_snp_per_MB' is deprecated.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Use 'get_lead_snps' instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> See help("Deprecated")</span>
+<span class="r-in"><span class="fu">flip_to_positive_allele_for_dat1</span><span class="op">(</span><span class="va">snpset</span><span class="op">$</span><span class="va">matched</span><span class="op">)</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Input dataframe is empty</span>
+<span class="r-in"><span class="co"># }</span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
@@ -99,7 +114,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

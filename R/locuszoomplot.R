@@ -29,7 +29,7 @@ locuszoom <- function(df, annotate=NULL,ntop=3, xmin=0, size=2, shape=19, alpha=
   if (!missing(show_exons)) {
     deprecated_argument_msg(show_exons)
   }
-  dat <- dat_check(df)
+  dat <- dat_check(df,verbose=verbose)
   if(length(unique(dat[[1]]$CHROM)) > 1){
     stop("There are multiple chromosomes in the input dataset. The locuszoom plot only works for a small genetic region_size within one chromosome")
   }
