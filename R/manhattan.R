@@ -66,6 +66,11 @@
 #' @param verbose A logical scalar (default: NULL). Set to FALSE to suppress printed messages 
 #' @param label_alpha An number or vector of numbers to set the transparency of the plot labels (default: \code{label_alpha=1})
 #' @param shades_line_alpha The transparency (alpha) of the lines around the rectangles (shades)
+#' @param vline A number or vector of numbers to add a vertical line to the plot at a specific chromosomal position, e.g \code{vline=chr1:204000066}. Multiple values can be provided in a vector, e.g  \code{vline=c(chr1:204000066,chr5:100500188)}
+#' @param vline_color The color of added vertical line/s (default: grey)
+#' @param vline_linetype The linetype of added vertical line/s (default : dashed)  
+#' @param vline_alpha The alpha of added vertical line/s (default : 1)  
+#' @param vline_size The size of added vertical line/s (default : 0.5)  
 #'
 #' @return ggplot object
 #' @export
@@ -74,7 +79,9 @@
 #' @import utils
 #'
 #' @examples
+#' \donttest{
 #' manhattan(CD_UKBB)
+#' }
 
 manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(),
                    sign_thresh=5e-09,sign_thresh_color="red", sign_thresh_label_size=3.5, label_size=3.5, size=0.8,shape=19,alpha=1,
@@ -86,15 +93,18 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
                    scale=1,show_legend=TRUE,sign_thresh_linetype="dashed", sign_thresh_size=0.5,rsids=NULL, rsids_color=NULL,
                   rsids_with_vline=NULL,annotate_with_vline=NULL,shades_color=NULL,shades_alpha=0.1,segment.size=0.2, 
                   segment.color="black",segment.linetype="solid",max.overlaps=10,label_fontface="plain",label_family="",
-                  gene_label_fontface="plain",gene_label_family="",build=38,verbose=NULL,label_alpha=1,shades_line_alpha=1){
+                  gene_label_fontface="plain",gene_label_family="",build=38,verbose=NULL,label_alpha=1,shades_line_alpha=1,vline=NULL,
+                  vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5){
     top_snps <- NULL
     genes_df <- NULL
     xaxis_label <- "Chromosome"
-    dat <- dat_check(df, verbose=verbose) %>% set_size_shape_alpha(size, shape, alpha) %>% set_color(color) %>% set_log10p(ntop)
+    dat <- dat_check(df, verbose=verbose)
+    dat <- dat %>% set_size_shape_alpha(size, shape, alpha) %>% set_color(color) %>% set_log10p(ntop)
+     
     using_ntop <- FALSE
-    if(length(dat) > ntop){
+  if(length(dat) > ntop){
       using_ntop <- TRUE
-    }
+  }
   annot_with_vline <- FALSE
   if(! is.null(annotate_with_vline)){
     annotate <- annotate_with_vline
@@ -112,6 +122,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     ymin <- get_ymin(dat)
     if(!is.null(highlight_genes)){ ymin <- ifelse(highlight_genes_ypos < ymin, highlight_genes_ypos, ymin) }
   }
+
   if(is.null(ymax)){ ymax <- get_ymax(dat) *1.04}
     # get the annotation
     if(! is.null(annotate)){
@@ -119,6 +130,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
                                  angle=angle,label_fontface=label_fontface,label_family=label_family, build=build, verbose = verbose, label_alpha=label_alpha)
       
     }
+
     #get the genes
     if (! is.null(highlight_genes)){
       if(is.data.frame(highlight_genes)){
@@ -127,6 +139,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
         genes_df <- get_genes_by_Gene_Symbol(highlight_genes,chr, build=build)
       }
     }
+    shades=NULL
     if(length(unique(dat[[1]]$CHROM))>1 & is.null(chr)){  #Manhattan plot
       incl_chrX <- include_chrX(dat)
       offsets <- get_chr_offsets(incl_chrX)
@@ -138,7 +151,6 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
       }
       dat <- get_pos_with_offset4list(dat,offsets)
     }
-    # Do the plotting
     main_plot <- get_base_plot(dat,color=color,legend_labels = legend_labels,legend_name=legend_name, legend_position = legend_position, 
                                legend_nrow = legend_nrow, show_legend = show_legend,scale=scale,verbose=verbose)
      
@@ -147,7 +159,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     }
     if(is.null(chr)){
       ticks <- get_ticks(dat)
-      main_plot <- main_plot %>% add_shades_and_ticks(shades,ticks,shades_color=shades_color,shades_alpha=shades_alpha,shades_line_alpha=shades_line_alpha)
+         main_plot <- main_plot %>% add_shades_and_ticks(shades,ticks,shades_color=shades_color,shades_alpha=shades_alpha,shades_line_alpha=shades_line_alpha)
     }else{
       main_plot <- main_plot + scale_y_continuous(expand=c(.02,.02))  + scale_x_continuous(expand=c(.01,.01),labels = scales::comma)
     }
@@ -188,6 +200,16 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
   if(! is.null(rsids)){
     rsids_df <- get_rsids_from_df(dat,rsids)
     main_plot <-main_plot %>% add_rsids(rsids_df, rsids_color=rsids_color, nudge_x=nudge_x, nudge_y=nudge_y, label_size=label_size, angle=angle, label_color=label_color, scale=scale, with_vline = with_vline)
+  }
+  if(! is.null(vline)){
+    v <- data.frame("x"=vline)
+    v <- v %>% tidyr::separate("x", c("CHROM","POS"),":")
+    v <- v %>% dplyr::mutate(CHROM=gsub('chr','',CHROM,ignore.case = T))
+    v$CHROM <- as.numeric(v$CHROM)
+    v$POS <- as.numeric(v$POS)
+    vlines_w_offsets <- v %>% get_pos_with_offset(get_chr_offsets())
+    vlines <- as.vector(vlines_w_offsets$POS)
+    main_plot <- main_plot %>% add_vline(vlines, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
   }
   main_plot <- main_plot %>% set_ymin_ymax(ymin,ymax)
   main_plot <- change_axes(main_plot)

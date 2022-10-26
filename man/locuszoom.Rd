@@ -69,7 +69,8 @@ locuszoom(
   build = 38,
   verbose = NULL,
   show_legend = TRUE,
-  label_alpha = 1
+  label_alpha = 1,
+  gene_label_size = NULL
 )
 }
 \arguments{
@@ -198,6 +199,8 @@ locuszoom(
 \item{show_legend}{A logical scalar, set to FALSE to hide the legend (default value is TRUE)}
 
 \item{label_alpha}{An number or vector of numbers to set the transparency of the plot labels (default: \code{label_alpha=1})}
+
+\item{gene_label_size}{A number setting the size of the gene labels shown at the bottom of the plot}
 }
 \value{
 plots using egg (https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html)

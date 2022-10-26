@@ -22,7 +22,3 @@ Required parameter is gene name
 
 This method is deprecated and will be removed in future versions. use \code{\link{get_gene_coords}} instead.
 }
-\examples{
-get_gene("FTO")
-
-}

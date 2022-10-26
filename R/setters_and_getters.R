@@ -159,7 +159,7 @@ get_chr_from_df <- function(df){
 
 
 get_shades <- function(offsets,dat,ntop=ntop,include_chrX=FALSE,ymin=NULL,ymax=NULL){
-  n_offsets <- 11
+   n_offsets <- 11
   if(!(include_chrX)) n_offsets <-10
   y1 <- c(rep(0, n_offsets))  #if there is no bottom plot
   if(is.null(ymin)){
@@ -184,8 +184,11 @@ get_shades <- function(offsets,dat,ntop=ntop,include_chrX=FALSE,ymin=NULL,ymax=N
                       y1=y1,
                       y2=c(rep(ymax, n_offsets)))
   }
+
   return(shades)
 }
+
+
 get_ymax <- function(dat){
   ymax <- 0
   if(is.data.frame(dat)) dat <- list(dat)
@@ -305,7 +308,9 @@ get_pos_with_offset <- function(df,offsets){
 #' @export
 #' @inheritParams regionplot
 #' @examples
+#' \dontrun{
 #' get_lead_snps(CD_UKBB)
+#' }
 #'
 get_lead_snps <- function(df, thresh=5e-09,region_size=1000000,protein_coding_only=FALSE,chr=NULL, .checked=FALSE, verbose=NULL, keep_chr=TRUE){
   variants <- df[0,]
@@ -419,7 +424,9 @@ get_genes_by_Gene_Symbol <- function(genes, chr=NULL, build=38){
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' get_gene_coords("FTO")
+#' }
 #'
 
 get_gene_coords  <- function(gene_name,chr=NULL, build=38){
@@ -467,8 +474,7 @@ get_legend<-function(p1){
 #'
 #' @examples
 #' \dontrun{
-#' data(gwas_CD)
-#' get_top_snp(gwas_CD, chr="chr1")
+#' get_top_snp(CD_UKBB, chr="chr1")
 #' }
 #'
 get_top_snp <- function(df, chr=NULL){
@@ -532,7 +538,9 @@ set_genes_pos_adj <- function(genes, offsets){
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' get_snps_within_region(CD_UKBB, "chr16:50593587-50834041")
+#' }
 #'
 
 get_snps_within_region <- function(df, region, chr=NULL, xmin=NULL, xmax=NULL,keep_chr=NULL){
@@ -543,8 +551,8 @@ get_snps_within_region <- function(df, region, chr=NULL, xmin=NULL, xmax=NULL,ke
     tmp <- unlist(stringr::str_split(region, ":"))
     chr <- tmp[1]
     tmp_pos <- unlist(stringr::str_split(tmp[2], "-"))
-    xmin <- tmp_pos[1]
-    xmax <- tmp_pos[2]
+    xmin <- as.numeric(tmp_pos[1])
+    xmax <- as.numeric(tmp_pos[2])
   }
   if(!is.null(chr) & !is.null(xmin) & !is.null(xmax)){
     snps <- df %>% filter(CHROM == chr & POS >= xmin & POS <= xmax)

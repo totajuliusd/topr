@@ -21,6 +21,8 @@ Dataframe with the gene name and its genetic coordinates
 Required parameter is gene name
 }
 \examples{
+\dontrun{
 get_gene_coords("FTO")
+}
 
 }

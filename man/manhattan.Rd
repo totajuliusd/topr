@@ -64,7 +64,12 @@ manhattan(
   build = 38,
   verbose = NULL,
   label_alpha = 1,
-  shades_line_alpha = 1
+  shades_line_alpha = 1,
+  vline = NULL,
+  vline_color = "grey",
+  vline_linetype = "dashed",
+  vline_alpha = 1,
+  vline_size = 0.5
 )
 }
 \arguments{
@@ -183,6 +188,16 @@ manhattan(
 \item{label_alpha}{An number or vector of numbers to set the transparency of the plot labels (default: \code{label_alpha=1})}
 
 \item{shades_line_alpha}{The transparency (alpha) of the lines around the rectangles (shades)}
+
+\item{vline}{A number or vector of numbers to add a vertical line to the plot at a specific chromosomal position, e.g \code{vline=chr1:204000066}. Multiple values can be provided in a vector, e.g  \code{vline=c(chr1:204000066,chr5:100500188)}}
+
+\item{vline_color}{The color of added vertical line/s (default: grey)}
+
+\item{vline_linetype}{The linetype of added vertical line/s (default : dashed)}
+
+\item{vline_alpha}{The alpha of added vertical line/s (default : 1)}
+
+\item{vline_size}{The size of added vertical line/s (default : 0.5)}
 }
 \value{
 ggplot object
@@ -194,5 +209,7 @@ Required parameter is at least one dataset (dataframe) containing the associatio
 All other input parameters are optional
 }
 \examples{
+\donttest{
 manhattan(CD_UKBB)
+}
 }

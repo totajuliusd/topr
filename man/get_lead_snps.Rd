@@ -39,6 +39,8 @@ Dataframe of lead variants. Returns the best variant per MB (by default, change 
 \code{get_lead_snps()} Get the top variants within 1 MB windows of the genome with association p-values below the given threshold
 }
 \examples{
+\dontrun{
 get_lead_snps(CD_UKBB)
+}
 
 }

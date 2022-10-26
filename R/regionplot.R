@@ -47,13 +47,13 @@ regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alp
                        region=NULL,legend_nrow=NULL,gene_label_size=NULL, scale=1, show_legend=TRUE,sign_thresh_linetype="dashed", sign_thresh_size=0.5,
                        rsids_with_vline=NULL, annotate_with_vline=NULL,show_gene_legend=TRUE, unit_main=7, unit_gene=2, unit_overview=1.25, verbose=NULL,
                        gene_color=NULL,segment.size=0.2,segment.color="black",segment.linetype="solid", max.overlaps=10, unit_ratios=NULL, 
-                       extract_plots=FALSE,label_fontface="plain",label_family="",gene_label_fontface="plain",gene_label_family="",build=38,label_alpha=1){
+                       extract_plots=FALSE,label_fontface="plain",label_family="",gene_label_fontface="plain",gene_label_family="",build=38,
+                       label_alpha=1, vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5){
   # three plots, overview_plot, main_plot and gene_plot
   #only include overview plot if df region is larger than the region between xmin and xmax
   if (!missing(show_exons)) {
     deprecated_argument_msg(show_exons)
   }
-  
   annot_with_vline <- FALSE
   if(! is.numeric(region_size)){
     region_size <- convert_region_size(region_size)
@@ -71,7 +71,6 @@ regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alp
    if(! locuszoomplot){
       dat <- dat %>% set_color(color)
     }
-  
   
   top_snps <- NULL
   using_ntop <- FALSE
@@ -151,7 +150,7 @@ regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alp
       }
     }
   }
-  main_plot <- main_plot %>% add_vline(vline)
+  main_plot <- main_plot %>% add_vline(vline, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
   main_plot <- main_plot + scale_y_continuous(expand=c(.02,.02)) + scale_x_continuous(expand=c(.01,.01))
 
 if(!is.null(sign_thresh)){
@@ -237,7 +236,7 @@ if(!is.null(sign_thresh)){
                                show_gene_legend=show_gene_legend,gene_color=gene_color,gene_label_fontface = gene_label_fontface,gene_label_family = gene_label_family)
   gene_plot <- gene_plot + scale_y_continuous(expand=c(.02,.02)) + scale_x_continuous(expand=c(.01,.01))
   gene_plot <- gene_plot + xlab(paste("Position on Chromosome ",gsub('chr','',chr), sep=""))
-  gene_plot <- gene_plot %>% add_vline(vline)
+  gene_plot <- gene_plot %>% add_vline(vline, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
   gene_plot <- gene_plot %>% set_legend_texts(legend_title_size=legend_title_size, legend_text_size=legend_text_size,scale=scale)
   gene_plot <- gene_plot %>% set_plot_text_sizes(axis_text_size=axis_text_size,axis_title_size = axis_title_size,legend_text_size=legend_text_size, legend_title_size=legend_title_size,scale=scale)
   plots <- list(main_plot=main_plot, overview_plot=overview_plot, gene_plot=gene_plot)

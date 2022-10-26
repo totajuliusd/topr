@@ -75,7 +75,11 @@ regionplot(
   gene_label_fontface = "plain",
   gene_label_family = "",
   build = 38,
-  label_alpha = 1
+  label_alpha = 1,
+  vline_color = "grey",
+  vline_linetype = "dashed",
+  vline_alpha = 1,
+  vline_size = 0.5
 )
 }
 \arguments{
@@ -216,6 +220,14 @@ regionplot(
 \item{build}{A number representing the genome build. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).}
 
 \item{label_alpha}{An number or vector of numbers to set the transparency of the plot labels (default: \code{label_alpha=1})}
+
+\item{vline_color}{The color of added vertical line/s (default: grey)}
+
+\item{vline_linetype}{The linetype of added vertical line/s (default : dashed)}
+
+\item{vline_alpha}{The alpha of added vertical line/s (default : 1)}
+
+\item{vline_size}{The size of added vertical line/s (default : 0.5)}
 }
 \value{
 plots within ggplotGrobs, arranged with egg::gtable_frame

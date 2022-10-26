@@ -21,3 +21,5 @@ local
 man/figures/topr.gif
 lastMiKTeXException
 .RDataTmp
+^cran-comments.md
+^CRAN-SUBMISSION$
