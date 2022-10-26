@@ -41,7 +41,10 @@ get_main_LD_snp <- function(dat, nudge_x=0.1,nudge_y=0.1,angle=0,label_fontface=
   top_snps <-  data.frame(matrix(nrow = 0, ncol = length(label_cols)))
   colnames(top_snps) <- label_cols
   for(i in seq_along(dat)){
-    top_snps <- rbind(top_snps, dat[[i]] %>% dplyr::filter("R2" >= 1) %>% dplyr::distinct(ID, .keep_all=T) %>% dplyr::arrange(-R2) %>% utils::head(n=1) %>% dplyr::select("CHROM","POS","P","ID","log10p") )
+    top_snps <- rbind(top_snps, dat[[i]] %>% dplyr::filter(R2 >= 1) %>% dplyr::distinct(ID, .keep_all=T) %>% dplyr::arrange(-R2) %>% utils::head(n=1) %>% dplyr::select("CHROM","POS","P","ID","log10p") )
+    if(length(top_snps$P) == 0){
+      print("Could not find the lead snps (with R2==1) in the dataset!")      
+    }
   }
   top_snps$nudge_x <- nudge_x; top_snps$nudge_y=nudge_y; top_snps$fontface<- label_fontface; top_snps$family <- label_family; top_snps$angle <- angle; top_snps$alpha=label_alpha;
   return(top_snps)

@@ -72,30 +72,6 @@ Annotate the lead/index variants (with p-values below 5e-09) with their nearest 
 manhattan(CD_UKBB, annotate=5e-09)
 ```
 
-Display genes of interest at the bottom of the Manhattan plot to get a visual representation of their position relative to association peaks:
-
-``` r
-manhattan(CD_UKBB, annotate=5e-09, highlight_genes=c("IL23R","NOD2","NOTCH4","JAK"))
-```
-
-View one chromosome only:
-``` r
-manhattan(CD_UKBB, annotate=5e-09, chr="chr1")
-```
-
-Create a Manhattan of multiple GWAS results (in a list) on the same plot
-
-``` r
-manhattan(list(UC_UKBB, CD_UKBB), legend_labels=c("UC UKBB", "CD UKBB"))
-```
-
-Use the <code>ntop</code> argument to control how many GWASes are displayed at the top and bottom of the plot:
-
-``` r
-manhattan(list(UC_UKBB, CD_UKBB,CD_FINNGEN), legend_labels=c("UC UKBB", "CD UKBB","CD FINNGEN"), ntop=1)
-```
-
-<br>
 
 #### Regionplot
 <hr>
@@ -107,17 +83,6 @@ Further zoom-in on a genetic region by gene name:
 regionplot(CD_UKBB, gene="IL23R")
 ```
 
-Label the top variant with it´s ID (rsid):
-
-``` r
-regionplot(CD_UKBB, gene="IL23R", annotate=5e-09)
-```
-
-Denser labelling of top variants (every 100000 kb) with vlines to get a better visual of where the variants are in relation to the genes and exons shown below:
-
-``` r
-regionplot(CD_UKBB, gene="IL23R", annotate_with_vline=5e-09, region_size=100000)
-```
 View the correlation pattern between the variants within the region in a locuszoom like plot.
 Note that the variant correlation (R2) has to be pre-calculated and included in the input dataframe.
 
@@ -139,19 +104,19 @@ regionplot(list(UC_UKBB, CD_UKBB))
 Extract lead/index variants from the GWAS dataset (<code>CD_UKBB</code>):
 
 ```{r}
-get_best_snp_per_MB(CD_UKBB)
+get_lead_snps()(CD_UKBB)
 ```
 
 Annotate the lead/index variants with their nearest gene:
 
 ```{r}
-get_best_snp_per_MB(CD_UKBB) %>%  annotate_with_nearest_gene()
+get_lead_snps(CD_UKBB) %>%  annotate_with_nearest_gene()
 ```
 
 Get genomic coordinates for a gene:
 
 ```{r}
-get_gene(gene_name="IL23R")
+get_gene_coords("IL23R")
 ```
 
 Get snps within a region:

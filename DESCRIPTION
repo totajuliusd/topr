@@ -15,7 +15,6 @@ LazyData: true
 LazyDataCompression: xz
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
-VignetteBuilder: knitr 
 Suggests: 
     testthat (>= 3.0.0),
     knitr,
@@ -26,7 +25,6 @@ Imports:
     ggplot2 (>= 3.3.2),
     dplyr (>= 1.0.2),
     stringr (>= 1.4.0),
-    readr (>= 1.4.0),
     scales (>= 1.1.1),
     ggrepel,
     egg,
@@ -34,6 +32,7 @@ Imports:
     gridExtra,
     magrittr (>= 1.5),
     utils,
+    tidyr,
     toprdata
 Depends: 
     R (>= 3.5.0)

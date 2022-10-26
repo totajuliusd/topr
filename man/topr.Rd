@@ -24,9 +24,4 @@ manhattan(CD_UKBB)
 # Create a regional plot
 regionplot(CD_UKBB, gene="IL23R")
 
-# Get the lead/index snps (the top snp per MB window)
-lead_snps <- get_lead_snps(CD_UKBB)
-
-# Annotate the index snps with their nearest gene
-lead_snps_annotated <- annotate_with_nearest_gene(lead_snps)
 }

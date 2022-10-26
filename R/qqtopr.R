@@ -18,9 +18,10 @@
 qqtopr <- function(dat, scale = 1, n_variants = 0, breaks = 15, title=NULL, color=get_topr_colors(),size=1,
                    legend_name="",legend_position="right", legend_labels=NULL,
                    axis_text_size=11,axis_title_size=12, title_text_size=13,legend_title_size=12,legend_text_size=12,verbose=NULL) {
-    dat <- dat_check(dat,verbose=verbose) 
+   
+   dat <- dat_check(dat,verbose=verbose) %>% set_color(color)
     nvars <- n_variants
-    if(is.data.frame(dat)){dat <- list(dat)}
+
     if(is.null(legend_labels)){
         if(length(dat) > 1){
             legend_labels <- color[seq_along(dat)]
@@ -29,6 +30,7 @@ qqtopr <- function(dat, scale = 1, n_variants = 0, breaks = 15, title=NULL, colo
     }
     maxy=5;maxx=5;miny=5
     for(i in seq_along(dat)){
+ 
       df <- dat[[i]]
       n_variants <- nvars[i]
       if ("QQ" %in% colnames(df)){df$exp <- df$QQ}
@@ -54,19 +56,19 @@ qqtopr <- function(dat, scale = 1, n_variants = 0, breaks = 15, title=NULL, colo
     }
     df <- dat[[1]]
     p1 <- ggplot2::ggplot(df, aes(exp, P)) + geom_smooth(aes(y = exp), method = "lm", se = F, color = "#808080", size = .5, fullrange = T)
-    p1 <- p1 + ggplot2::geom_point(size = size, aes(color=color[1])) + labs(title = title, x = "Theoretical", y = "Observed", color = "Test", caption = caption) 
-    # Remove panel borders and grid lines
+    p1 <- p1 + ggplot2::geom_point(size = size, aes(color=color[1])) + labs(title = title, x = "Theoretical", y = "Observed", color="Test", caption = caption) 
+  
+      # Remove panel borders and grid lines
     p1 <- p1+theme(legend.background=element_blank(),legend.key=element_rect(fill="white"))
     p1 <- p1+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                    panel.background = element_blank(), axis.line = element_blank())
     p1 <- p1+geom_vline(xintercept=0, colour="grey")+geom_hline(yintercept=0, colour="grey")  
     p1 <- p1 + scale_x_continuous(expand = c(0, 0),breaks = scales::pretty_breaks(breaks), limits=c(0,maxx*1.01)) +
       scale_y_continuous(expand = c(0, 0), limits=c(0,maxy*1.01))
-    
     if(length(dat)>1){
-      for(i in 2:length(dat)){
-        df <- dat[[i]]
-        p1 <- p1 + ggplot2::geom_point(data=df, aes(exp,P, color=color[i]), size = size)
+      for(j in 2:length(dat)){
+        df <- dat[[j]]
+        p1 <- p1 + ggplot2::geom_point(data=df, aes(exp,P, color=color), size = size)
       }
     }
     p1 <- p1 %>% set_plot_text_sizes(axis_text_size=axis_text_size,axis_title_size = axis_title_size, legend_text_size=legend_text_size, legend_title_size=legend_title_size,scale=scale)

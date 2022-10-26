@@ -20,8 +20,7 @@ All other input parameters are optional
 }
 \examples{
 \dontrun{
-data(gwas_CD)
-get_top_snp(gwas_CD, chr="chr1")
+get_top_snp(CD_UKBB, chr="chr1")
 }
 
 }

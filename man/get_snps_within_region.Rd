@@ -33,6 +33,8 @@ the variants within the requested region
 \code{get_snps_within_region()}
 }
 \examples{
+\dontrun{
 get_snps_within_region(CD_UKBB, "chr16:50593587-50834041")
+}
 
 }
