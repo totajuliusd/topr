@@ -2,6 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=r
 
 .idea/
+*.DS_STORE
 local/
 
 ### R ###
@@ -46,6 +47,9 @@ vignettes/*.pdf
 
 # translation temp files
 po/*~
+
+# test output files
+tests/testthat/Rplots.pdf
 
 ### R.Bookdown Stack ###
 # R package: bookdown caching files
