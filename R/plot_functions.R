@@ -64,20 +64,20 @@ add_shades_and_ticks <- function(p1, shades, ticks,shades_color=NULL,shades_alph
 
 add_annotation <- function(p1,plot_labels=NULL, nudge_x=0.01, nudge_y=0.01, label_size=3.5, angle=0,annotate_with="Gene_Symbol", label_color=NULL,scale=1, 
                            annot_with_vline=FALSE,segment.size=0.2,segment.color="black",segment.linetype="solid",max.overlaps=10){
-  if(! is.null(label_color)){
+   if(! is.null(label_color)){
     if(is.vector(label_color) & length(label_color) > 1){label_color <- label_color[1]; 
       print("label color can only be assigned one color, so using the first color from the vector!  The arguments label_alpha,label_font and label_family take vectors as input and can be used to distinguish between labels.")
     }
-    plot_labels$color <- label_color
+     if(nrow(plot_labels) >0 ) plot_labels$color <- label_color
     }
    if(! is.null(plot_labels)){
-    p1 <- p1 + ggrepel::geom_text_repel(data=plot_labels, 
+   p1 <- p1 + ggrepel::geom_text_repel(data=plot_labels, 
                                         aes(x=POS, y=log10p, label=(plot_labels %>% dplyr::pull(annotate_with)) ),
                                         nudge_x=plot_labels$nudge_x,nudge_y=ifelse(plot_labels$log10p>0, plot_labels$nudge_y, -plot_labels$nudge_y),
                                         segment.size=segment.size,size=label_size*scale, fontface=plot_labels$fontface, family=plot_labels$family, alpha=plot_labels$alpha,
                                         color=plot_labels$color,segment.color = segment.color,segment.linetype=segment.linetype,max.iter=10000,direction="both",angle=plot_labels$angle, max.overlaps = max.overlaps)
     
-  }
+   }
   if(annot_with_vline){
     p1 <- p1 %>% add_vline(plot_labels$POS)
   }
