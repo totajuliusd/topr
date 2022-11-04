@@ -71,6 +71,7 @@
 #' @param vline_linetype The linetype of added vertical line/s (default : dashed)  
 #' @param vline_alpha The alpha of added vertical line/s (default : 1)  
 #' @param vline_size The size of added vertical line/s (default : 0.5)  
+#' @param region A string representing a genetic region, e.g. chr1:67038906-67359979
 #'
 #' @return ggplot object
 #' @export
@@ -94,7 +95,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
                   rsids_with_vline=NULL,annotate_with_vline=NULL,shades_color=NULL,shades_alpha=0.1,segment.size=0.2, 
                   segment.color="black",segment.linetype="solid",max.overlaps=10,label_fontface="plain",label_family="",
                   gene_label_fontface="plain",gene_label_family="",build=38,verbose=NULL,label_alpha=1,shades_line_alpha=1,vline=NULL,
-                  vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5){
+                  vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5,region=NULL){
     top_snps <- NULL
     genes_df <- NULL
     xaxis_label <- "Chromosome"
@@ -102,6 +103,14 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     dat <- dat %>% set_size_shape_alpha(size, shape, alpha) %>% set_color(color) %>% set_log10p(ntop)
      
     using_ntop <- FALSE
+   
+     if(! is.null(region)){
+      tmp <- unlist(stringr::str_split(region, ":"))
+      chr <- tmp[1]
+      tmp_pos <- unlist(stringr::str_split(tmp[2], "-"))
+      xmin <- as.numeric(tmp_pos[1])
+      xmax <- as.numeric(tmp_pos[2])
+    }
   if(length(dat) > ntop){
       using_ntop <- TRUE
   }
@@ -212,6 +221,10 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     main_plot <- main_plot %>% add_vline(vlines, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
   }
   main_plot <- main_plot %>% set_ymin_ymax(ymin,ymax)
+  
+  if(!is.null(xmin) & !is.null(xmax) & ! is.null(chr)){
+    main_plot <- main_plot %>% set_xmin_xmax(xmin,xmax)
+  }
   main_plot <- change_axes(main_plot)
   return(main_plot)
   }
