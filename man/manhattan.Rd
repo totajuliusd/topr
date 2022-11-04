@@ -69,7 +69,8 @@ manhattan(
   vline_color = "grey",
   vline_linetype = "dashed",
   vline_alpha = 1,
-  vline_size = 0.5
+  vline_size = 0.5,
+  region = NULL
 )
 }
 \arguments{
@@ -198,6 +199,8 @@ manhattan(
 \item{vline_alpha}{The alpha of added vertical line/s (default : 1)}
 
 \item{vline_size}{The size of added vertical line/s (default : 0.5)}
+
+\item{region}{A string representing a genetic region, e.g. chr1:67038906-67359979}
 }
 \value{
 ggplot object

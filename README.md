@@ -104,13 +104,13 @@ regionplot(list(UC_UKBB, CD_UKBB))
 Extract lead/index variants from the GWAS dataset (<code>CD_UKBB</code>):
 
 ```{r}
-get_lead_snps()(CD_UKBB)
+get_lead_snps(CD_UKBB)
 ```
 
 Annotate the lead/index variants with their nearest gene:
 
 ```{r}
-get_lead_snps(CD_UKBB) %>%  annotate_with_nearest_gene()
+get_lead_snps(CD_UKBB) %>% annotate_with_nearest_gene()
 ```
 
 Get genomic coordinates for a gene:
@@ -128,6 +128,7 @@ get_snps_within_region(CD_UKBB, region = "chr1:67138906-67259979")
 Get the top variant on a chromosome:
 ```{r}
 get_top_snp(CD_UKBB, chr="chr1")
+
 ```
 
 <br>
