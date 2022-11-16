@@ -1,3 +1,8 @@
+# 1.1.1
+
+* Minor bug fix for plot colors and legends when plotting multiple datasets
+* region argument added to the manhattan function
+
 # 1.1.0
 
 * Update to increase control over plot aesthetics and variant labeling
