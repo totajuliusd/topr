@@ -63,7 +63,7 @@ add_shades_and_ticks <- function(p1, shades, ticks,shades_color=NULL,shades_alph
 }
 
 add_annotation <- function(p1,plot_labels=NULL, nudge_x=0.01, nudge_y=0.01, label_size=3.5, angle=0,annotate_with="Gene_Symbol", label_color=NULL,scale=1, 
-                           annot_with_vline=FALSE,segment.size=0.2,segment.color="black",segment.linetype="solid",max.overlaps=10){
+                           segment.size=0.2,segment.color="black",segment.linetype="solid",max.overlaps=10){
    if(! is.null(label_color)){
     if(is.vector(label_color) & length(label_color) > 1){label_color <- label_color[1]; 
       print("label color can only be assigned one color, so using the first color from the vector!  The arguments label_alpha,label_font and label_family take vectors as input and can be used to distinguish between labels.")
@@ -78,9 +78,6 @@ add_annotation <- function(p1,plot_labels=NULL, nudge_x=0.01, nudge_y=0.01, labe
                                         color=plot_labels$color,segment.color = segment.color,segment.linetype=segment.linetype,max.iter=10000,direction="both",angle=plot_labels$angle, max.overlaps = max.overlaps)
     
    }
-  if(annot_with_vline){
-    p1 <- p1 %>% add_vline(plot_labels$POS)
-  }
   return(p1)
 }
 
@@ -95,7 +92,7 @@ add_zoom_rectangle <- function(p1,dat,xmin=NULL,xmax=NULL){
   return(p1)
 }
 
-add_vline <- function(p1, vline, vline_color="grey",vline_linetype="dashed", vline_alpha=1, vline_size=1, scale){
+add_vline <- function(p1, vline, vline_color="grey",vline_linetype="dashed", vline_alpha=1, vline_size=1, scale=1){
   if(!is.null(vline)){
     for(i in seq_along(vline)){
       p1 <- p1+geom_vline(xintercept = as.numeric(vline[i]) , colour=vline_color, linetype=vline_linetype, alpha=vline_alpha, size=vline_size*scale)

@@ -298,7 +298,7 @@ effectplot <- function(df,pheno_x="x_pheno", pheno_y="y_pheno", annotate_with="G
     P3 <- dat %>% dplyr::filter(y_P > 0.05)
     dat$y_P <- signif(dat$y_P,2)
     dat$sigma <- NA
-    #The Greek letter σ (sigma) is used in statistics to represent the standard deviation of a population.
+
     for (i in seq_len(nrow(dat))){dat$sigma[i] <- -abs(dat$y_Effect[i])/stats::qnorm(dat$y_P[i]/2)}
     dat$C1 <- ifelse(dat$y_P<ci_thresh,dat$y_Effect-1.96*dat$sigma,dat$y_Effect)
     dat$C2 <- ifelse(dat$y_P<ci_thresh,dat$y_Effect+1.96*dat$sigma,dat$y_Effect)

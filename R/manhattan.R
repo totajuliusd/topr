@@ -172,7 +172,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     }else{
       main_plot <- main_plot + scale_y_continuous(expand=c(.02,.02))  + scale_x_continuous(expand=c(.01,.01),labels = scales::comma)
     }
-
+0
   main_plot <- set_axis_labels(main_plot,xaxis_label = xaxis_label)
   main_plot <- main_plot %>% set_plot_text_sizes(axis_text_size=axis_text_size,axis_title_size = axis_title_size, 
                                                  legend_text_size=legend_text_size, legend_title_size=legend_title_size,scale=scale)
@@ -189,7 +189,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
 
   if (! is.null(annotate)){
     main_plot <- main_plot %>%  add_annotation(plot_labels = top_snps,annotate_with=annotate_with,angle=angle,label_size = label_size, 
-                                               label_color=label_color, nudge_x=nudge_x, nudge_y=nudge_y, scale=scale, annot_with_vline=annot_with_vline, 
+                                               label_color=label_color, nudge_x=nudge_x, nudge_y=nudge_y, scale=scale, 
                                                segment.size=segment.size,segment.color=segment.color,segment.linetype=segment.linetype, max.overlaps=max.overlaps)
   }
   if (! is.null(highlight_genes)){
@@ -200,7 +200,9 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
                                 label_size=label_size,gene_label_angle = gene_label_angle,scale=scale,gene_label_fontface=gene_label_fontface,gene_label_family=gene_label_family)
     
   }
-
+  if(annot_with_vline){
+    main_plot <- main_plot %>% add_vline(top_snps$POS, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
+  }
   with_vline <- FALSE
   if(! is.null(rsids_with_vline)){
     rsids <- rsids_with_vline
