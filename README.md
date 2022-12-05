@@ -87,13 +87,13 @@ View the correlation pattern between the variants within the region in a locuszo
 Note that the variant correlation (R2) has to be pre-calculated and included in the input dataframe.
 
 ``` r
-locuszoom(R2_CD_UKBB, gene="IL23R")
+locuszoom(R2_CD_UKBB)
 ```
 
 A region plot of multiple GWASes zoomed in on the IL23R gene
 
 ``` r
-regionplot(list(UC_UKBB, CD_UKBB))
+regionplot(list(UC_UKBB, CD_UKBB), gene="IL23R")
 ```
 
 <br>
