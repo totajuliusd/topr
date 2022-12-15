@@ -37,8 +37,8 @@ convert_region_size <- function(region_size){
 
 dat_column_chr_pos_check <- function(df){
   df <- df %>% 
-    rename_with(~ "CHROM", matches(c("^chrom$","^chr$","^chromosome$"), ignore.case = TRUE)) %>% 
-    rename_with(~ "POS", matches(c("^pos$","^bp$","^base_pair_location$"), ignore.case = TRUE))
+    rename_with(~ rename_value(.x, "CHROM"), matches(c("^chrom$","^chr$","^chromosome$"), ignore.case = TRUE)) %>% 
+    rename_with(~ rename_value(.x, "POS"), matches(c("^pos$","^bp$","^base_pair_location$"), ignore.case = TRUE))
   return(df)
 }
 
@@ -49,19 +49,19 @@ dat_column_check_and_set <- function(dat, verbose=TRUE,locuszoomplot=FALSE){
     if(locuszoomplot)
       dfwithcolor=df
     df <- df %>% 
-      dplyr::rename_with(~ "ID", matches(c("^rsid$","^rsname$","^snp$"), ignore.case = TRUE)) %>% 
-      dplyr::rename_with(~ "Gene_Symbol", matches(c("^gene_symbol$","^gene$","^genename$","^gene_name$"), ignore.case = TRUE)) %>%
-      dplyr::rename_with(~ "Max_Impact", matches(c("^max_impact$","^impact$"), ignore.case = TRUE)) %>% 
-      dplyr::rename_with(~ "OR", matches(c("^odds_ratio$","^or$"), ignore.case = TRUE)) %>% 
-      dplyr::rename_with(~ "BETA", matches(c("^beta$"), ignore.case=TRUE)) %>% 
-      dplyr::rename_with(~ "REF", matches(c("^ref$"), ignore.case=TRUE)) %>% 
-      dplyr::rename_with(~ "ALT", matches(c("^alt$"), ignore.case=TRUE)) 
+      dplyr::rename_with(~ rename_value(.x, "ID"), matches(c("^rsid$","^rsname$","^snp$"), ignore.case = TRUE)) %>% 
+      dplyr::rename_with(~ rename_value(.x, "Gene_Symbol"), matches(c("^gene_symbol$","^gene$","^genename$","^gene_name$"), ignore.case = TRUE)) %>%
+      dplyr::rename_with(~ rename_value(.x, "Max_Impact"), matches(c("^max_impact$","^impact$"), ignore.case = TRUE)) %>% 
+      dplyr::rename_with(~ rename_value(.x, "OR"), matches(c("^odds_ratio$","^or$"), ignore.case = TRUE)) %>% 
+      dplyr::rename_with(~ rename_value(.x, "BETA"), matches(c("^beta$"), ignore.case=TRUE)) %>% 
+      dplyr::rename_with(~ rename_value(.x, "REF"), matches(c("^ref$"), ignore.case=TRUE)) %>% 
+      dplyr::rename_with(~ rename_value(.x, "ALT"), matches(c("^alt$"), ignore.case=TRUE)) 
     if(locuszoomplot)
         df$color <- dfwithcolor$color
    
     if(! "P" %in% colnames(df)){
       df <- df %>% 
-        dplyr::rename_with(~ "P", matches(c("^pval$","^pvalue$","^p_value$","^p$"), ignore.case = TRUE)) 
+        dplyr::rename_with(~ rename_value(.x, "P"), matches(c("^pval$","^pvalue$","^p_value$","^p$"), ignore.case = TRUE)) 
     }
     if(! "ID" %in% colnames(df)){
       if("CHROM" %in% colnames(df)){
