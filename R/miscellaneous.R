@@ -39,3 +39,11 @@ is_df_empty <- function(df, type){
     }
   }
 }
+
+rename_value <- function(x, value) {
+  if (length(x) == 0L) {
+    character()
+  } else {
+    value
+  }
+}
