@@ -205,6 +205,14 @@ match_by_pos <- function(df1, df2, verbose=NULL, show_full_output=FALSE){
 
 get_snpset <- function(df1, df2, thresh=1e-08, protein_coding_only=TRUE, region_size=1000000, verbose=NULL, show_full_output=FALSE, build=38){
   snpset <- NULL
+  
+  if(is.list(df1) & length(df1)==2){
+    if(is.data.frame(df1[[1]]) & is.data.frame(df1[[2]])){
+     df2=df1[[2]]
+     df1=df1[[1]]
+    }
+  }
+  
   if(! is.numeric(region_size)){
     region_size <- convert_region_size(region_size)
   } 

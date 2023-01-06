@@ -317,7 +317,10 @@ get_lead_snps <- function(df, thresh=5e-09,region_size=1000000,protein_coding_on
   dat <- df
   if(is.data.frame(dat)) dat <- list(dat)
   chrPrefix=0
-  if("CHROM" %in% colnames(dat[[1]])){
+  
+  dat[[1]] <- dat_column_chr_pos_check(dat[[1]]) 
+  
+  if("CHROM"  %in% colnames(dat[[1]])){
     if(!is.integer(dat[[1]][1,"CHROM"])){chrPrefix=1}
   }
   if(! is.numeric(region_size)){
@@ -326,6 +329,7 @@ get_lead_snps <- function(df, thresh=5e-09,region_size=1000000,protein_coding_on
   if(! .checked){
     dat <- dat_check(dat, verbose=verbose)
   }
+ 
   df <- dat[[1]]
   if(! is.null(chr)){
     chr <- gsub("chr","", chr)
