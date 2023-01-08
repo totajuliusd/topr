@@ -66,10 +66,16 @@ View the whole genome association results on a Manhattan plot:
 manhattan(CD_UKBB)
 ```
 
-Annotate the lead/index variants (with p-values below 5e-09) with their nearest gene:
+Annotate the lead/index variants (with p-values below 5e-9) with their nearest gene:
 
 ``` r
-manhattan(CD_UKBB, annotate=5e-09)
+manhattan(CD_UKBB, annotate=5e-9)
+```
+
+View multiple GWAS results on the same plot
+
+``` r
+manhattan(list(CD_UKBB, CD_FINNGEN), legend_labels = c("UKBB", FinnGen"))
 ```
 
 
@@ -90,7 +96,7 @@ Note that the variant correlation (R2) has to be pre-calculated and included in 
 locuszoom(R2_CD_UKBB)
 ```
 
-A region plot of multiple GWASes zoomed in on the IL23R gene
+Display multiple GWAS results zoomed in on the IL23R gene
 
 ``` r
 regionplot(list(UC_UKBB, CD_UKBB), gene="IL23R")
