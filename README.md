@@ -1,5 +1,5 @@
 
-# topr : an R package for viewing and annotating genetic association data
+# topr : an R package for viewing and annotating genetic association results
 
 <img src="man/figures/manhattan_wide_1080_high.gif" alt="topr GIF" width="100%">
 
