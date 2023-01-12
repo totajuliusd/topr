@@ -1,7 +1,7 @@
 
-# topr : an R package for viewing and annotating genetic association data
+# topr : an R package for viewing and annotating genetic association results
 
-<img src="man/figures/topr_v.1.1.0.gif" alt="topr GIF" width="100%">
+<img src="man/figures/manhattan_wide_1080_high.gif" alt="topr GIF" width="100%">
 
 
 ## Installation
@@ -66,10 +66,16 @@ View the whole genome association results on a Manhattan plot:
 manhattan(CD_UKBB)
 ```
 
-Annotate the lead/index variants (with p-values below 5e-09) with their nearest gene:
+Annotate the lead/index variants (with p-values below 5e-9) with their nearest gene:
 
 ``` r
-manhattan(CD_UKBB, annotate=5e-09)
+manhattan(CD_UKBB, annotate=5e-9)
+```
+
+View multiple GWAS results on the same plot
+
+``` r
+manhattan(list(CD_UKBB, CD_FINNGEN), legend_labels = c("UKBB", FinnGen"))
 ```
 
 
@@ -87,13 +93,13 @@ View the correlation pattern between the variants within the region in a locuszo
 Note that the variant correlation (R2) has to be pre-calculated and included in the input dataframe.
 
 ``` r
-locuszoom(R2_CD_UKBB, gene="IL23R")
+locuszoom(R2_CD_UKBB)
 ```
 
-A region plot of multiple GWASes zoomed in on the IL23R gene
+Display multiple GWAS results zoomed in on the IL23R gene
 
 ``` r
-regionplot(list(UC_UKBB, CD_UKBB))
+regionplot(list(UC_UKBB, CD_UKBB), gene="IL23R")
 ```
 
 <br>

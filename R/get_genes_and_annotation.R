@@ -9,7 +9,7 @@
 #' @param xmin An integer representing genetic position 
 #' @param xmax An integer representing genetic position
 #' @param show_genes A logical scalar, show genes instead of exons (default show_genes=FALSE)
-#' @param show_exons Deprecated : A logical scalar, show exons instead of genees (default show_exons=FALSE)
+#' @param show_exons Deprecated : A logical scalar, show exons instead of genes (default show_exons=FALSE)
 #' @inheritParams manhattan
 #' @return the genes the requested region
 #' @export

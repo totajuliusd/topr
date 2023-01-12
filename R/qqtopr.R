@@ -8,7 +8,7 @@
 #' @param dat Dataframe or a list of dataframes (required columns is \code{P})) of association results.
 #' @param scale An integer, plot elements scale, default: 1
 #' @param n_variants An integer, total number of variants used in the study
-#' @param color A string or vector of strings setting the color's for the input dataset's
+#' @param color A string or vector of strings setting the color's for the input datasets
 #' @param breaks A number setting the breaks for the axes
 #' @inheritParams manhattan
 #'

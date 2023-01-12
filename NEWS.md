@@ -1,3 +1,9 @@
+# 1.1.2
+
+* the scale parameter for annotate_with_vline was fixed
+* the Manhattan plot was changed to the more conventional two-color display
+* the argument theme_grey can be set to TRUE to make the Manhattan plot look like it does in older versions of topr
+
 # 1.1.1
 
 * Minor bug fix for plot colors and legends when plotting multiple datasets

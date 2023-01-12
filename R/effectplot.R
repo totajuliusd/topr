@@ -205,6 +205,14 @@ match_by_pos <- function(df1, df2, verbose=NULL, show_full_output=FALSE){
 
 get_snpset <- function(df1, df2, thresh=1e-08, protein_coding_only=TRUE, region_size=1000000, verbose=NULL, show_full_output=FALSE, build=38){
   snpset <- NULL
+  
+  if(is.list(df1) & length(df1)==2){
+    if(is.data.frame(df1[[1]]) & is.data.frame(df1[[2]])){
+     df2=df1[[2]]
+     df1=df1[[1]]
+    }
+  }
+  
   if(! is.numeric(region_size)){
     region_size <- convert_region_size(region_size)
   } 
@@ -298,7 +306,7 @@ effectplot <- function(df,pheno_x="x_pheno", pheno_y="y_pheno", annotate_with="G
     P3 <- dat %>% dplyr::filter(y_P > 0.05)
     dat$y_P <- signif(dat$y_P,2)
     dat$sigma <- NA
-    #The Greek letter σ (sigma) is used in statistics to represent the standard deviation of a population.
+
     for (i in seq_len(nrow(dat))){dat$sigma[i] <- -abs(dat$y_Effect[i])/stats::qnorm(dat$y_P[i]/2)}
     dat$C1 <- ifelse(dat$y_P<ci_thresh,dat$y_Effect-1.96*dat$sigma,dat$y_Effect)
     dat$C2 <- ifelse(dat$y_P<ci_thresh,dat$y_Effect+1.96*dat$sigma,dat$y_Effect)

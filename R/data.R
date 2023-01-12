@@ -37,6 +37,7 @@
 #' Finngen r7 Crohn‘s disease (K11_CROHNS)
 #'
 #' Dataset retrieved from the Finngen database (version 7) including 3147 crohn´s cases (K50) and 296,100 controls. The dataset has been filtered on variants with P <1e-03.
+#' FinnGen data are publicly available and were downloaded from https://finngen.fi.
 #'
 #' @format A data frame  with 41,095 rows and 8 variables:
 #' \describe{

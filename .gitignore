@@ -56,3 +56,4 @@ tests/testthat/Rplots.pdf
 /*_files/
 
 # End of https://www.toptal.com/developers/gitignore/api/r
+inst/doc

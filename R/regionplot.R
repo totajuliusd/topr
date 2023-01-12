@@ -10,7 +10,7 @@
 #' @param show_overview A logical scalar, shows/hides the overview plot (default= TRUE)
 #' @param gene A string, the name of the  gene to zoom into (e.g. gene=FTO)
 #' @param show_genes A logical scalar, show genes instead of exons (default show_genes=FALSE)
-#' @param show_exons Deprecated : A logical scalar, show exons instead of genees (default show_exons=FALSE)
+#' @param show_exons Deprecated : A logical scalar, show exons instead of genes (default show_exons=FALSE)
 #' @param vline A number or vector of numbers to add a vertical line to the plot at a specific chromosomal position, e.g \code{vline=204000066}. Multiple values can be provided in a vector, e.g  \code{vline=c(204000066,100500188)}
 #' @param max_genes An integer, only label the genes if they are fewer than max_genes (default values is 200).
 #' @param show_gene_names A logical scalar, if set to TRUE, gene names are shown even though they exceed the max_genes count
@@ -136,8 +136,11 @@ regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alp
   main_plot <- main_plot+theme(axis.text.x=element_blank(), axis.title.x = element_blank(), axis.ticks.x=element_blank())
   if(! is.null(annotate)){
     main_plot <- main_plot %>%  add_annotation(plot_labels = top_snps,annotate_with=annotate_with,angle=angle,label_size = label_size, nudge_y = nudge_y, 
-                                               nudge_x = nudge_x, label_color=label_color,scale=scale,annot_with_vline = annot_with_vline,
+                                               nudge_x = nudge_x, label_color=label_color,scale=scale,
                                                segment.color=segment.color,segment.size=segment.size,segment.linetype=segment.linetype,max.overlaps=max.overlaps)
+    if(annot_with_vline){
+      main_plot <- main_plot %>% add_vline(top_snps$POS, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
+    }
   }
   if(locuszoomplot){
     #annotate the top variant
@@ -145,8 +148,11 @@ regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alp
       ld_snp <- get_main_LD_snp(dat, nudge_x=nudge_x, nudge_y=nudge_y, label_fontface=label_fontface, angle=angle, label_alpha=label_alpha)
       if(is.null(annotate) & !is.null(ld_snp) & length(ld_snp$POS)> 0){
         main_plot <- main_plot %>%  add_annotation(plot_labels = ld_snp,annotate_with=annotate_with,angle=angle,label_size = label_size, nudge_y = nudge_y, nudge_x = nudge_x, 
-                                                   label_color=label_color,scale=scale,annot_with_vline = annot_with_vline,segment.color=segment.color,segment.size=segment.size,
+                                                   label_color=label_color,scale=scale,segment.color=segment.color,segment.size=segment.size,
                                                    segment.linetype=segment.linetype,max.overlaps=max.overlaps)
+        if(annot_with_vline){
+          main_plot <- main_plot %>% add_vline(ld_snp$POS, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
+        }
       }
     }
   }
