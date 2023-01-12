@@ -82,7 +82,6 @@ add_annotation <- function(p1,plot_labels=NULL, nudge_x=0.01, nudge_y=0.01, labe
                                         aes(x=POS, y=log10p, label=(plot_labels %>% dplyr::pull(annotate_with)) ),
                                         nudge_x=plot_labels$nudge_x,nudge_y=ifelse(plot_labels$log10p>0, plot_labels$nudge_y, -plot_labels$nudge_y),
                                         segment.size=segment.size,size=label_size*scale, fontface=plot_labels$fontface, family=plot_labels$family, alpha=plot_labels$alpha,
-                                       # color=ifelse( is.null(label_color) & length(unique(plot_labels$color)) == 1, "black", plot_labels$color), 
                                        color=plot_labels$color,
                                         segment.color = segment.color,
                                         segment.linetype=segment.linetype,max.iter=10000,direction="both",angle=plot_labels$angle, max.overlaps = max.overlaps)

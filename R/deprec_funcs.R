@@ -60,7 +60,7 @@ match_alleles <- function(df, verbose=F){
 #' @param verbose A logical scalar (default: FALSE). Assign to TRUE to get information on which alleles are matched and which are not.
 #'
 #'
-#' @return The input dataframe containing only those variants whith matched alleles in the snpset
+#' @return The input dataframe containing only those variants with matched alleles in the snpset
 #' @export
 #'
 #' @examples
@@ -127,7 +127,7 @@ get_overlapping_snps_by_pos <- function(df1, df2,verbose=F){
 #' @param df1 The dataframe to extract the top snps from (with p-value below thresh)
 #' @param df2 The dataframe in which to search for overlapping SNPs from dataframe1
 #' @param thresh Numeric, the p-value threshold used for extracting the top snps from dataset 1
-#' @param region_size Ingeter, the size of the interval which to extract the top snps from
+#' @param region_size Integer, the size of the interval which to extract the top snps from
 #' @param protein_coding_only Logical, set this variable to TRUE to only use protein_coding genes for the annotation
 #' @param verbose Logical, (default: FALSE). Assign to TRUE to get information on which alleles are matched and which are not.
 

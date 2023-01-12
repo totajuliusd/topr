@@ -9,7 +9,7 @@
 #'
 #'
 #' @param df Dataframe or a list of dataframes (required columns are \code{CHROM,POS,P}), in upper- or lowercase) of association results.
-#' @param ntop An integer, number of datasets (GWASes) to show on the top plot
+#' @param ntop An integer, number of datasets (GWAS results) to show on the top plot
 #' @param chr A string or integer, the chromosome to plot (i.e. chr15), only required if the input dataframe contains results from more than one chromosome
 #' @param title A string to set the plot title
 #' @param color A string or a vector of strings, for setting the color of the datapoints on the plot
@@ -27,7 +27,7 @@
 #' @param highlight_genes_color A string, color for the highlighted genes (default: darkred)
 #' @param xmin,xmax Integer, setting the chromosomal range to display on the x-axis
 #' @param ymin,ymax Integer, min and max of the y-axis, (default values: \code{ymin=0, ymax=max(-log10(df$P))})
-#' @param legend_labels A string or vector of strings representing legend labels for the input dataset's
+#' @param legend_labels A string or vector of strings representing legend labels for the input datasets
 #' @param legend_name A string, use to change the name of the legend (default: None)
 #' @param legend_position A string, top,bottom,left or right
 #' @param title_text_size A number, size of the plot title (default: 13)
@@ -59,7 +59,7 @@
 #' @param segment.linetype line segment solid, dashed, etc.(ggrepel argument)
 #' @param max.overlaps Exclude text labels that overlap too many things. Defaults to 10 (ggrepel argument)
 #' @param label_fontface  A string or a vector of strings. Label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)
-#' @param label_family A stirng or a vector of strings. Label font name (default ggrepel argument is "")
+#' @param label_family A string or a vector of strings. Label font name (default ggrepel argument is "")
 #' @param gene_label_fontface  Gene label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)
 #' @param gene_label_family Gene label font name (default ggrepel argument is "")
 #' @param build A number representing the genome build. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).
@@ -174,7 +174,6 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     }else{
       main_plot <- main_plot + scale_y_continuous(expand=c(.02,.02))  + scale_x_continuous(expand=c(.01,.01),labels = scales::comma)
     }
-0
   main_plot <- set_axis_labels(main_plot,xaxis_label = xaxis_label)
   main_plot <- main_plot %>% set_plot_text_sizes(axis_text_size=axis_text_size,axis_title_size = axis_title_size, 
                                                  legend_text_size=legend_text_size, legend_title_size=legend_title_size,scale=scale)

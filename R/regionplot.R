@@ -10,7 +10,7 @@
 #' @param show_overview A logical scalar, shows/hides the overview plot (default= TRUE)
 #' @param gene A string, the name of the  gene to zoom into (e.g. gene=FTO)
 #' @param show_genes A logical scalar, show genes instead of exons (default show_genes=FALSE)
-#' @param show_exons Deprecated : A logical scalar, show exons instead of genees (default show_exons=FALSE)
+#' @param show_exons Deprecated : A logical scalar, show exons instead of genes (default show_exons=FALSE)
 #' @param vline A number or vector of numbers to add a vertical line to the plot at a specific chromosomal position, e.g \code{vline=204000066}. Multiple values can be provided in a vector, e.g  \code{vline=c(204000066,100500188)}
 #' @param max_genes An integer, only label the genes if they are fewer than max_genes (default values is 200).
 #' @param show_gene_names A logical scalar, if set to TRUE, gene names are shown even though they exceed the max_genes count
