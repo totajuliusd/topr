@@ -22,7 +22,7 @@ create_snpset(
 
 \item{protein_coding_only}{Logical, set this variable to TRUE to only use protein_coding genes for the annotation}
 
-\item{region_size}{Ingeter, the size of the interval which to extract the top snps from}
+\item{region_size}{Integer, the size of the interval which to extract the top snps from}
 
 \item{verbose}{Logical, (default: FALSE). Assign to TRUE to get information on which alleles are matched and which are not.}
 }

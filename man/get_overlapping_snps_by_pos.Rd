@@ -14,7 +14,7 @@ get_overlapping_snps_by_pos(df1, df2, verbose = F)
 \item{verbose}{A logical scalar (default: FALSE). Assign to TRUE to get information on which alleles are matched and which are not.}
 }
 \value{
-The input dataframe containing only those variants whith matched alleles in the snpset
+The input dataframe containing only those variants with matched alleles in the snpset
 }
 \description{
 \code{get_overlapping_snps_by_pos()}

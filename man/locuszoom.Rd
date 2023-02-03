@@ -70,7 +70,11 @@ locuszoom(
   verbose = NULL,
   show_legend = TRUE,
   label_alpha = 1,
-  gene_label_size = NULL
+  gene_label_size = NULL,
+  vline_color = "grey",
+  vline_linetype = "dashed",
+  vline_alpha = 1,
+  vline_size = 0.5
 )
 }
 \arguments{
@@ -78,7 +82,7 @@ locuszoom(
 
 \item{annotate}{A number (p-value). Display annotation for variants with p-values below this threshold}
 
-\item{ntop}{An integer, number of datasets (GWASes) to show on the top plot}
+\item{ntop}{An integer, number of datasets (GWAS results) to show on the top plot}
 
 \item{xmin, xmax}{Integer, setting the chromosomal range to display on the x-axis}
 
@@ -104,7 +108,7 @@ locuszoom(
 
 \item{show_overview}{A logical scalar, shows/hides the overview plot (default= TRUE)}
 
-\item{show_exons}{Deprecated : A logical scalar, show exons instead of genees (default show_exons=FALSE)}
+\item{show_exons}{Deprecated : A logical scalar, show exons instead of genes (default show_exons=FALSE)}
 
 \item{max_genes}{An integer, only label the genes if they are fewer than max_genes (default values is 200).}
 
@@ -118,7 +122,7 @@ locuszoom(
 
 \item{protein_coding_only}{A logical scalar, if TRUE, only protein coding genes are used for annotation}
 
-\item{region_size}{An integer (default = 1000000) (or a string represented as 100kb or 1MB) indicating the window size for variant labeling. Increase this number for sparser annotation and decrease for denser annotation.}
+\item{region_size}{An integer (default = 20000000) (or a string represented as 200kb or 2MB) indicating the window size for variant labeling. Increase this number for sparser annotation and decrease for denser annotation.}
 
 \item{gene_padding}{An integer representing size of the region around the gene, if the gene argument was used (default = 100000)}
 
@@ -148,7 +152,7 @@ locuszoom(
 
 \item{show_gene_names}{A logical scalar, if set to TRUE, gene names are shown even though they exceed the max_genes count}
 
-\item{legend_labels}{A string or vector of strings representing legend labels for the input dataset's}
+\item{legend_labels}{A string or vector of strings representing legend labels for the input datasets}
 
 \item{gene}{A string representing the gene to zoom in on (e.g. gene=FTO)}
 
@@ -186,7 +190,7 @@ locuszoom(
 
 \item{label_fontface}{A string or a vector of strings. Label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
 
-\item{label_family}{A stirng or a vector of strings. Label font name (default ggrepel argument is "")}
+\item{label_family}{A string or a vector of strings. Label font name (default ggrepel argument is "")}
 
 \item{gene_label_fontface}{Gene label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
 
@@ -201,6 +205,14 @@ locuszoom(
 \item{label_alpha}{An number or vector of numbers to set the transparency of the plot labels (default: \code{label_alpha=1})}
 
 \item{gene_label_size}{A number setting the size of the gene labels shown at the bottom of the plot}
+
+\item{vline_color}{The color of added vertical line/s (default: grey)}
+
+\item{vline_linetype}{The linetype of added vertical line/s (default : dashed)}
+
+\item{vline_alpha}{The alpha of added vertical line/s (default : 1)}
+
+\item{vline_size}{The size of added vertical line/s (default : 0.5)}
 }
 \value{
 plots using egg (https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html)

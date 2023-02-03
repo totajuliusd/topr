@@ -25,5 +25,6 @@ CD_FINNGEN
 }
 \description{
 Dataset retrieved from the Finngen database (version 7) including 3147 crohn´s cases (K50) and 296,100 controls. The dataset has been filtered on variants with P <1e-03.
+FinnGen data are publicly available and were downloaded from https://finngen.fi.
 }
 \keyword{datasets}
