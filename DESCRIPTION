@@ -2,8 +2,8 @@ Package: topr
 Title: Create Custom Plots for Viewing Genetic Association Results
 Version: 1.1.3
 Authors@R: c(
-    person("Thorhildur", "Juliusdottir", role = c("cph","aut", "cre"),email = "thorhildur@genuitysci.com"),
-    person("Andri", "Stefansson", role = "aut", email = "andri@genuitysci.com")
+    person("Thorhildur", "Juliusdottir", role = c("cph","aut", "cre"),email = "totajuliusd@gmail.com"),
+    person("Andri", "Stefansson", role = "aut", email = "andrimarstefansson@gmail.com")
     )
 URL: https://github.com/totajuliusd/topr
 BugReports: https://github.com/totajuliusd/topr/issues

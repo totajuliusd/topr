@@ -16,7 +16,7 @@ install.packages("topr")
 Or from github:
 
 ``` r
-devtools::install_github("GenuityScience/topr")
+devtools::install_github("totajuliusd/topr")
 ```
 
 And then load the package:
@@ -37,7 +37,7 @@ Input datasets must include least three columns (<code>CHROM,
 POS</code> and <code>P</code>), where naming of the columns is flexible
 (i.e the chr label can be either chr or chrom and is case insensitive).
 
-topr has 3 in-built datasets (GWASes), take a look at one of them by issuing the following command:
+topr has 3 in-built datasets (GWAS results), take a look at one of them by issuing the following command:
 
 ``` r
 head(CD_UKBB)
@@ -119,10 +119,15 @@ Annotate the lead/index variants with their nearest gene:
 get_lead_snps(CD_UKBB) %>% annotate_with_nearest_gene()
 ```
 
-Get genomic coordinates for a gene:
+Get genomic coordinates for a gene (topr uses genome build GRCh38.p13 by default):
 
 ```{r}
 get_gene_coords("IL23R")
+```
+Get genomic coordinates for a gene using build GRCh37 instead.
+
+```{r}
+get_gene_coords("IL23R", build="37")
 ```
 
 Get snps within a region:
