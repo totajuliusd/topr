@@ -1,3 +1,3 @@
 test_that("locuszoom works", {
-  expect_no_error(locuszoom(R2_CD_UKBB, gene="IL23R"))
+  expect_no_error(locuszoom(R2_CD_UKBB))
 })
