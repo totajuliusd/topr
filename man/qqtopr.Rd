@@ -63,3 +63,9 @@ ggplot
 \code{qqtopr()} displays QQ plots for association data.
 Required parameter is at least one dataset (dataframe) containing the association data (with columns \code{CHROM,POS,P}
 }
+\examples{
+\dontrun{
+qqtopr(CD_UKBB)
+}
+
+}

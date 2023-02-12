@@ -14,6 +14,8 @@
 #'
 #' @return ggplot
 #' @export
+#' 
+#' @examples
 #' \dontrun{
 #' qqtopr(CD_UKBB)
 #' }
