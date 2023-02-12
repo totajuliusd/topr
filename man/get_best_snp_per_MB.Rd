@@ -37,3 +37,8 @@ Dataframe of lead variants. Returns the best variant per MB (by default, change 
 
 This method is deprecated and will be removed in future versions. use \code{\link{get_lead_snps}} instead.
 }
+\examples{
+\dontrun{
+  get_best_snp_per_MB(CD_UKBB)
+}
+}

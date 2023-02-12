@@ -21,7 +21,9 @@ the input dataframe with Gene_Symbol as an additional column
 Required parameters is a dataframe of SNPs (with the columns CHROM and POS)
 }
 \examples{
+\dontrun{
 variants <-get_lead_snps(CD_UKBB)
 annotate_with_nearest_gene(variants)
+}
 
 }

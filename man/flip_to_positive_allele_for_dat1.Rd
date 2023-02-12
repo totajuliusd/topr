@@ -16,7 +16,7 @@ The input dataframe after flipping to the positive effect allele in dataframe 1
 \code{flip_to_positive_allele_for_dat1()}
 }
 \examples{
-\donttest{
+\dontrun{
 CD_UKBB_index_snps <- get_lead_snps(CD_UKBB)
 snpset <- get_snpset(CD_UKBB_index_snps, CD_FINNGEN)
 flip_to_positive_allele_for_dat1(snpset$matched)

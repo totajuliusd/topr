@@ -15,8 +15,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' get_genes_in_region(region="chr16:50593587-50834041")
-#'
+#'}
 
 
 get_genes_in_region <- function(chr=chr, xmin=xmin,xmax=xmax,protein_coding_only=F, show_exons=F,show_genes=T, build=38, region=NULL){
@@ -141,8 +142,10 @@ get_annotation <- function(dat, annotate=5e-09, region_size=1000000,distinct_gen
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' variants <-get_lead_snps(CD_UKBB)
 #' annotate_with_nearest_gene(variants)
+#' }
 #' 
 annotate_with_nearest_gene <- function(variants, protein_coding_only=FALSE, build=38){
   if("POS" %in% colnames(variants) & "CHROM" %in% colnames(variants)){

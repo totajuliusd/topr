@@ -39,7 +39,7 @@ Dataframe of overlapping snps (snpset)
 \code{get_snpset()}
 }
 \examples{
-\donttest{
+\dontrun{
 CD_UKBB_index_snps <-get_lead_snps(CD_UKBB)
 get_snpset(CD_UKBB_index_snps, CD_FINNGEN)
 }

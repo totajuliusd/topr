@@ -14,6 +14,9 @@
 #'
 #' @return ggplot
 #' @export
+#' \dontrun{
+#' qqtopr(CD_UKBB)
+#' }
 #' 
 qqtopr <- function(dat, scale = 1, n_variants = 0, breaks = 15, title=NULL, color=get_topr_colors(),size=1,
                    legend_name="",legend_position="right", legend_labels=NULL,

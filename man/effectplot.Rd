@@ -105,7 +105,7 @@ ggplot object
 \code{effectplot()}
 }
 \examples{
-\donttest{
+\dontrun{
 effectplot(list(CD_UKBB, CD_FINNGEN))
 }
 

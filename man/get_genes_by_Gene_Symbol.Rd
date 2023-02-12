@@ -22,7 +22,7 @@ Required parameters is on gene name or a vector of gene names
 }
 \examples{
 \dontrun{
-get_genes_by_Gene_Symbol(c("FTO","THADA"))
+  get_genes_by_Gene_Symbol(c("FTO","THADA"))
 }
 
 }

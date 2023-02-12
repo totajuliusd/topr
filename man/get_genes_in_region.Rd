@@ -39,6 +39,7 @@ the genes the requested region
 \code{get_genes_in_region()}
 }
 \examples{
+\dontrun{
 get_genes_in_region(region="chr16:50593587-50834041")
-
+}
 }

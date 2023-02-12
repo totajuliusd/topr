@@ -391,7 +391,7 @@ get_lead_snps <- function(df, thresh=5e-09,region_size=1000000,protein_coding_on
 #'
 #' @examples
 #' \dontrun{
-#' get_genes_by_Gene_Symbol(c("FTO","THADA"))
+#'   get_genes_by_Gene_Symbol(c("FTO","THADA"))
 #' }
 #'
 get_genes_by_Gene_Symbol <- function(genes, chr=NULL, build=38){
