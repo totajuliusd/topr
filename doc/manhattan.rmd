@@ -1,0 +1,165 @@
+---
+title: "Intro into manhattan"
+author: "Thorhildur Juliusdottir"
+output: html_notebook
+---
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Intro into manhattan}
+-->
+
+```{r, include=FALSE}
+library(topr)
+library(dplyr)
+library(knitr)
+```
+<hr>
+
+## manhattan
+
+Displays GWAS results over the entire genome.
+
+Get an overview of the in-built Crohn's GWAS results (<code>CD_UKBB</code>):
+
+```{r, eval=FALSE}
+manhattan(CD_UKBB)
+```
+
+
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('figures/manhattan.jpg')
+```
+
+
+Annotate the lead/index variants (with p-values below 5e-9) with their nearest gene and add a title:
+```{r, eval=FALSE}
+manhattan(CD_UKBB, 
+          annotate = 5e-09,  
+          title = "Crohn's disease")
+```
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('figures/manhattan_annotate.jpg')
+```
+
+
+Display genes of interest at the bottom of the Manhattan plot to get a visual representation of their position relative to association peaks:
+
+```{r, eval=FALSE}
+genes = c("IL23R","NOTCH4","NOD2","JAK2","TTC33")
+manhattan(CD_UKBB, 
+          annotate = 5e-09, 
+          title = "Crohn's disease", 
+          highlight_genes = genes)
+```
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('figures/manhattan_genes.jpg')
+```
+
+
+View one chromosome only:
+
+```{r, eval=FALSE}
+manhattan(CD_UKBB, 
+          annotate = 5e-09, 
+          chr = "chr1")
+```
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('figures/manhattan_chr1.jpg')
+```
+
+
+Create a Manhattan of multiple GWAS results (represented as a list) on the same plot
+
+```{r eval=FALSE}
+manhattan(list(UC_UKBB, CD_UKBB), 
+          legend_labels = c("UC UKBB", "CD UKBB"))
+```
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('figures/manhattan_multi.jpg')
+```
+
+Show three GWAS results on the same plot, using different annotation thresholds for each dataset. Also, add genes of interest to the plot
+Use the ntop argument to control how many GWAS results are displayed at the top and bottom of the plot:
+
+```{r, eval=FALSE}
+manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB), 
+          legend_labels = c("CD UKBB", "CD FinnGen","UC UKBB"), 
+          annotate = c(5e-9,5e-12,1e-15),
+          region_size = "3Mb", 
+          ntop = 2, 
+          highlight_genes = genes, 
+          highlight_genes_ypos = -0.5 , 
+          title = "Inflammatory Bowel Disease")
+```
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('figures/manhattan_multi_ntop.jpg')
+```
+
+Make the plot prettier by giving more space to the labels by extending the yaxis (using <code>ymax</code> and <code>ymin</code>) and by changing the position and angle of the labels (using <code>angle</code> and the <code>nudge_y</code> arguments).
+
+```{r, eval=FALSE}
+manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB), 
+          legend_labels = c("CD UKBB", "CD FinnGen","UC UKBB"), 
+          annotate = c(5e-9,5e-12,1e-15),
+          region_size = "3Mb",
+          ntop = 2, 
+          highlight_genes = genes, 
+          highlight_genes_ypos = -1.5, 
+          title = "Inflammatory Bowel Disease", 
+          ymax = 65, 
+          ymin = -55, 
+          nudge_y = 12, 
+          angle = 90)
+```
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('figures/manhattan_multi_ntop_tidy.jpg')
+```
+
+The same plot as above with gray shades/rectangles distinguishing between chromosomes intead (using <code>theme_gray=T</code>)
+
+```{r, eval=FALSE}
+manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB), 
+          legend_labels = c("CD UKBB", "CD FinnGen","UC UKBB"), 
+          annotate = c(5e-9,5e-12,1e-15),
+          region_size = "3Mb",
+          ntop = 2, 
+          highlight_genes = genes, 
+          highlight_genes_ypos = -1.5 , 
+          title = "Inflammatory Bowel Disease", 
+          ymax = 65, 
+          ymin = -55, 
+          nudge_y = 12, 
+          angle = 90, 
+          theme_grey = T)
+```
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('figures/manhattan_multi_ntop_tidy_grey.jpg')
+```
+
+Use <code>annotate_with_vline</code> to highlight the association peaks in the <code>CD_UKBB</code> dataset. Use different <code>alpha</code>, <code>size</code> and <code>shape</code> for the three datasets.
+
+```{r, eval=FALSE}
+manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB), 
+          legend_labels = c("CD UKBB", "CD FinnGen","UC UKBB"), 
+          annotate_with_vline  = c(5e-9,5e-100,1e-100),
+          region_size="3Mb", 
+          ntop=1, 
+          highlight_genes = genes, 
+          highlight_genes_ypos = -0.5, 
+          title = "Inflammatory Bowel Disease", 
+          nudge_y = 6,
+          angle = 90, 
+          alpha = c(1, 1, 0.7),
+          size = c(1, 1.5, 0.9), 
+          shape = c(19,6,19), 
+          ymax=33)
+```
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('figures/manhattan_multi_ntop_tidy_vline.jpg')
+```
