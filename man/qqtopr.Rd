@@ -34,7 +34,7 @@ qqtopr(
 
 \item{title}{A string to set the plot title}
 
-\item{color}{A string or vector of strings setting the color's for the input dataset's}
+\item{color}{A string or vector of strings setting the color's for the input datasets}
 
 \item{size}{A number or a vector of numbers, setting the size of the plot points (default: \code{size=1.2})}
 
@@ -42,7 +42,7 @@ qqtopr(
 
 \item{legend_position}{A string, top,bottom,left or right}
 
-\item{legend_labels}{A string or vector of strings representing legend labels for the input dataset's}
+\item{legend_labels}{A string or vector of strings representing legend labels for the input datasets}
 
 \item{axis_text_size}{A number, size of the x and y axes tick labels (default: 12)}
 
@@ -62,4 +62,10 @@ ggplot
 \description{
 \code{qqtopr()} displays QQ plots for association data.
 Required parameter is at least one dataset (dataframe) containing the association data (with columns \code{CHROM,POS,P}
+}
+\examples{
+\dontrun{
+qqtopr(CD_UKBB)
+}
+
 }

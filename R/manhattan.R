@@ -81,7 +81,7 @@
 #' @import utils
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' manhattan(CD_UKBB)
 #' }
 

@@ -85,7 +85,7 @@ regionplot(
 \arguments{
 \item{df}{Dataframe or a list of dataframes (required columns are \code{CHROM,POS,P}), in upper- or lowercase) of association results.}
 
-\item{ntop}{An integer, number of datasets (GWASes) to show on the top plot}
+\item{ntop}{An integer, number of datasets (GWAS results) to show on the top plot}
 
 \item{annotate}{A number (p-value). Display annotation for variants with p-values below this threshold}
 
@@ -113,7 +113,7 @@ regionplot(
 
 \item{show_overview}{A logical scalar, shows/hides the overview plot (default= TRUE)}
 
-\item{show_exons}{Deprecated : A logical scalar, show exons instead of genees (default show_exons=FALSE)}
+\item{show_exons}{Deprecated : A logical scalar, show exons instead of genes (default show_exons=FALSE)}
 
 \item{max_genes}{An integer, only label the genes if they are fewer than max_genes (default values is 200).}
 
@@ -127,7 +127,7 @@ regionplot(
 
 \item{protein_coding_only}{A logical scalar, if TRUE, only protein coding genes are used for annotation}
 
-\item{region_size}{An integer (default = 1000000) (or a string represented as 100kb or 1MB) indicating the window size for variant labeling. Increase this number for sparser annotation and decrease for denser annotation.}
+\item{region_size}{An integer (default = 20000000) (or a string represented as 200kb or 2MB) indicating the window size for variant labeling. Increase this number for sparser annotation and decrease for denser annotation.}
 
 \item{gene_padding}{An integer representing size of the region around the gene, if the gene argument was used (default = 100000)}
 
@@ -157,7 +157,7 @@ regionplot(
 
 \item{show_gene_names}{A logical scalar, if set to TRUE, gene names are shown even though they exceed the max_genes count}
 
-\item{legend_labels}{A string or vector of strings representing legend labels for the input dataset's}
+\item{legend_labels}{A string or vector of strings representing legend labels for the input datasets}
 
 \item{gene}{A string representing the gene to zoom in on (e.g. gene=FTO)}
 
@@ -211,7 +211,7 @@ regionplot(
 
 \item{label_fontface}{A string or a vector of strings. Label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
 
-\item{label_family}{A stirng or a vector of strings. Label font name (default ggrepel argument is "")}
+\item{label_family}{A string or a vector of strings. Label font name (default ggrepel argument is "")}
 
 \item{gene_label_fontface}{Gene label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
 

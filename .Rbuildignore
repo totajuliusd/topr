@@ -15,7 +15,6 @@ vignettes/.gitignore
 pkgdown
 README.html
 README.md
-vignettes
 local
 .idea
 man/figures/manhattan_wide_1080_high.gif
@@ -24,3 +23,5 @@ lastMiKTeXException
 .RDataTmp
 ^cran-comments.md
 ^CRAN-SUBMISSION$
+^doc$
+^Meta$

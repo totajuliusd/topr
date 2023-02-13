@@ -22,7 +22,7 @@ A list containing two dataframes, one of overlapping snps and the other snps not
 \code{match_by_pos()}
 }
 \examples{
-\donttest{
+\dontrun{
 CD_UKBB_index_snps <- get_lead_snps(CD_UKBB)
 match_by_pos(CD_UKBB_index_snps, CD_FINNGEN)
 }

@@ -216,7 +216,11 @@ effect_plot <- function(dat,pheno_x="pheno_x", pheno_y="pheno_", annotate_with="
 #' @param build A string, genome build, choose between builds 37 (GRCh37) and 38 (GRCh38) (default is 38)
 #' @return Dataframe with the gene name and its genetic coordinates
 #' @export
-#'
+#' 
+#' @examples
+#' \dontrun{
+#' get_gene("FTO")
+#' }
 
 get_gene <- function(gene_name,chr=NULL, build=38){
   .Deprecated("get_gene")
@@ -241,7 +245,10 @@ get_gene <- function(gene_name,chr=NULL, build=38){
 #' @return Dataframe of lead variants. Returns the best variant per MB (by default, change the region size with the region argument) with p-values below the input threshold (thresh=5e-09 by default)
 #' @export
 #' @inheritParams regionplot
-
+#' @examples
+#' \dontrun{
+#'   get_best_snp_per_MB(CD_UKBB)
+#' }
 
 get_best_snp_per_MB <- function(df, thresh=5e-09,region_size=1000000,protein_coding_only=FALSE,chr=NULL, .checked=FALSE, verbose=FALSE){
   .Deprecated("get_lead_snps")

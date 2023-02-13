@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' CD_UKBB_index_snps <- get_lead_snps(CD_UKBB)
 #' snpset <- get_snpset(CD_UKBB_index_snps, CD_FINNGEN)
 #' flip_to_positive_allele_for_dat1(snpset$matched)
@@ -54,7 +54,7 @@ flip_to_positive_allele_for_dat1 <- function(df){
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' CD_UKBB_lead_snps <- get_lead_snps(CD_UKBB)
 #' snpset <- get_snpset(CD_UKBB_lead_snps, CD_FINNGEN)
 #' match_by_alleles(snpset$found)
@@ -115,7 +115,7 @@ match_by_alleles <- function(df, verbose=NULL, show_full_output=FALSE){
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' CD_UKBB_index_snps <- get_lead_snps(CD_UKBB)
 #' match_by_pos(CD_UKBB_index_snps, CD_FINNGEN)
 #' }
@@ -197,7 +197,7 @@ match_by_pos <- function(df1, df2, verbose=NULL, show_full_output=FALSE){
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' CD_UKBB_index_snps <-get_lead_snps(CD_UKBB)
 #' get_snpset(CD_UKBB_index_snps, CD_FINNGEN)
 #' }
@@ -239,7 +239,9 @@ get_snpset <- function(df1, df2, thresh=1e-08, protein_coding_only=TRUE, region_
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' get_snpset_code()
+#' }
 #'
 get_snpset_code <-function(){
   print("snpset_list <- df1 %>% get_lead_snps(thresh = 1e-08,region_size=1000000) %>% match_by_pos(df2)")
@@ -271,7 +273,7 @@ get_snpset_code <-function(){
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' effectplot(list(CD_UKBB, CD_FINNGEN))
 #' }
 #'

@@ -20,7 +20,7 @@ The input dataframe containing only those variants with matched alleles in the s
 \code{match_by_alleles()}
 }
 \examples{
-\donttest{
+\dontrun{
 CD_UKBB_lead_snps <- get_lead_snps(CD_UKBB)
 snpset <- get_snpset(CD_UKBB_lead_snps, CD_FINNGEN)
 match_by_alleles(snpset$found)

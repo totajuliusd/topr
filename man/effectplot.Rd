@@ -60,7 +60,7 @@ effectplot(
 
 \item{label_fontface}{A string or a vector of strings. Label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
 
-\item{label_family}{A stirng or a vector of strings. Label font name (default ggrepel argument is "")}
+\item{label_family}{A string or a vector of strings. Label font name (default ggrepel argument is "")}
 
 \item{nudge_y}{A number to horizontally adjust the starting position of each gene label (this is a ggrepel parameter)}
 
@@ -105,7 +105,7 @@ ggplot object
 \code{effectplot()}
 }
 \examples{
-\donttest{
+\dontrun{
 effectplot(list(CD_UKBB, CD_FINNGEN))
 }
 

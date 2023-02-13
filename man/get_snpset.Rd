@@ -24,7 +24,7 @@ get_snpset(
 
 \item{protein_coding_only}{Logical, set this variable to TRUE to only use protein_coding genes for annotation}
 
-\item{region_size}{An integer (default = 1000000) (or a string represented as 100kb or 1MB) indicating the window size for variant labeling. Increase this number for sparser annotation and decrease for denser annotation.}
+\item{region_size}{An integer (default = 20000000) (or a string represented as 200kb or 2MB) indicating the window size for variant labeling. Increase this number for sparser annotation and decrease for denser annotation.}
 
 \item{verbose}{Logical, (default: FALSE). Assign to TRUE to get information on which alleles are matched and which are not.}
 
@@ -39,7 +39,7 @@ Dataframe of overlapping snps (snpset)
 \code{get_snpset()}
 }
 \examples{
-\donttest{
+\dontrun{
 CD_UKBB_index_snps <-get_lead_snps(CD_UKBB)
 get_snpset(CD_UKBB_index_snps, CD_FINNGEN)
 }

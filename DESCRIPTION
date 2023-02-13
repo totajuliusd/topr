@@ -1,13 +1,12 @@
 Package: topr
 Title: Create Custom Plots for Viewing Genetic Association Results
-Version: 1.1.2
+Version: 1.1.3
 Authors@R: c(
-    person("Genuity", "Science", role = "cph", email = "thorhildur@genuitysci.com"),
-    person("Thorhildur", "Juliusdottir", role = c("aut", "cre"),email = "thorhildur@genuitysci.com"),
-    person("Andri", "Stefansson", role = "aut", email = "andri@genuitysci.com")
+    person("Thorhildur", "Juliusdottir", role = c("cph","aut", "cre"),email = "totajuliusd@gmail.com"),
+    person("Andri", "Stefansson", role = "aut", email = "andrimarstefansson@gmail.com")
     )
-URL: https://github.com/GenuityScience/topr
-BugReports: https://github.com/GenuityScience/topr/issues
+URL: https://github.com/totajuliusd/topr
+BugReports: https://github.com/totajuliusd/topr/issues
 Description: A collection of functions for visualizing,exploring and annotating genetic association results.Association results from multiple traits can be viewed simultaneously along with gene annotation, over the entire genome (Manhattan plot) or in the more detailed regional view.
 License: LGPL (>= 3)
 Encoding: UTF-8

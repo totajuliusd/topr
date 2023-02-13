@@ -13,6 +13,8 @@ Dataframe containing the top hit
 \code{get_snpset_code()}
 }
 \examples{
+\dontrun{
 get_snpset_code()
+}
 
 }

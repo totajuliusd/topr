@@ -1,3 +1,6 @@
+# 1.1.3
+* Fix to make topr compatible with the next version of dplyr
+
 # 1.1.2
 
 * the scale parameter for annotate_with_vline was fixed

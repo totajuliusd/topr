@@ -24,7 +24,7 @@ get_genes_in_region(
 
 \item{protein_coding_only}{A logical scalar, if TRUE, only protein coding genes are used for annotation}
 
-\item{show_exons}{Deprecated : A logical scalar, show exons instead of genees (default show_exons=FALSE)}
+\item{show_exons}{Deprecated : A logical scalar, show exons instead of genes (default show_exons=FALSE)}
 
 \item{show_genes}{A logical scalar, show genes instead of exons (default show_genes=FALSE)}
 
@@ -39,6 +39,7 @@ the genes the requested region
 \code{get_genes_in_region()}
 }
 \examples{
+\dontrun{
 get_genes_in_region(region="chr16:50593587-50834041")
-
+}
 }

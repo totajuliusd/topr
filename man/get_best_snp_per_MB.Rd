@@ -19,7 +19,7 @@ get_best_snp_per_MB(
 
 \item{thresh}{A number. P-value threshold, only extract variants with p-values below this threshold (5e-09 by default)}
 
-\item{region_size}{An integer (default = 1000000) (or a string represented as 100kb or 1MB) indicating the window size for variant labeling. Increase this number for sparser annotation and decrease for denser annotation.}
+\item{region_size}{An integer (default = 20000000) (or a string represented as 200kb or 2MB) indicating the window size for variant labeling. Increase this number for sparser annotation and decrease for denser annotation.}
 
 \item{protein_coding_only}{Logical, set this variable to TRUE to only use protein_coding genes for annotation}
 
@@ -36,4 +36,9 @@ Dataframe of lead variants. Returns the best variant per MB (by default, change 
 \code{get_best_snp_per_MB()} Get the top variants within 1 MB windows of the genome with association p-values below the given threshold
 
 This method is deprecated and will be removed in future versions. use \code{\link{get_lead_snps}} instead.
+}
+\examples{
+\dontrun{
+  get_best_snp_per_MB(CD_UKBB)
+}
 }

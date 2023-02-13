@@ -17,8 +17,8 @@ manhattan(
   size = 0.8,
   shape = 19,
   alpha = 1,
-  highlight_genes_color = "green",
-  highlight_genes_ypos = 1,
+  highlight_genes_color = "darkred",
+  highlight_genes_ypos = 1.5,
   axis_text_size = 12,
   axis_title_size = 14,
   title_text_size = 15,
@@ -29,11 +29,11 @@ manhattan(
   legend_labels = NULL,
   chr = NULL,
   annotate_with = "Gene_Symbol",
-  region_size = 1e+06,
+  region_size = 2e+07,
   legend_name = NULL,
   legend_position = "bottom",
   nudge_x = 0.1,
-  nudge_y = 0.2,
+  nudge_y = 0.7,
   xmin = NULL,
   xmax = NULL,
   ymin = NULL,
@@ -52,10 +52,10 @@ manhattan(
   rsids_with_vline = NULL,
   annotate_with_vline = NULL,
   shades_color = NULL,
-  shades_alpha = 0.1,
+  shades_alpha = 0.5,
   segment.size = 0.2,
   segment.color = "black",
-  segment.linetype = "solid",
+  segment.linetype = "dashed",
   max.overlaps = 10,
   label_fontface = "plain",
   label_family = "",
@@ -70,13 +70,14 @@ manhattan(
   vline_linetype = "dashed",
   vline_alpha = 1,
   vline_size = 0.5,
-  region = NULL
+  region = NULL,
+  theme_grey = FALSE
 )
 }
 \arguments{
 \item{df}{Dataframe or a list of dataframes (required columns are \code{CHROM,POS,P}), in upper- or lowercase) of association results.}
 
-\item{ntop}{An integer, number of datasets (GWASes) to show on the top plot}
+\item{ntop}{An integer, number of datasets (GWAS results) to show on the top plot}
 
 \item{title}{A string to set the plot title}
 
@@ -98,7 +99,7 @@ manhattan(
 
 \item{alpha}{A number or a vector of numbers setting the transparency of the plotted points}
 
-\item{highlight_genes_color}{A string, color for the highlighted genes (default: green)}
+\item{highlight_genes_color}{A string, color for the highlighted genes (default: darkred)}
 
 \item{highlight_genes_ypos}{An integer, controlling where on the y-axis the highlighted genes are placed (default value is 1)}
 
@@ -116,13 +117,13 @@ manhattan(
 
 \item{angle}{A number, the angle of the text label}
 
-\item{legend_labels}{A string or vector of strings representing legend labels for the input dataset's}
+\item{legend_labels}{A string or vector of strings representing legend labels for the input datasets}
 
 \item{chr}{A string or integer, the chromosome to plot (i.e. chr15), only required if the input dataframe contains results from more than one chromosome}
 
 \item{annotate_with}{A string. Annotate the variants with either Gene_Symbol or ID (default: "Gene_Symbol")}
 
-\item{region_size}{An integer (default = 1000000) (or a string represented as 100kb or 1MB) indicating the window size for variant labeling. Increase this number for sparser annotation and decrease for denser annotation.}
+\item{region_size}{An integer (default = 20000000) (or a string represented as 200kb or 2MB) indicating the window size for variant labeling. Increase this number for sparser annotation and decrease for denser annotation.}
 
 \item{legend_name}{A string, use to change the name of the legend (default: None)}
 
@@ -176,7 +177,7 @@ manhattan(
 
 \item{label_fontface}{A string or a vector of strings. Label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
 
-\item{label_family}{A stirng or a vector of strings. Label font name (default ggrepel argument is "")}
+\item{label_family}{A string or a vector of strings. Label font name (default ggrepel argument is "")}
 
 \item{gene_label_fontface}{Gene label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)}
 
@@ -201,6 +202,8 @@ manhattan(
 \item{vline_size}{The size of added vertical line/s (default : 0.5)}
 
 \item{region}{A string representing a genetic region, e.g. chr1:67038906-67359979}
+
+\item{theme_grey}{Use gray rectangles (instead of white to distinguish between chromosomes)}
 }
 \value{
 ggplot object
@@ -212,7 +215,7 @@ Required parameter is at least one dataset (dataframe) containing the associatio
 All other input parameters are optional
 }
 \examples{
-\donttest{
+\dontrun{
 manhattan(CD_UKBB)
 }
 }
