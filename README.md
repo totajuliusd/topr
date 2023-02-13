@@ -31,7 +31,7 @@ library(topr)
 
 ### Example input datasets 
 
-*See the <a href="https://genuityscience.github.io/topr/articles/input_datasets.html">Input datasets vignette</a> for more detailed information.*
+*See the <a href="https://totajuliusd.github.io/topr/articles/input_datasets.html">Input datasets vignette</a> for more detailed information.*
 
 Input datasets must include least three columns (<code>CHROM,
 POS</code> and <code>P</code>), where naming of the columns is flexible
@@ -60,7 +60,7 @@ our without the <i>chr</i> suffix, e.g (chr1 or 1)
 #### Manhattan
 <hr>
 
-*See the <a href="https://genuityscience.github.io/topr/articles/manhattan.html">Manhattan vignette</a> for more detailed examples of how to use the manhattan plot function.*
+*See the <a href="https:///totajuliusd.github.io/topr/articles/manhattan.html">Manhattan vignette</a> for more detailed examples of how to use the manhattan plot function.*
 
 View the whole genome association results on a Manhattan plot:
 
@@ -83,7 +83,7 @@ manhattan(list(CD_UKBB, CD_FINNGEN), legend_labels = c("UKBB", FinnGen"))
 
 #### Regionplot
 <hr>
-*See the <a href="https://genuityscience.github.io/topr/articles/regionplot.html">Regionplot vignette</a> for more detailed examples of how to use the regionplot function.*
+*See the <a href="https:///totajuliusd.github.io/topr/articles/regionplot.html">Regionplot vignette</a> for more detailed examples of how to use the regionplot function.*
 
 Further zoom-in on a genetic region by gene name (*IL23R*):
 

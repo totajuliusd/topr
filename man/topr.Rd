@@ -17,13 +17,11 @@ The main plotting functions are:
 }
 
 \examples{
-\dontrun{
 library(topr)
 # Create a manhattan plot using
 manhattan(CD_UKBB)
 
 # Create a regional plot
 regionplot(CD_UKBB, gene="IL23R")
-}
 
 }
