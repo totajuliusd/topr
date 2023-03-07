@@ -6,7 +6,7 @@
 \usage{
 get_lead_snps(
   df,
-  thresh = 5e-09,
+  thresh = 5e-08,
   region_size = 1e+06,
   protein_coding_only = FALSE,
   chr = NULL,
@@ -18,7 +18,7 @@ get_lead_snps(
 \arguments{
 \item{df}{Dataframe}
 
-\item{thresh}{A number. P-value threshold, only extract variants with p-values below this threshold (5e-09 by default)}
+\item{thresh}{A number. P-value threshold, only extract variants with p-values below this threshold (5e-08 by default)}
 
 \item{region_size}{An integer (default = 20000000) (or a string represented as 200kb or 2MB) indicating the window size for variant labeling. Increase this number for sparser annotation and decrease for denser annotation.}
 
@@ -33,7 +33,7 @@ get_lead_snps(
 \item{keep_chr}{Logical, set to FALSE to remove the "chr" prefix before each chromosome if present (TRUE by default)}
 }
 \value{
-Dataframe of lead variants. Returns the best variant per MB (by default, change the region size with the region argument) with p-values below the input threshold (thresh=5e-09 by default)
+Dataframe of lead variants. Returns the best variant per MB (by default, change the region size with the region argument) with p-values below the input threshold (thresh=5e-08 by default)
 }
 \description{
 \code{get_lead_snps()} Get the top variants within 1 MB windows of the genome with association p-values below the given threshold

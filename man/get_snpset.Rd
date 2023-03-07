@@ -7,7 +7,7 @@
 get_snpset(
   df1,
   df2,
-  thresh = 1e-08,
+  thresh = 5e-08,
   protein_coding_only = TRUE,
   region_size = 1e+06,
   verbose = NULL,
@@ -20,7 +20,7 @@ get_snpset(
 
 \item{df2}{The dataframe in which to search for overlapping SNPs from dataframe1}
 
-\item{thresh}{A number. P-value threshold, only extract variants with p-values below this threshold (5e-09 by default)}
+\item{thresh}{A number. P-value threshold, only extract variants with p-values below this threshold (5e-08 by default)}
 
 \item{protein_coding_only}{Logical, set this variable to TRUE to only use protein_coding genes for annotation}
 
