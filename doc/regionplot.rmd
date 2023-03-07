@@ -3,10 +3,9 @@ title: "Intro into regionplot"
 author: "Thorhildur Juliusdottir"
 output: html_notebook
 ---
-<!--
+
 %\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{Intro into regionplot}
--->
 
 ```{r, include=FALSE}
     library(topr)

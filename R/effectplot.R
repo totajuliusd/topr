@@ -203,7 +203,7 @@ match_by_pos <- function(df1, df2, verbose=NULL, show_full_output=FALSE){
 #' }
 #'
 
-get_snpset <- function(df1, df2, thresh=1e-08, protein_coding_only=TRUE, region_size=1000000, verbose=NULL, show_full_output=FALSE, build=38){
+get_snpset <- function(df1, df2, thresh=5e-08, protein_coding_only=TRUE, region_size=1000000, verbose=NULL, show_full_output=FALSE, build=38){
   snpset <- NULL
   
   if(is.list(df1) & length(df1)==2){
@@ -244,7 +244,7 @@ get_snpset <- function(df1, df2, thresh=1e-08, protein_coding_only=TRUE, region_
 #' }
 #'
 get_snpset_code <-function(){
-  print("snpset_list <- df1 %>% get_lead_snps(thresh = 1e-08,region_size=1000000) %>% match_by_pos(df2)")
+  print("snpset_list <- df1 %>% get_lead_snps(thresh = 5e-08,region_size=1000000) %>% match_by_pos(df2)")
   print("snps_matched <- snpset_list$found %>% match_by_alleles()")
   print("snps_matched_flipped %>% snps_matched$matched %>% flip_to_positive_allele_for_dat1()")
 }
@@ -278,10 +278,10 @@ get_snpset_code <-function(){
 #' }
 #'
 
-effectplot <- function(df,pheno_x="x_pheno", pheno_y="y_pheno", annotate_with="Gene_Symbol", thresh=1e-08, ci_thresh=1,gene_label_thresh = 1e-08, 
+effectplot <- function(df,pheno_x="x_pheno", pheno_y="y_pheno", annotate_with="Gene_Symbol", thresh=5e-08, ci_thresh=1,gene_label_thresh = 5e-08, 
                        color=get_topr_colors()[1],scale=1, build=38,label_fontface="italic",label_family="",nudge_y=0.001,nudge_x=0.001,size=2,
                        segment.size=0.2,segment.linetype="solid",segment.color="transparent",angle=0,title=NULL,
-                       axis_text_size=10,axis_title_size=12, title_text_size=13,subtitle_text_size=11,gene_label_size=3.2,snpset_thresh=1e-08,
+                       axis_text_size=10,axis_title_size=12, title_text_size=13,subtitle_text_size=11,gene_label_size=3.2,snpset_thresh=5e-08,
                        snpset_region_size=1000000,max.overlaps=10, annotate=0,label_color=NULL){
   if (!missing(gene_label_thresh)) deprecated_argument_msg(gene_label_thresh)
    dat <- df

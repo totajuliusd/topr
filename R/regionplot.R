@@ -40,7 +40,7 @@
 
 regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alpha=1,label_size=4, annotate_with="ID",
                        color=get_topr_colors(), axis_text_size=11,axis_title_size=12,title_text_size=13, show_genes=NULL, show_overview=TRUE,
-                       show_exons=FALSE,max_genes=200, sign_thresh=5e-09, sign_thresh_color="red", sign_thresh_label_size=3.5,
+                       show_exons=FALSE,max_genes=200, sign_thresh=5e-08, sign_thresh_color="red", sign_thresh_label_size=3.5,
                        xmax=NULL,ymin=NULL,ymax=NULL,protein_coding_only=FALSE,region_size=1000000,gene_padding=100000,angle=0,legend_title_size=12,legend_text_size=11,
                        nudge_x=0.01,nudge_y=0.01, rsids=NULL, variant=NULL,rsids_color=NULL,legend_name="",legend_position="right",
                        chr=NULL,vline=NULL,show_gene_names=NULL,legend_labels=NULL,gene=NULL, title=NULL, label_color=NULL,locuszoomplot=FALSE,

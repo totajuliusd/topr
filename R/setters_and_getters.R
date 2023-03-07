@@ -228,7 +228,7 @@ get_chr_lengths_and_offsets <- function(include_chrX=F){
   if(include_chrX)
     no_chrs <- 23
   chr_lengths <- chr_lengths %>% dplyr::filter(CHROM< no_chrs +1 )
- chr_lengths_and_offsets <- chr_lengths %>% dplyr::group_by(CHROM) %>% dplyr::summarize(m=V2) %>% dplyr::mutate(offset=cumsum(lag(m, default=0)))
+ chr_lengths_and_offsets <- chr_lengths %>% dplyr::group_by(CHROM) %>% dplyr::summarize(m=V2) %>% dplyr::mutate(offset=cumsum(as.numeric(lag(m, default=0))))
   return(chr_lengths_and_offsets)
 }
 
@@ -298,13 +298,13 @@ get_pos_with_offset <- function(df,offsets){
 #'
 #'
 #' @param df Dataframe
-#' @param thresh A number. P-value threshold, only extract variants with p-values below this threshold (5e-09 by default)
+#' @param thresh A number. P-value threshold, only extract variants with p-values below this threshold (5e-08 by default)
 #' @param protein_coding_only Logical, set this variable to TRUE to only use protein_coding genes for annotation
 #' @param chr String, get the top variants from one chromosome only, e.g. chr="chr1"
 #' @param .checked Logical, if the input data has already been checked, this can be set to TRUE so it wont be checked again (FALSE by default)
 #' @param verbose Logical, set to TRUE to get printed information on number of SNPs extracted
 #' @param keep_chr Logical, set to FALSE to remove the "chr" prefix before each chromosome if present (TRUE by default) 
-#' @return Dataframe of lead variants. Returns the best variant per MB (by default, change the region size with the region argument) with p-values below the input threshold (thresh=5e-09 by default)
+#' @return Dataframe of lead variants. Returns the best variant per MB (by default, change the region size with the region argument) with p-values below the input threshold (thresh=5e-08 by default)
 #' @export
 #' @inheritParams regionplot
 #' @examples
@@ -312,7 +312,7 @@ get_pos_with_offset <- function(df,offsets){
 #' get_lead_snps(CD_UKBB)
 #' }
 #'
-get_lead_snps <- function(df, thresh=5e-09,region_size=1000000,protein_coding_only=FALSE,chr=NULL, .checked=FALSE, verbose=NULL, keep_chr=TRUE){
+get_lead_snps <- function(df, thresh=5e-08,region_size=1000000,protein_coding_only=FALSE,chr=NULL, .checked=FALSE, verbose=NULL, keep_chr=TRUE){
   variants <- df[0,]
   dat <- df
   if(is.data.frame(dat)) dat <- list(dat)

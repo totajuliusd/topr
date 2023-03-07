@@ -50,7 +50,7 @@ get_main_LD_snp <- function(dat, nudge_x=0.1,nudge_y=0.1,angle=0,label_fontface=
   top_snps$nudge_x <- nudge_x; top_snps$nudge_y=nudge_y; top_snps$fontface<- label_fontface; top_snps$family <- label_family; top_snps$angle <- angle; top_snps$alpha=label_alpha;
   return(top_snps)
 }
-get_annotation <- function(dat, annotate=5e-09, region_size=1000000,distinct_gene_labels=FALSE,protein_coding_only=FALSE, verbose=NULL,nudge_x=0.1,nudge_y=0.1,
+get_annotation <- function(dat, annotate=5e-08, region_size=1000000,distinct_gene_labels=FALSE,protein_coding_only=FALSE, verbose=NULL,nudge_x=0.1,nudge_y=0.1,
                            angle=0,label_fontface="plain",label_family="",build=38, label_alpha=1){
   if(is.data.frame(dat)){dat <- list(dat)}
   if("log10p" %in% colnames(dat[[1]])){
