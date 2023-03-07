@@ -1,11 +1,11 @@
 ---
 title: "topr"
 output: rmarkdown::html_vignette
-vignette: >
+vignette: 
   %\VignetteIndexEntry{topr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(

@@ -3,10 +3,9 @@ title: "Intro into manhattan"
 author: "Thorhildur Juliusdottir"
 output: html_notebook
 ---
-<!--
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Intro into manhattan}
--->
+
+\VignetteEngine{knitr::knitr}
+\VignetteIndexEntry{Intro into manhattan}
 
 ```{r, include=FALSE}
 library(topr)

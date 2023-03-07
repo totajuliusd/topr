@@ -20,7 +20,7 @@
 #' @param annotate_with A string. Annotate the variants with either Gene_Symbol or ID (default: "Gene_Symbol")
 #' @param label_size An number to set the size of the plot labels (default: \code{label_size=3})
 #' @param label_color A string or a vector of strings. To change the color of the gene or variant labels
-#' @param sign_thresh A number or vector of numbers, setting the horizontal significance threshold (default: \code{sign_thresh=5.1e-9}). Set to NULL to hide the significance threshold.
+#' @param sign_thresh A number or vector of numbers, setting the horizontal significance threshold (default: \code{sign_thresh=5e-8}). Set to NULL to hide the significance threshold.
 #' @param sign_thresh_color A string or vector of strings to set the color/s of the significance threshold/s
 #' @param highlight_genes A string or vector of strings, gene or genes to highlight at the bottom of the plot
 #' @param highlight_genes_ypos An integer, controlling where on the y-axis the highlighted genes are placed (default value is 1)
@@ -86,7 +86,7 @@
 #' }
 
 manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(),
-                   sign_thresh=5e-09,sign_thresh_color="red", sign_thresh_label_size=3.5, label_size=3.5, size=0.8,shape=19,alpha=1,
+                   sign_thresh=5e-08,sign_thresh_color="red", sign_thresh_label_size=3.5, label_size=3.5, size=0.8,shape=19,alpha=1,
                    highlight_genes_color="darkred",highlight_genes_ypos=1.5,axis_text_size=12,axis_title_size=14, title_text_size=15,
                    legend_title_size=13,legend_text_size=12, protein_coding_only=TRUE,angle=0,
                    legend_labels=NULL,chr=NULL, annotate_with="Gene_Symbol",region_size=20000000,legend_name=NULL,
