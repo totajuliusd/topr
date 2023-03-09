@@ -1,3 +1,7 @@
+# 1.1.4
+* Default significance threshold changed from 5e-9 to 5e-8
+* Updated README
+
 # 1.1.3
 * Fix to make topr compatible with the next version of dplyr
 

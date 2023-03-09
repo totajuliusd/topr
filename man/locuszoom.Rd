@@ -22,7 +22,7 @@ locuszoom(
   show_overview = FALSE,
   show_exons = FALSE,
   max_genes = 200,
-  sign_thresh = 5e-09,
+  sign_thresh = 5e-08,
   sign_thresh_color = "red",
   sign_thresh_label_size = 3.5,
   xmax = NULL,
@@ -112,7 +112,7 @@ locuszoom(
 
 \item{max_genes}{An integer, only label the genes if they are fewer than max_genes (default values is 200).}
 
-\item{sign_thresh}{A number or vector of numbers, setting the horizontal significance threshold (default: \code{sign_thresh=5.1e-9}). Set to NULL to hide the significance threshold.}
+\item{sign_thresh}{A number or vector of numbers, setting the horizontal significance threshold (default: \code{sign_thresh=5e-8}). Set to NULL to hide the significance threshold.}
 
 \item{sign_thresh_color}{A string or vector of strings to set the color/s of the significance threshold/s}
 
