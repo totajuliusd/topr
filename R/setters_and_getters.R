@@ -117,6 +117,8 @@ get_genes <- function(chr,xmin=0,xmax=NULL,protein_coding_only=FALSE, build=38){
   if(is.null(xmax)){
     xmax <- chr_lengths[chr_lengths$V1 == chr,]$V2
   }
+  if(chr == "chr23"){ chr="chrX"}
+  if(chr == "23"){ chr="X"}
   if(build == "38")
     genes <- toprdata::ENSGENES %>% dplyr::filter(chrom==chr)  %>% dplyr::filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax | gene_start == xmin | gene_end == xmax)
   else if(build == "37")
