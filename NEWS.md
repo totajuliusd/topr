@@ -1,3 +1,6 @@
+# 1.1.6
+* Updated documentation
+
 # 1.1.5
 * Fix for chrX when displaying genes in regionplot
 
