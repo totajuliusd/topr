@@ -241,6 +241,8 @@ if(!is.null(sign_thresh)){
     gene_plot <- get_gene_plot(plot_args,label_size=label_size,xmin = xmin, xmax = xmax, show_gene_names = show_gene_names,scale=scale, 
                                show_gene_legend=show_gene_legend,gene_color=gene_color,gene_label_fontface = gene_label_fontface,gene_label_family = gene_label_family)
   gene_plot <- gene_plot + scale_y_continuous(expand=c(.02,.02)) + scale_x_continuous(expand=c(.01,.01))
+  if(chr == "chr23"){ chr="chrX"}
+  if(chr == "23"){ chr="X"}
   gene_plot <- gene_plot + xlab(paste("Position on Chromosome ",gsub('chr','',chr), sep=""))
   gene_plot <- gene_plot %>% add_vline(vline, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
   gene_plot <- gene_plot %>% set_legend_texts(legend_title_size=legend_title_size, legend_text_size=legend_text_size,scale=scale)
