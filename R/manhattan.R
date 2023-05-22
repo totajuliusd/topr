@@ -104,8 +104,9 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     dat <- dat %>% set_size_shape_alpha(size, shape, alpha) %>% set_color(color) %>% set_log10p(ntop)
      
     using_ntop <- FALSE
+    if(length(unique(dat[[1]]$CHROM))==1){chr<-unique(dat[[1]]$CHROM)}
     
-     if(! is.null(region)){
+    if(! is.null(region)){
       tmp <- unlist(stringr::str_split(region, ":"))
       chr <- tmp[1]
       tmp_pos <- unlist(stringr::str_split(tmp[2], "-"))
@@ -151,6 +152,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
       }
     }
     shades=NULL
+
     if(length(unique(dat[[1]]$CHROM))>1 & is.null(chr)){  #Manhattan plot
       incl_chrX <- include_chrX(dat)
       offsets <- get_chr_offsets(incl_chrX)
