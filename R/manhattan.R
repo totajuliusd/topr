@@ -44,10 +44,10 @@
 #' @param sign_thresh_label_size  A number setting the text size of the label for the significance thresholds (default text size is 3.5)
 #' @param gene_label_size A number setting the size of the gene labels shown at the bottom of the plot
 #' @param gene_label_angle A number setting the angle of the gene label shown at the bottom of the plot (default: 0)
-#' @param scale A number, to change the size of the title and axes labels and ticks at the same time (default = 1)
-#' @param show_legend A logical scalar, set to FALSE to hide the legend (default value is TRUE)
-#' @param sign_thresh_linetype A string, the line-type of the horizontal significance threshold (default = dashed)
-#' @param sign_thresh_size A number, sets the size of the horizontal significance threshold line (default = 1)
+#' @param scale A number, to change the size of the title and axes labels and ticks at the same time (default : 1)
+#' @param show_legend A logical scalar, set to FALSE to hide the legend (default : TRUE)
+#' @param sign_thresh_linetype A string, the line-type of the horizontal significance threshold (default : dashed)
+#' @param sign_thresh_size A number, sets the size of the horizontal significance threshold line (default : 1)
 #' @param rsids A string (rsid) or vector of strings to highlight on the plot, e.g. \code{rsids=c("rs1234, rs45898")}
 #' @param rsids_color A string, the color of the variants in variants_id (default color is red)
 #' @param rsids_with_vline  A string (rsid) or vector of strings to highlight on the plot with their rsids and vertical lines further highlighting their positions
@@ -73,6 +73,7 @@
 #' @param vline_size The size of added vertical line/s (default : 0.5)  
 #' @param region A string representing a genetic region, e.g. chr1:67038906-67359979
 #' @param theme_grey Use gray rectangles (instead of white to distinguish between chromosomes)
+#' @param xaxis_label The label for the x-axis (default: Chromosome)
 #'
 #' @return ggplot object
 #' @export
@@ -96,16 +97,16 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
                   rsids_with_vline=NULL,annotate_with_vline=NULL,shades_color=NULL,shades_alpha=0.5,segment.size=0.2, 
                   segment.color="black",segment.linetype="dashed",max.overlaps=10,label_fontface="plain",label_family="",
                   gene_label_fontface="plain",gene_label_family="",build=38,verbose=NULL,label_alpha=1,shades_line_alpha=1,vline=NULL,
-                  vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5,region=NULL, theme_grey=FALSE){
+                  vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5,region=NULL, theme_grey=FALSE, xaxis_label="Chromosome"){
     top_snps <- NULL
     genes_df <- NULL
-    xaxis_label <- "Chromosome"
     dat <- dat_check(df, verbose=verbose)
     dat <- dat %>% set_size_shape_alpha(size, shape, alpha) %>% set_color(color) %>% set_log10p(ntop)
      
     using_ntop <- FALSE
+    if(length(unique(dat[[1]]$CHROM))==1){chr<-unique(dat[[1]]$CHROM)}
     
-     if(! is.null(region)){
+    if(! is.null(region)){
       tmp <- unlist(stringr::str_split(region, ":"))
       chr <- tmp[1]
       tmp_pos <- unlist(stringr::str_split(tmp[2], "-"))
@@ -151,6 +152,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
       }
     }
     shades=NULL
+
     if(length(unique(dat[[1]]$CHROM))>1 & is.null(chr)){  #Manhattan plot
       incl_chrX <- include_chrX(dat)
       offsets <- get_chr_offsets(incl_chrX)
