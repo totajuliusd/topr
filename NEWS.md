@@ -1,3 +1,8 @@
+# 1.1.7
+* Placeholder added when there are no genes in the region on display
+* Fix for the manhattan function to handle one chromosome datasets
+* xaxis_label added as an input argument to the manhattan plot function
+
 # 1.1.6
 * Updated documentation
 
