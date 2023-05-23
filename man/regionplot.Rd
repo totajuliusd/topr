@@ -173,13 +173,13 @@ regionplot(
 
 \item{gene_label_size}{A number setting the size of the gene labels shown at the bottom of the plot}
 
-\item{scale}{A number, to change the size of the title and axes labels and ticks at the same time (default = 1)}
+\item{scale}{A number, to change the size of the title and axes labels and ticks at the same time (default : 1)}
 
-\item{show_legend}{A logical scalar, set to FALSE to hide the legend (default value is TRUE)}
+\item{show_legend}{A logical scalar, set to FALSE to hide the legend (default : TRUE)}
 
-\item{sign_thresh_linetype}{A string, the line-type of the horizontal significance threshold (default = dashed)}
+\item{sign_thresh_linetype}{A string, the line-type of the horizontal significance threshold (default : dashed)}
 
-\item{sign_thresh_size}{A number, sets the size of the horizontal significance threshold line (default = 1)}
+\item{sign_thresh_size}{A number, sets the size of the horizontal significance threshold line (default : 1)}
 
 \item{rsids_with_vline}{A string (rsid) or vector of strings to highlight on the plot with their rsids and vertical lines further highlighting their positions}
 
