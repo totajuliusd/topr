@@ -162,13 +162,13 @@ locuszoom(
 
 \item{region}{A string representing a genetic region, e.g. chr1:67038906-67359979}
 
-\item{scale}{A number, to change the size of the title and axes labels and ticks at the same time (default = 1)}
+\item{scale}{A number, to change the size of the title and axes labels and ticks at the same time (default : 1)}
 
 \item{rsids_with_vline}{A string (rsid) or vector of strings to highlight on the plot with their rsids and vertical lines further highlighting their positions}
 
 \item{annotate_with_vline}{A number (p-value). Display annotation and vertical lines for variants with p-values below this threshold}
 
-\item{sign_thresh_size}{A number, sets the size of the horizontal significance threshold line (default = 1)}
+\item{sign_thresh_size}{A number, sets the size of the horizontal significance threshold line (default : 1)}
 
 \item{unit_main}{the height unit of the main plot (default = 7)}
 
@@ -200,7 +200,7 @@ locuszoom(
 
 \item{verbose}{Logical, set to FALSE to get suppress printed information}
 
-\item{show_legend}{A logical scalar, set to FALSE to hide the legend (default value is TRUE)}
+\item{show_legend}{A logical scalar, set to FALSE to hide the legend (default : TRUE)}
 
 \item{label_alpha}{An number or vector of numbers to set the transparency of the plot labels (default: \code{label_alpha=1})}
 

@@ -54,7 +54,7 @@ effectplot(
 
 \item{color}{A string, default value is the first of the topr colors}
 
-\item{scale}{A number, to change the size of the title and axes labels and ticks at the same time (default = 1)}
+\item{scale}{A number, to change the size of the title and axes labels and ticks at the same time (default : 1)}
 
 \item{build}{A number representing the genome build. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).}
 

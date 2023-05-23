@@ -71,7 +71,8 @@ manhattan(
   vline_alpha = 1,
   vline_size = 0.5,
   region = NULL,
-  theme_grey = FALSE
+  theme_grey = FALSE,
+  xaxis_label = "Chromosome"
 )
 }
 \arguments{
@@ -147,13 +148,13 @@ manhattan(
 
 \item{gene_label_angle}{A number setting the angle of the gene label shown at the bottom of the plot (default: 0)}
 
-\item{scale}{A number, to change the size of the title and axes labels and ticks at the same time (default = 1)}
+\item{scale}{A number, to change the size of the title and axes labels and ticks at the same time (default : 1)}
 
-\item{show_legend}{A logical scalar, set to FALSE to hide the legend (default value is TRUE)}
+\item{show_legend}{A logical scalar, set to FALSE to hide the legend (default : TRUE)}
 
-\item{sign_thresh_linetype}{A string, the line-type of the horizontal significance threshold (default = dashed)}
+\item{sign_thresh_linetype}{A string, the line-type of the horizontal significance threshold (default : dashed)}
 
-\item{sign_thresh_size}{A number, sets the size of the horizontal significance threshold line (default = 1)}
+\item{sign_thresh_size}{A number, sets the size of the horizontal significance threshold line (default : 1)}
 
 \item{rsids}{A string (rsid) or vector of strings to highlight on the plot, e.g. \code{rsids=c("rs1234, rs45898")}}
 
@@ -204,6 +205,8 @@ manhattan(
 \item{region}{A string representing a genetic region, e.g. chr1:67038906-67359979}
 
 \item{theme_grey}{Use gray rectangles (instead of white to distinguish between chromosomes)}
+
+\item{xaxis_label}{The label for the x-axis (default: Chromosome)}
 }
 \value{
 ggplot object
