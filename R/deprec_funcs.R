@@ -223,7 +223,7 @@ effect_plot <- function(dat,pheno_x="pheno_x", pheno_y="pheno_", annotate_with="
 #' }
 
 get_gene <- function(gene_name,chr=NULL, build=38){
-  .Deprecated("get_gene")
+  .Deprecated("get_gene_coords")
   return(get_gene_coords(gene_name=gene_name,chr=chr,build=build))
 }
 
