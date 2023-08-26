@@ -162,30 +162,21 @@ get_chr_from_df <- function(df){
 
 get_shades <- function(offsets,dat,ntop=ntop,include_chrX=FALSE,ymin=NULL,ymax=NULL){
    n_offsets <- 11
-  if(!(include_chrX)) n_offsets <-10
   y1 <- c(rep(0, n_offsets))  #if there is no bottom plot
-  if(is.null(ymin)){
+  if(is.null(ymin))
     ymin <- get_ymin(dat)
-  }
-  if(length(dat) > ntop){
+  if(length(dat) > ntop)
     y1 <- c(rep(ymin, n_offsets))
-  }
   if(is.null(ymax)){
     ymax <- get_ymax(dat)
   }
-  ##### here we need to account for whether we have chr X or not
-  if(include_chrX){
-      shades <- data.frame(x1=c(offsets[[2]],offsets[[4]],offsets[[6]],offsets[[8]],offsets[[10]],offsets[[12]],offsets[[14]],offsets[[16]],offsets[[18]],offsets[[20]],offsets[[22]]),
-                      x2=c(offsets[[3]],offsets[[5]],offsets[[7]], offsets[[9]],offsets[[11]],offsets[[13]],offsets[[15]],offsets[[17]],offsets[[19]],offsets[[21]],offsets[[23]]),
+  offset23 <- offsets[[23]]
+   if(! include_chrX)
+    offset23 <- offset23+4000000
+  shades <- data.frame(x1=c(offsets[[2]],offsets[[4]],offsets[[6]],offsets[[8]],offsets[[10]],offsets[[12]],offsets[[14]],offsets[[16]],offsets[[18]],offsets[[20]],offsets[[22]]),
+                      x2=c(offsets[[3]],offsets[[5]],offsets[[7]], offsets[[9]],offsets[[11]],offsets[[13]],offsets[[15]],offsets[[17]],offsets[[19]],offsets[[21]],offset23),
                       y1=y1,
                       y2=c(rep(ymax, n_offsets)))
-  }
-  else{
-    shades <- data.frame(x1=c(offsets[[2]],offsets[[4]],offsets[[6]],offsets[[8]],offsets[[10]],offsets[[12]],offsets[[14]],offsets[[16]],offsets[[18]],offsets[[20]]),
-                      x2=c(offsets[[3]],offsets[[5]],offsets[[7]], offsets[[9]],offsets[[11]],offsets[[13]],offsets[[15]],offsets[[17]],offsets[[19]],offsets[[21]]),
-                      y1=y1,
-                      y2=c(rep(ymax, n_offsets)))
-  }
   return(shades)
 }
 
@@ -225,7 +216,8 @@ get_chr_lengths_and_offsets <- function(include_chrX=F){
   chr_lengths[chr_lengths$CHROM=="X",'CHROM'] <- "23"
   chr_lengths[chr_lengths$CHROM=="Y",'CHROM'] <- "24"
   chr_lengths$CHROM <- as.integer(chr_lengths$CHROM)
-  no_chrs <-ifelse(include_chrX, 23,22)
+  no_chrs <- 23
+  #no_chrs <-ifelse(include_chrX, 23,22)
   chr_lengths <- chr_lengths %>% dplyr::filter(CHROM< no_chrs +1 )
   chr_lengths_and_offsets <- chr_lengths %>% dplyr::group_by(CHROM) %>% dplyr::summarize(m=V2) %>% dplyr::mutate(offset=cumsum(as.numeric(lag(m, default=0))))
   return(chr_lengths_and_offsets)
@@ -259,15 +251,8 @@ get_ticknames <- function(df){
 get_ticks <- function(dat){
   df <- dat[[1]]
   for(i in seq_along(dat)){ if(length(unique(dat[[i]]$CHROM))  > length(unique(df$CHROM))){ df <- dat[[i]] } }
-  no_chrs <- ifelse("chrX" %in% df$CHROM || "X" %in% df$CHROM || "chr23" %in% df$CHROM || "23" %in% df$CHROM, 23, 22)
-  include_chrX <- T
-  if(no_chrs == 23){
-    ticknames <- c(1:16, '',18, '',20, '',22, 'X')
-  }else{
-    ticknames <- c(1:16, '',18, '',20, '',22)
-    include_chrX <- F
-  }
-  chr_lengts_and_offsets <- get_chr_lengths_and_offsets(include_chrX)
+  ticknames <- c(1:16, '',18, '',20, '',22, 'X')
+  chr_lengts_and_offsets <- get_chr_lengths_and_offsets()
   tickpos <-chr_lengts_and_offsets %>% dplyr::group_by(CHROM)%>%
     dplyr::summarize(pm=offset+(m/2))%>%
     dplyr::pull(pm)

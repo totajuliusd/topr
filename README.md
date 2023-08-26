@@ -3,6 +3,12 @@
 
 <img src="man/figures/manhattan_wide_1080_high.gif" alt="topr GIF" width="100%">
 
+## Citation
+
+Please cite the following paper if you use *topr* in a publication:
+
+Juliusdottir, T. *topr*: an R package for viewing and annotating genetic association results. BMC Bioinformatics 24, 268 (2023). https://doi.org/10.1186/s12859-023-05301-4
+
 
 ## Installation
 <hr>
