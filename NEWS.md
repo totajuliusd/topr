@@ -1,5 +1,5 @@
 # 1.1.8
-* Missing shade added for chr21 on Manhattan plot when chrX is not included in the dataset.
+* Missing shade added for chr22 on Manhattan plot when chrX is not included in the dataset.
 
 # 1.1.7
 * Placeholder added when there are no genes in the region on display
