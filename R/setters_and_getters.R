@@ -33,19 +33,40 @@ set_annotate <- function(dat,annotate){
   return(dat)
 }
 
-set_color <- function(dat,color){
+set_color <- function(dat,color,shades_alpha=0.5, use_shades=T, chr_lightness=0.80){
   if(length(color) < length(dat))
     stop(paste("There are ",length(dat), " datasets, but only ",length(color), " color. Add more colors with the color argument, eg. color=c(\"blue\",\"yellow\",\"green\", etc)"))
   for(i in seq_along(dat)){
     if(!is.null(color) & nrow(dat[[i]]>0)){
-      if(is.vector(color) & (length(color) >= i))
-        dat[[i]]$color <- color[i]
+      if(is.vector(color) & (length(color) >= i)){
+        if(use_shades)
+          dat[[i]]$color <- color[i]
+        else{                  
+          even_chr_color <- lightness(color[i], get_chr_lightness(chr_lightness,i) )
+          dat[[i]]$color <- ifelse((dat[[i]]$CHROM %% 2) == 0, even_chr_color , color[i]) 
+        }
+      }
       else
         dat[[i]]$color <- color
     }
   }
   return(dat)
 }
+
+get_chr_lightness <- function(chr_lightness, i){
+   if(is.null(chr_lightness) || !is.numeric(chr_lightness))
+     chr_lightness <- 0.8
+   if(is.vector(chr_lightness)){
+     if(length(chr_lightness) >= i)
+        chr_lightness <- chr_lightness[i]
+    else
+        chr_lightness <- chr_lightness[length(chr_lightness)]
+   }
+  return(chr_lightness)
+}
+
+
+
 
 set_size <- function(dat,size, locuszoomplot = locuszoomplot){
   if(is.null(size))
@@ -313,7 +334,7 @@ get_lead_snps <- function(df, thresh=5e-08,region_size=1000000,protein_coding_on
   if(! .checked){
     dat <- dat_check(dat, verbose=verbose)
   }
- 
+
   df <- dat[[1]]
   if(! is.null(chr)){
     chr <- gsub("chr","", chr)
@@ -335,6 +356,7 @@ get_lead_snps <- function(df, thresh=5e-08,region_size=1000000,protein_coding_on
     }
     lead_snps <- df %>% dplyr::group_by(CHROM,tmp) %>% dplyr::arrange(P) %>% distinct(P, .keep_all=T) %>% dplyr::filter(P == min(P))
     variants <- dplyr::ungroup(lead_snps)%>% dplyr::distinct(CHROM,POS, .keep_all = T)
+    variants$color <-  dat[[1]][1,"color"]
     if(! is.null(verbose)){
       if(verbose){
         print(paste("Found ",length(variants$POS), " index/lead variants with a p-value below ", thresh, sep=""))

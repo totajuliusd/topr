@@ -74,6 +74,10 @@
 #' @param region A string representing a genetic region, e.g. chr1:67038906-67359979
 #' @param theme_grey Use gray rectangles (instead of white to distinguish between chromosomes)
 #' @param xaxis_label The label for the x-axis (default: Chromosome)
+#' @param use_shades Use shades/rectangles to distinguish between chromosomes
+#' @param even_no_chr_lightness Lightness value for even numbered chromosomes. A number or vector of numbers between 0 and 1 (default: 0.8). If set to 0.5, the same color as shown for odd numbered chromosomes is displayed. A value below 0.5 will result in a darker color displayed for even numbered chromosomes, whereas a value above 0.5 results in a lighter color.
+#' 
+#'
 #'
 #' @return ggplot object
 #' @export
@@ -97,12 +101,19 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
                   rsids_with_vline=NULL,annotate_with_vline=NULL,shades_color=NULL,shades_alpha=0.5,segment.size=0.2, 
                   segment.color="black",segment.linetype="dashed",max.overlaps=10,label_fontface="plain",label_family="",
                   gene_label_fontface="plain",gene_label_family="",build=38,verbose=NULL,label_alpha=1,shades_line_alpha=1,vline=NULL,
-                  vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5,region=NULL, theme_grey=FALSE, xaxis_label="Chromosome"){
+                  vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5,region=NULL, theme_grey=FALSE, xaxis_label="Chromosome",use_shades=FALSE, even_no_chr_lightness=0.8){
+    
     top_snps <- NULL
     genes_df <- NULL
+    if(theme_grey)
+      use_shades=T
     dat <- dat_check(df, verbose=verbose)
-    dat <- dat %>% set_size_shape_alpha(size, shape, alpha) %>% set_color(color) %>% set_log10p(ntop)
+    dat <- dat %>% set_size_shape_alpha(size, shape, alpha) %>% set_color(color,shades_alpha,use_shades,even_no_chr_lightness) %>% set_log10p(ntop)
      
+    if(!use_shades & ! is.null(shades_color)){
+      warning(paste0("Argument use_shades is set to FALSE by default. For the shades_color argument to have an effect, the use_shades argument has to be set to TRUE. Add the argument [use_shades=TRUE] and re-run."))
+    }
+   
     using_ntop <- FALSE
     if(length(unique(dat[[1]]$CHROM))==1){chr<-unique(dat[[1]]$CHROM)}
     
@@ -140,7 +151,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     if(! is.null(annotate)){
       top_snps <- get_annotation(dat, region_size = region_size, annotate=annotate, protein_coding_only = protein_coding_only,nudge_x=nudge_x,nudge_y=nudge_y,
                                  angle=angle,label_fontface=label_fontface,label_family=label_family, build=build, verbose = verbose, label_alpha=label_alpha)
-      
+
     }
 
     #get the genes
@@ -151,13 +162,11 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
         genes_df <- get_genes_by_Gene_Symbol(highlight_genes,chr, build=build)
       }
     }
-    shades=NULL
 
     if(length(unique(dat[[1]]$CHROM))>1 & is.null(chr)){  #Manhattan plot
       incl_chrX <- include_chrX(dat)
       offsets <- get_chr_offsets(incl_chrX)
-      shades <- get_shades(offsets,dat,ntop=ntop,include_chrX = incl_chrX,ymin=ymin,ymax=ymax)
-      if(! is.null(annotate)){  top_snps <- top_snps %>%  get_pos_with_offset(offsets) }
+       if(! is.null(annotate)){  top_snps <- top_snps %>%  get_pos_with_offset(offsets) }
       if (! is.null(highlight_genes)){
         genes_df$CHROM <- gsub("chr", "", genes_df$CHROM)
         genes_df <- genes_df  %>% get_pos_with_offset(offsets)
@@ -172,7 +181,9 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     }
     if(is.null(chr)){
       ticks <- get_ticks(dat)
-         main_plot <- main_plot %>% add_shades_and_ticks(shades,ticks,shades_color=shades_color,shades_alpha=shades_alpha,shades_line_alpha=shades_line_alpha, theme_grey=theme_grey)
+      if(use_shades)
+        shades <- get_shades(offsets,dat,ntop=ntop,include_chrX = incl_chrX,ymin=ymin,ymax=ymax)
+      main_plot <- main_plot %>% add_shades_and_ticks(shades,ticks,shades_color=shades_color,shades_alpha=shades_alpha,shades_line_alpha=shades_line_alpha, theme_grey=theme_grey, use_shades=use_shades)
     }else{
       main_plot <- main_plot + scale_y_continuous(expand=c(.02,.02))  + scale_x_continuous(expand=c(.01,.01),labels = scales::comma)
     }

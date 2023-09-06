@@ -78,7 +78,7 @@ regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alp
     using_ntop <- TRUE
   }
   if(! is.null(gene)){
-    gene_df <- get_gene_coords(gene)
+    gene_df <- get_gene_coords(gene, build=build)
     if(dim(gene_df)[1]==0){  stop(paste("Could not find gene ",gene)) }
     else{
       chr <- gene_df$chrom

@@ -48,41 +48,47 @@ add_zero_hline <- function(p1){
   return(p1 + geom_hline(yintercept = 0,size=0.2, color="grey54"))
 }
 
-add_shades_and_ticks <- function(p1, shades, ticks,shades_color=NULL,shades_alpha=0.5, shades_line_alpha=1,theme_grey=F){
-   if(theme_grey){
+add_shades_and_ticks <- function(p1, shades,ticks,shades_color=NULL,shades_alpha=0.5, shades_line_alpha=1,theme_grey=F, use_shades=F){
+     if(theme_grey){
      shades_color="#D3D3D3"
      shades_alpha=0.1
-     p1 <- p1 + geom_rect(data=shades, mapping=aes(ymax=y2,xmin=x1, xmax=x2, ymin=y1),
-                         color=alpha(shades_color,shades_line_alpha),  alpha=shades_alpha, size=0.1)+
-      scale_x_continuous(breaks=ticks$pos, labels=ticks$names,expand=c(.01,.01)) + scale_y_continuous(expand=c(.02,.02))
-  }
+      p1 <- p1 + geom_rect(data=shades, mapping=aes(ymax=y2,xmin=x1, xmax=x2, ymin=y1),
+                     color=alpha(shades_color,shades_line_alpha),  alpha=shades_alpha, size=0.1)
+   }
   else{
     if(is.null(shades_color))
        shades_color="white"
-    p1 <- p1 + geom_rect(data=shades, mapping=aes(ymax=y2,xmin=x1, xmax=x2, ymin=y1),
+    if(use_shades){
+       
+    p1 <- p1 + 
+      geom_rect(data=shades, mapping=aes(ymax=y2,xmin=x1, xmax=x2, ymin=y1),
                          color=alpha(shades_color,shades_line_alpha),
-                         fill=alpha(shades_color, shades_alpha), size=0.1)+
-   scale_x_continuous(breaks=ticks$pos, labels=ticks$names,expand=c(.01,.01)) + scale_y_continuous(expand=c(.02,.02))
+                         fill=alpha(shades_color, shades_alpha), size=0.1)
+    }
   }
+     p1 <- p1 + scale_x_continuous(breaks=ticks$pos, labels=ticks$names,expand=c(.01,.01)) + scale_y_continuous(expand=c(.02,.02))
+     
    return(p1)
 }
 
 add_annotation <- function(p1,plot_labels=NULL, nudge_x=0.01, nudge_y=0.01, label_size=3.5, angle=0,annotate_with="Gene_Symbol", label_color=NULL,scale=1, 
                            segment.size=0.2,segment.color="black",segment.linetype="solid",max.overlaps=10){
+
   if(! is.null(label_color)){
      if(is.vector(label_color) & length(label_color) > 1){
       label_color <- label_color[1]; 
       print("label color can only be assigned one color, so using the first color from the vector!  The arguments label_alpha,label_font and label_family take vectors as input and can be used to distinguish between labels.")
     }
      if(nrow(plot_labels) >0 ) plot_labels$color <- label_color
-    }
+  }
    if(! is.null(plot_labels)){
     if(is.null(label_color) & length(unique(plot_labels$color)) == 1){plot_labels$color="black"} 
+    
         p1 <- p1 + ggrepel::geom_text_repel(data=plot_labels, 
                                         aes(x=POS, y=log10p, label=(plot_labels %>% dplyr::pull(annotate_with)) ),
                                         nudge_x=plot_labels$nudge_x,nudge_y=ifelse(plot_labels$log10p>0, plot_labels$nudge_y, -plot_labels$nudge_y),
                                         segment.size=segment.size,size=label_size*scale, fontface=plot_labels$fontface, family=plot_labels$family, alpha=plot_labels$alpha,
-                                       color=plot_labels$color,
+                                        color=plot_labels$color,
                                         segment.color = segment.color,
                                         segment.linetype=segment.linetype,max.iter=10000,direction="both",angle=plot_labels$angle, max.overlaps = max.overlaps)
     

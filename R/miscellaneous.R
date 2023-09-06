@@ -47,3 +47,42 @@ rename_value <- function(x, value) {
     value
   }
 }
+
+
+
+#' @importFrom grDevices col2rgb
+
+lightness = function(col, light=0.5) {
+  
+  if (length(col)==1) {
+    if (length(light)>1) {
+      tmp = col
+      col = light
+      col[] = tmp
+    }
+  } else {
+    if (length(light)==1) {
+      light = rep(light,length(col))
+    } else {
+      if (length(col)!=length(light)) stop('col and light must have the same length (or be of length 1).')
+    }
+  }
+  
+  for (i in seq(length(col))) {
+    rgb = col2rgb(col[i],alpha=T)/255
+    if (light[i]<0.5) {
+      rgb[1:3] = rgb[1:3]*light[i]*2
+    } else {
+      rgb[1:3] = 1-(1-rgb[1:3])*(1-light[i])*2
+    }
+    if (rgb[4]==1) {
+      col[i] = rgb(rgb[1],rgb[2],rgb[3])
+    } else {
+      col[i] = rgb(rgb[1],rgb[2],rgb[3],rgb[4])
+    }
+  }
+  
+  return(col)
+  
+}
+

@@ -120,50 +120,93 @@ regionplot(list(UC_UKBB, CD_UKBB), gene="IL23R")
 
 Extract lead/index variants from the GWAS dataset (<code>CD_UKBB</code>):
 
-```{r}
+``` r
 get_lead_snps(CD_UKBB)
 ```
 
 Annotate the lead/index variants with their nearest gene:
 
-```{r}
+``` r
 get_lead_snps(CD_UKBB) %>% annotate_with_nearest_gene()
 ```
 
 Get genomic coordinates for a gene (*topr* uses genome build GRCh38.p13 by default):
 
-```{r}
+``` r
 get_gene_coords("IL23R")
 ```
 Get genomic coordinates for a gene using genome build GRCh37 instead.
 
-```{r}
+``` r
 get_gene_coords("IL23R", build="37")
 ```
 
 Get snps within a region:
 
-```{r}
+``` r
 get_snps_within_region(CD_UKBB, region = "chr1:67138906-67259979")
 ```
 
 Get the top variant on a chromosome:
-```{r}
+``` r
 get_top_snp(CD_UKBB, chr="chr1")
 ```
 
 Create a snpset by extracting the top/lead variants from the CD_UKBB dataset and overlapping variants (by position) in the CD_FINNGEN dataset. 
 
-```{r}
+``` r
 get_snpset(CD_UKBB, CD_FINNGEN)
 ```
 
 Create an effecplot by plotting the effect sizes of top/lead variants overlapping in two datasets.
-```{r}
+``` r
 effectplot(list(CD_UKBB, CD_FINNGEN), annotate = 1e-08)
 ```
 
 <br>
+
+#### How to color specific peaks on the Manhattan plot
+<hr>
+
+I use the inbuilt <code>CD_UKBB</code> dataset in this example and create two dataframes containing hypothetically known and novel loci. 
+
+I start by annotating the variants in the <code>CD_UKBB</code> dataset so they can be extracted based on their nearest gene annotation.
+``` r
+CD_UKBB_annotated <- CD_UKBB %>% annotate_with_nearest_gene()
+```
+
+Next I create two dataframes, one including an example of hypothetically <code>known</code> variants and the other an example of hypothetically <code>novel</code> variants.
+
+``` r
+known <- CD_UKBB_annotated %>% filter(Gene_Symbol %in% c("C1orf141","IL23R","NOD2","CYLD-AS1","IKZF1"))
+novel <- CD_UKBB_annotated %>% filter(Gene_Symbol %in% c("JAK2","TTC33","ATG16L1"))
+```
+
+Now I can call the <code>manhattan</code> function with a list containing the 3 datasets (<code>CD_UKBB, known, novel</code>) and assign a color to each dataset (darkgrey, blue, red), where novel loci are displayed in red. 
+
+
+``` r
+manhattan(list(CD_UKBB, known, novel), color=c("darkgrey","blue","red"), annotate = c(1e-100,5e-08,5e-08))
+```
+<img src="man/figures/manhattan_colored_peaks.png" alt="topr GIF" width="100%">
+
+Note that here I only want to annotate the top variants in the <code>novel</code> and <code>known</code> datasets, and therefore I set the first p-value (for the first dataset CD_UKBB) assigned to the <code>annotate</code> argument to a very low number (1e-100) (so that nothing gets annotated in the CD_UKBB dataset).
+
+As can be seen on the plot, known and novel peaks on even numbered chromosomes are displayed in a lighter color of blue and red. This can be altered with the <code>even_no_chr_lightness</code> argument and shown next.
+
+<br>
+
+##### Use the same color of red and blue for all the peaks
+
+By default, association points on even numbered chromosomes (2,4,6 etc) are displayed in a slightly lighter color compared to the association points displayed on odd numbered chromosomes (1,3,5 etc). 
+
+This can be controlled with the <code>even_no_chr_lightness</code> argument which is set to 0.8 by default. If this argument is set to 0.5 for a given dataset and color, the same color will be displayed on all chromosomes for this dataset. A value below 0.5 will result in a darker color displayed for even numbered chromosomes, whereas a value above 0.5 results in a lighter color.
+
+``` r
+manhattan(list(CD_UKBB, known, novel), color=c("darkgrey","blue","red"), annotate = c(1e-100,5e-08,5e-08 ), even_no_chr_lightness = c(0.8,0.5,0.5), legend_labels = c("CD_UKBB","Known loci","Novel loci"), label_color = "black")
+```
+<img src="man/figures/manhattan_colored_peaks2.png" alt="topr GIF" width="100%">
+
 
 #### Get help:
 

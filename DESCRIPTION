@@ -1,6 +1,6 @@
 Package: topr
 Title: Create Custom Plots for Viewing Genetic Association Results
-Version: 1.1.8
+Version: 1.1.9
 Authors@R: c(
     person("Thorhildur", "Juliusdottir", role = c("cph","aut", "cre"),email = "totajuliusd@gmail.com"),
     person("Andri", "Stefansson", role = "aut", email = "andrimarstefansson@gmail.com")

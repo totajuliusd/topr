@@ -72,7 +72,9 @@ manhattan(
   vline_size = 0.5,
   region = NULL,
   theme_grey = FALSE,
-  xaxis_label = "Chromosome"
+  xaxis_label = "Chromosome",
+  use_shades = FALSE,
+  even_no_chr_lightness = 0.8
 )
 }
 \arguments{
@@ -207,6 +209,10 @@ manhattan(
 \item{theme_grey}{Use gray rectangles (instead of white to distinguish between chromosomes)}
 
 \item{xaxis_label}{The label for the x-axis (default: Chromosome)}
+
+\item{use_shades}{Use shades/rectangles to distinguish between chromosomes}
+
+\item{even_no_chr_lightness}{Lightness value for even numbered chromosomes. A number or vector of numbers between 0 and 1 (default: 0.8). If set to 0.5, the same color as shown for odd numbered chromosomes is displayed. A value below 0.5 will result in a darker color displayed for even numbered chromosomes, whereas a value above 0.5 results in a lighter color.}
 }
 \value{
 ggplot object
