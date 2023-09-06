@@ -50,8 +50,6 @@ rename_value <- function(x, value) {
 
 
 
-#' @author Danail Obreschkow
-#'
 #' @importFrom grDevices col2rgb
 
 lightness = function(col, light=0.5) {
