@@ -1,3 +1,7 @@
+# 1.1.9
+* Correct gene annotation used in regionplot when using build 37
+* Fix of partly incorrect coloring of association points near the end or beginning of a chromosome.
+
 # 1.1.8
 * Missing shade added for chr22 on Manhattan plot when chrX is not included in the dataset.
 

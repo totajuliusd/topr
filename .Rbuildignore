@@ -19,6 +19,8 @@ local
 .idea
 man/figures/manhattan_wide_1080_high.gif
 man/figures/topr_v.1.1.0.gif
+man/figures/manhattan_colored_peaks2.png
+man/figures/manhattan_colored_peaks.png
 lastMiKTeXException
 .RDataTmp
 ^cran-comments.md
