@@ -221,13 +221,13 @@ regionplot(
 
 \item{label_alpha}{An number or vector of numbers to set the transparency of the plot labels (default: \code{label_alpha=1})}
 
-\item{vline_color}{The color of added vertical line/s (default: grey)}
+\item{vline_color}{A string. The color of added vertical line/s (default: grey)}
 
-\item{vline_linetype}{The linetype of added vertical line/s (default : dashed)}
+\item{vline_linetype}{A string. The linetype of added vertical line/s (default : dashed)}
 
-\item{vline_alpha}{The alpha of added vertical line/s (default : 1)}
+\item{vline_alpha}{A number. The alpha of added vertical line/s (default : 1)}
 
-\item{vline_size}{The size of added vertical line/s (default : 0.5)}
+\item{vline_size}{A number.The size of added vertical line/s (default : 0.5)}
 }
 \value{
 plots within ggplotGrobs, arranged with egg::gtable_frame

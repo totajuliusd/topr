@@ -7,7 +7,14 @@ There were no ERRORs or WARNINGs.
 
 ## R CMD check_rhub results
 
-0 errors ✔ | 0 warnings ✔ | 2 notes ✖
+0 errors ✔ | 0 warnings ✔ | 4 notes ✖
+
+> checking CRAN incoming feasibility ... [11s] NOTE
+
+> * checking examples ... NOTE
+Examples with CPU (user + system) or elapsed time > 5s
+     user system elapsed
+topr 4.84   0.26    5.16
 
 ❯ checking for detritus in the temp directory ... NOTE
   Found the following files/directories:

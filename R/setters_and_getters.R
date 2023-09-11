@@ -33,14 +33,15 @@ set_annotate <- function(dat,annotate){
   return(dat)
 }
 
-set_color <- function(dat,color,shades_alpha=0.5, use_shades=T, chr_lightness=0.80){
+set_color <- function(dat,color,shades_alpha=0.5, use_shades=T, chr_lightness=0.80, chr=NULL){
   if(length(color) < length(dat))
     stop(paste("There are ",length(dat), " datasets, but only ",length(color), " color. Add more colors with the color argument, eg. color=c(\"blue\",\"yellow\",\"green\", etc)"))
   for(i in seq_along(dat)){
     if(!is.null(color) & nrow(dat[[i]]>0)){
       if(is.vector(color) & (length(color) >= i)){
-        if(use_shades)
+        if(use_shades || !(is.null(chr))){
           dat[[i]]$color <- color[i]
+        }
         else{                  
           even_chr_color <- lightness(color[i], get_chr_lightness(chr_lightness,i) )
           dat[[i]]$color <- ifelse((dat[[i]]$CHROM %% 2) == 0, even_chr_color , color[i]) 
@@ -181,25 +182,60 @@ get_chr_from_df <- function(df){
 }
 
 
-get_shades <- function(offsets,dat,ntop=ntop,include_chrX=FALSE,ymin=NULL,ymax=NULL){
-   n_offsets <- 11
-  y1 <- c(rep(0, n_offsets))  #if there is no bottom plot
+get_shades <- function(chr_lengths_and_offsets,dat,ntop=ntop,include_chrX=FALSE,ymin=NULL,ymax=NULL){
+  coords <- get_x1_x2(chr_lengths_and_offsets)
+  y1 <- c(rep(0, coords$n_offsets))  #if there is no bottom plot
   if(is.null(ymin))
     ymin <- get_ymin(dat)
   if(length(dat) > ntop)
-    y1 <- c(rep(ymin, n_offsets))
-  if(is.null(ymax)){
+    y1 <- c(rep(ymin, coords$n_offsets))
+  if(is.null(ymax))
     ymax <- get_ymax(dat)
-  }
-  offset23 <- offsets[[23]]
-   if(! include_chrX)
-    offset23 <- offset23+4000000
-  shades <- data.frame(x1=c(offsets[[2]],offsets[[4]],offsets[[6]],offsets[[8]],offsets[[10]],offsets[[12]],offsets[[14]],offsets[[16]],offsets[[18]],offsets[[20]],offsets[[22]]),
-                      x2=c(offsets[[3]],offsets[[5]],offsets[[7]], offsets[[9]],offsets[[11]],offsets[[13]],offsets[[15]],offsets[[17]],offsets[[19]],offsets[[21]],offset23),
-                      y1=y1,
-                      y2=c(rep(ymax, n_offsets)))
+   
+  shades <- data.frame(x1 = coords$x1,
+                        x2 = coords$x2,
+                        y1 = y1,
+                        y2 = c(rep(ymax, coords$n_offsets)))
+
   return(shades)
 }
+
+get_x1_x2 <- function(chr_lengths_and_offsets){
+  chrs <- chr_lengths_and_offsets$CHROM
+  n_offsets <- floor(length(chrs)/2)
+  offsets <- stats::setNames(chr_lengths_and_offsets$offset,chr_lengths_and_offsets$CHROM)
+
+  x1 <- c()
+  even_no <- as.numeric(subset(chrs, chrs %% 2 == 0))
+  for(i in 1:length(even_no)){
+    x1 <- c(x1, offsets[[even_no[i]]])
+  }
+  x2 <- c()
+  odd_no <- as.numeric(subset(chrs, chrs %% 2 != 0))
+ 
+   if(length(odd_no) > 1){
+    for(i in 2:length(odd_no)){
+      x2 <- c(x2, offsets[[odd_no[i]]])
+    }
+  }
+  else if(length(odd_no) == length(even_no) & length(odd_no) == 1) {
+    last_chr <- even_no[length(even_no)]
+    last_chr_length_df <- chr_lengths_and_offsets %>% filter(CHROM == last_chr ) 
+    last_chr_length <- last_chr_length_df$m
+    final_x2 <- offsets[[last_chr]] + last_chr_length*1.02 
+    x2 <- c(x2, final_x2)
+  }
+  if(length(x1) > length(x2)){
+    last_chr <- even_no[length(even_no)]
+    last_chr_length_df <- chr_lengths_and_offsets %>% filter(CHROM == last_chr ) 
+    last_chr_length <- last_chr_length_df$m
+    final_x2 <- offsets[[last_chr]] + last_chr_length*1.02 
+    x2 <- c(x2, final_x2)
+  }
+  return(list(x1=x1, x2=x2,n_offsets=n_offsets))
+}
+
+
 
 
 get_ymax <- function(dat){
@@ -230,25 +266,26 @@ get_ymin <- function(dat){
   return(ymin)
 }
 
-get_chr_lengths_and_offsets <- function(include_chrX=F){
-  #create the offsets from the internal chr_lengths data
-  chr_lengths$CHROM <- gsub("chr","", chr_lengths$V1)
-  chr_lengths <- chr_lengths %>% dplyr::filter(! V1 %in% c("chrM") )
-  chr_lengths[chr_lengths$CHROM=="X",'CHROM'] <- "23"
-  chr_lengths[chr_lengths$CHROM=="Y",'CHROM'] <- "24"
-  chr_lengths$CHROM <- as.integer(chr_lengths$CHROM)
-  no_chrs <- 23
-  #no_chrs <-ifelse(include_chrX, 23,22)
-  chr_lengths <- chr_lengths %>% dplyr::filter(CHROM< no_chrs +1 )
-  chr_lengths_and_offsets <- chr_lengths %>% dplyr::group_by(CHROM) %>% dplyr::summarize(m=V2) %>% dplyr::mutate(offset=cumsum(as.numeric(lag(m, default=0))))
+get_chr_lengths_and_offsets <- function(include_chrX=FALSE, dat, get_chr_lengths_from_data){
+  if(get_chr_lengths_from_data){
+    chrs <- get_chrs_from_data(dat)
+    chrs2plot <- get_max_value_by_chr_from_data(dat, chrs)
+  }
+  else{
+    #create the offsets from the internal chr_lengths data
+    chr_lengths$CHROM <- gsub("chr","", chr_lengths$V1)
+    chr_lengths <- chr_lengths %>% dplyr::filter(! V1 %in% c("chrM") )
+    chr_lengths[chr_lengths$CHROM=="X",'CHROM'] <- "23"
+    chr_lengths[chr_lengths$CHROM=="Y",'CHROM'] <- "24"
+    chr_lengths$CHROM <- as.integer(chr_lengths$CHROM)
+    chrs <- get_chrs_from_data(dat)
+    chrs2plot <- chr_lengths %>% filter(CHROM %in% chrs)
+  }
+  chr_lengths_and_offsets <- chrs2plot %>% dplyr::group_by(CHROM) %>% dplyr::summarize(m=V2) %>% dplyr::mutate(offset=cumsum(as.numeric(lag(m, default=0))))
   return(chr_lengths_and_offsets)
 }
 
-get_chr_offsets <- function(include_chrX=F){
-  tmp <- get_chr_lengths_and_offsets(include_chrX)
-  offsets <- stats::setNames(tmp$offset,tmp$CHROM)
-  return(offsets)
-}
+
 
 get_ticknames <- function(df){
   no_chrs <- ifelse("chrX" %in% df$CHROM || "X" %in% df$CHROM || "chr23" %in% df$CHROM || "23" %in% df$CHROM, 23, 22)
@@ -269,15 +306,31 @@ get_ticknames <- function(df){
   return(list(names=ticknames, pos=tickpos))
 }
 
-get_ticks <- function(dat){
+get_ticks <- function(dat,chr_lengths_and_offsets ){
   df <- dat[[1]]
   for(i in seq_along(dat)){ if(length(unique(dat[[i]]$CHROM))  > length(unique(df$CHROM))){ df <- dat[[i]] } }
   ticknames <- c(1:16, '',18, '',20, '',22, 'X')
-  chr_lengts_and_offsets <- get_chr_lengths_and_offsets()
-  tickpos <-chr_lengts_and_offsets %>% dplyr::group_by(CHROM)%>%
+ tickpos <-chr_lengths_and_offsets %>% dplyr::group_by(CHROM)%>%
     dplyr::summarize(pm=offset+(m/2))%>%
     dplyr::pull(pm)
   names(tickpos) <- NULL
+  if(length(tickpos) < length(ticknames)){
+    ticknames=c()
+    if(length(chr_lengths_and_offsets$CHROM) > 19){
+      for(i in 1:length(chr_lengths_and_offsets$CHROM)){
+        if(chr_lengths_and_offsets$CHROM[i] < 17)
+          ticknames <- c(ticknames, chr_lengths_and_offsets$CHROM[i])
+        else{
+          if(chr_lengths_and_offsets$CHROM[i] %% 2 == 0)
+            ticknames <- c(ticknames, chr_lengths_and_offsets$CHROM[i])
+          else
+            ticknames <- c(ticknames, '')
+        }
+      }
+    }
+    else
+      ticknames <- c(1:length(chr_lengths_and_offsets$CHROM))
+  }
   return(list(names=ticknames, pos=tickpos))
 }
 
@@ -572,3 +625,36 @@ get_snps_within_region <- function(df, region, chr=NULL, xmin=NULL, xmax=NULL,ke
   }
   return(snps)
 }
+
+get_chrs_from_data = function(dat){
+  all_chrs=NULL
+  for(i in seq_along(dat)){
+    unique_chrs=unique(dat[[i]]$CHROM)
+    all_chrs <- c(all_chrs, unique_chrs)
+  }
+  chrs <- unique(all_chrs) %>% sort()
+  return(chrs)
+}
+
+
+get_max_value_by_chr_from_data = function(dat, chrs){
+  max_chr_values=c()
+  for(i in 1:(length(chrs))){
+    max_chr_val=0
+    for(j in seq_along(dat)){ #for(j in seq_along(dat)){
+      dat_chr <- dat[[j]] %>% dplyr::filter(CHROM==chrs[i])
+      if(nrow(dat_chr)> 0){
+        max_val <- max(dat_chr$POS, na.rm = T)
+        if(max_val > max_chr_val){
+          max_chr_val <- max_val  
+        }
+      }
+    }
+    max_chr_values[i] <- max_chr_val*1.02
+  }
+  chr_lengths <- data.frame("CHROM" = unique(chrs), "V2" = max_chr_values)
+
+  return(chr_lengths)
+}
+
+

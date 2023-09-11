@@ -66,16 +66,17 @@
 #' @param verbose A logical scalar (default: NULL). Set to FALSE to suppress printed messages 
 #' @param label_alpha An number or vector of numbers to set the transparency of the plot labels (default: \code{label_alpha=1})
 #' @param shades_line_alpha The transparency (alpha) of the lines around the rectangles (shades)
-#' @param vline A number or vector of numbers to add a vertical line to the plot at a specific chromosomal position, e.g \code{vline=chr1:204000066}. Multiple values can be provided in a vector, e.g  \code{vline=c(chr1:204000066,chr5:100500188)}
-#' @param vline_color The color of added vertical line/s (default: grey)
-#' @param vline_linetype The linetype of added vertical line/s (default : dashed)  
-#' @param vline_alpha The alpha of added vertical line/s (default : 1)  
-#' @param vline_size The size of added vertical line/s (default : 0.5)  
+#' @param vline A number or vector of numbers to add a vertical line to the plot at a specific chromosomal position, e.g \code{vline="chr1:204000066"}. Multiple values can be provided in a vector, e.g  \code{vline=c("chr1:204000066","chr5:100500188")}
+#' @param vline_color A string. The color of added vertical line/s (default: grey)
+#' @param vline_linetype A string. The linetype of added vertical line/s (default : dashed)  
+#' @param vline_alpha A number. The alpha of added vertical line/s (default : 1)  
+#' @param vline_size A number.The size of added vertical line/s (default : 0.5)  
 #' @param region A string representing a genetic region, e.g. chr1:67038906-67359979
-#' @param theme_grey Use gray rectangles (instead of white to distinguish between chromosomes)
-#' @param xaxis_label The label for the x-axis (default: Chromosome)
-#' @param use_shades Use shades/rectangles to distinguish between chromosomes
+#' @param theme_grey A logical scalar (default: FALSE). Use gray rectangles (instead of white to distinguish between chromosomes)
+#' @param xaxis_label A string. The label for the x-axis (default: Chromosome)
+#' @param use_shades A logical scalar (default: FALSE). Use shades/rectangles to distinguish between chromosomes
 #' @param even_no_chr_lightness Lightness value for even numbered chromosomes. A number or vector of numbers between 0 and 1 (default: 0.8). If set to 0.5, the same color as shown for odd numbered chromosomes is displayed. A value below 0.5 will result in a darker color displayed for even numbered chromosomes, whereas a value above 0.5 results in a lighter color.
+#' @param get_chr_lengths_from_data A logical scalar (default: FALSE). If set to TRUE, instead of using the inbuilt chromosome lengths, use chromosome lengths based on the max position for each chromosome in the input dataset/s.
 #' 
 #'
 #'
@@ -101,14 +102,15 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
                   rsids_with_vline=NULL,annotate_with_vline=NULL,shades_color=NULL,shades_alpha=0.5,segment.size=0.2, 
                   segment.color="black",segment.linetype="dashed",max.overlaps=10,label_fontface="plain",label_family="",
                   gene_label_fontface="plain",gene_label_family="",build=38,verbose=NULL,label_alpha=1,shades_line_alpha=1,vline=NULL,
-                  vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5,region=NULL, theme_grey=FALSE, xaxis_label="Chromosome",use_shades=FALSE, even_no_chr_lightness=0.8){
+                  vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5,region=NULL, theme_grey=FALSE, xaxis_label="Chromosome",
+                  use_shades=FALSE, even_no_chr_lightness=0.8, get_chr_lengths_from_data=FALSE){
     
     top_snps <- NULL
     genes_df <- NULL
     if(theme_grey)
       use_shades=T
     dat <- dat_check(df, verbose=verbose)
-    dat <- dat %>% set_size_shape_alpha(size, shape, alpha) %>% set_color(color,shades_alpha,use_shades,even_no_chr_lightness) %>% set_log10p(ntop)
+    dat <- dat %>% set_size_shape_alpha(size, shape, alpha) %>% set_color(color,shades_alpha,use_shades,even_no_chr_lightness,chr) %>% set_log10p(ntop)
      
     if(!use_shades & ! is.null(shades_color)){
       warning(paste0("Argument use_shades is set to FALSE by default. For the shades_color argument to have an effect, the use_shades argument has to be set to TRUE. Add the argument [use_shades=TRUE] and re-run."))
@@ -162,10 +164,12 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
         genes_df <- get_genes_by_Gene_Symbol(highlight_genes,chr, build=build)
       }
     }
-
+    offsets=NULL
+    incl_chrX=T
     if(length(unique(dat[[1]]$CHROM))>1 & is.null(chr)){  #Manhattan plot
       incl_chrX <- include_chrX(dat)
-      offsets <- get_chr_offsets(incl_chrX)
+      chr_lengths_and_offsets <- get_chr_lengths_and_offsets(incl_chrX, dat, get_chr_lengths_from_data)
+      offsets <- stats::setNames(chr_lengths_and_offsets$offset,chr_lengths_and_offsets$CHROM)
        if(! is.null(annotate)){  top_snps <- top_snps %>%  get_pos_with_offset(offsets) }
       if (! is.null(highlight_genes)){
         genes_df$CHROM <- gsub("chr", "", genes_df$CHROM)
@@ -173,20 +177,23 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
       }
       dat <- get_pos_with_offset4list(dat,offsets)
     }
+    
     main_plot <- get_base_plot(dat,color=color,legend_labels = legend_labels,legend_name=legend_name, legend_position = legend_position, 
                                legend_nrow = legend_nrow, show_legend = show_legend,scale=scale,verbose=verbose)
-     
      if(! is.null(title)){
         main_plot <- main_plot %>% add_title(title=title, title_text_size = title_text_size,scale=scale)
-    }
+     }
     if(is.null(chr)){
-      ticks <- get_ticks(dat)
+      ticks <- get_ticks(dat,chr_lengths_and_offsets)
+    
       if(use_shades)
-        shades <- get_shades(offsets,dat,ntop=ntop,include_chrX = incl_chrX,ymin=ymin,ymax=ymax)
-      main_plot <- main_plot %>% add_shades_and_ticks(shades,ticks,shades_color=shades_color,shades_alpha=shades_alpha,shades_line_alpha=shades_line_alpha, theme_grey=theme_grey, use_shades=use_shades)
+        shades <- get_shades(chr_lengths_and_offsets,dat,ntop=ntop,include_chrX = incl_chrX,ymin=ymin,ymax=ymax)
+      
+     main_plot <- main_plot %>% add_shades_and_ticks(shades,ticks,shades_color=shades_color,shades_alpha=shades_alpha,shades_line_alpha=shades_line_alpha, theme_grey=theme_grey, use_shades=use_shades)
     }else{
       main_plot <- main_plot + scale_y_continuous(expand=c(.02,.02))  + scale_x_continuous(expand=c(.01,.01),labels = scales::comma)
     }
+   
   main_plot <- set_axis_labels(main_plot,xaxis_label = xaxis_label)
   main_plot <- main_plot %>% set_plot_text_sizes(axis_text_size=axis_text_size,axis_title_size = axis_title_size, 
                                                  legend_text_size=legend_text_size, legend_title_size=legend_title_size,scale=scale)
@@ -214,6 +221,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
                                 label_size=label_size,gene_label_angle = gene_label_angle,scale=scale,gene_label_fontface=gene_label_fontface,gene_label_family=gene_label_family)
     
   }
+
   if(annot_with_vline){
     main_plot <- main_plot %>% add_vline(top_snps$POS, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
   }
@@ -232,15 +240,22 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     v <- v %>% dplyr::mutate(CHROM=gsub('chr','',CHROM,ignore.case = T))
     v$CHROM <- as.numeric(v$CHROM)
     v$POS <- as.numeric(v$POS)
-    vlines_w_offsets <- v %>% get_pos_with_offset(get_chr_offsets())
-    vlines <- as.vector(vlines_w_offsets$POS)
+    if(is.null(offsets)){
+      vlines <- v$POS
+      }
+    else{
+      vlines_w_offsets <- v %>% get_pos_with_offset(offsets)
+      vlines <- as.vector(vlines_w_offsets$POS)
+    }
     main_plot <- main_plot %>% add_vline(vlines, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
   }
+
   main_plot <- main_plot %>% set_ymin_ymax(ymin,ymax)
-  
+
   if(!is.null(xmin) & !is.null(xmax) & ! is.null(chr)){
     main_plot <- main_plot %>% set_xmin_xmax(xmin,xmax)
   }
+ 
   main_plot <- change_axes(main_plot)
   return(main_plot)
   }
