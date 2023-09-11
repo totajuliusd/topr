@@ -184,7 +184,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
         main_plot <- main_plot %>% add_title(title=title, title_text_size = title_text_size,scale=scale)
      }
     if(is.null(chr)){
-      ticks <- get_ticks(chr_lengths_and_offsets)
+      ticks <- get_ticks(dat,chr_lengths_and_offsets)
     
       if(use_shades)
         shades <- get_shades(chr_lengths_and_offsets,dat,ntop=ntop,include_chrX = incl_chrX,ymin=ymin,ymax=ymax)

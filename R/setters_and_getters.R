@@ -306,7 +306,7 @@ get_ticknames <- function(df){
   return(list(names=ticknames, pos=tickpos))
 }
 
-get_ticks <- function(chr_lengths_and_offsets ){
+get_ticks <- function(dat,chr_lengths_and_offsets ){
   df <- dat[[1]]
   for(i in seq_along(dat)){ if(length(unique(dat[[i]]$CHROM))  > length(unique(df$CHROM))){ df <- dat[[i]] } }
   ticknames <- c(1:16, '',18, '',20, '',22, 'X')

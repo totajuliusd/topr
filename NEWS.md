@@ -1,3 +1,8 @@
+# 1.1.10
+* Argument get_chr_lengths_from_data added to the Manhattan function so the number of chromosomes and chromosome lengths can be extracted from the input data.
+* The Manhattan plot displays as many chromosomes as are in the input data.
+
+
 # 1.1.9
 * Correct gene annotation used in regionplot when using build 37
 * Fix of partly incorrect coloring of association points near the end or beginning of a chromosome.

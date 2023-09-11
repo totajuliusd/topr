@@ -74,7 +74,8 @@ manhattan(
   theme_grey = FALSE,
   xaxis_label = "Chromosome",
   use_shades = FALSE,
-  even_no_chr_lightness = 0.8
+  even_no_chr_lightness = 0.8,
+  get_chr_lengths_from_data = FALSE
 )
 }
 \arguments{
@@ -194,25 +195,27 @@ manhattan(
 
 \item{shades_line_alpha}{The transparency (alpha) of the lines around the rectangles (shades)}
 
-\item{vline}{A number or vector of numbers to add a vertical line to the plot at a specific chromosomal position, e.g \code{vline=chr1:204000066}. Multiple values can be provided in a vector, e.g  \code{vline=c(chr1:204000066,chr5:100500188)}}
+\item{vline}{A number or vector of numbers to add a vertical line to the plot at a specific chromosomal position, e.g \code{vline="chr1:204000066"}. Multiple values can be provided in a vector, e.g  \code{vline=c("chr1:204000066","chr5:100500188")}}
 
-\item{vline_color}{The color of added vertical line/s (default: grey)}
+\item{vline_color}{A string. The color of added vertical line/s (default: grey)}
 
-\item{vline_linetype}{The linetype of added vertical line/s (default : dashed)}
+\item{vline_linetype}{A string. The linetype of added vertical line/s (default : dashed)}
 
-\item{vline_alpha}{The alpha of added vertical line/s (default : 1)}
+\item{vline_alpha}{A number. The alpha of added vertical line/s (default : 1)}
 
-\item{vline_size}{The size of added vertical line/s (default : 0.5)}
+\item{vline_size}{A number.The size of added vertical line/s (default : 0.5)}
 
 \item{region}{A string representing a genetic region, e.g. chr1:67038906-67359979}
 
-\item{theme_grey}{Use gray rectangles (instead of white to distinguish between chromosomes)}
+\item{theme_grey}{A logical scalar (default: FALSE). Use gray rectangles (instead of white to distinguish between chromosomes)}
 
-\item{xaxis_label}{The label for the x-axis (default: Chromosome)}
+\item{xaxis_label}{A string. The label for the x-axis (default: Chromosome)}
 
-\item{use_shades}{Use shades/rectangles to distinguish between chromosomes}
+\item{use_shades}{A logical scalar (default: FALSE). Use shades/rectangles to distinguish between chromosomes}
 
 \item{even_no_chr_lightness}{Lightness value for even numbered chromosomes. A number or vector of numbers between 0 and 1 (default: 0.8). If set to 0.5, the same color as shown for odd numbered chromosomes is displayed. A value below 0.5 will result in a darker color displayed for even numbered chromosomes, whereas a value above 0.5 results in a lighter color.}
+
+\item{get_chr_lengths_from_data}{A logical scalar (default: FALSE). If set to TRUE, instead of using the inbuilt chromosome lengths, use chromosome lengths based on the max position for each chromosome in the input dataset/s.}
 }
 \value{
 ggplot object
