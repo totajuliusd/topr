@@ -1,15 +1,15 @@
-## ---- include=FALSE-----------------------------------------------------------
+## ----include=FALSE------------------------------------------------------------
 library(topr)
 library(dplyr)
 library(knitr)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  manhattan(CD_UKBB)
 
 ## ----echo=FALSE, out.width='100%'---------------------------------------------
 knitr::include_graphics('figures/manhattan.jpg')
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  manhattan(CD_UKBB,
 #            annotate = 5e-09,
 #            title = "Crohn's disease")
@@ -17,7 +17,7 @@ knitr::include_graphics('figures/manhattan.jpg')
 ## ----echo=FALSE, out.width='100%'---------------------------------------------
 knitr::include_graphics('figures/manhattan_annotate.jpg')
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  genes = c("IL23R","NOTCH4","NOD2","JAK2","TTC33")
 #  manhattan(CD_UKBB,
 #            annotate = 5e-09,
@@ -27,7 +27,7 @@ knitr::include_graphics('figures/manhattan_annotate.jpg')
 ## ----echo=FALSE, out.width='100%'---------------------------------------------
 knitr::include_graphics('figures/manhattan_genes.jpg')
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  manhattan(CD_UKBB,
 #            annotate = 5e-09,
 #            chr = "chr1")
@@ -42,7 +42,7 @@ knitr::include_graphics('figures/manhattan_chr1.jpg')
 ## ----echo=FALSE, out.width='100%'---------------------------------------------
 knitr::include_graphics('figures/manhattan_multi.jpg')
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB),
 #            legend_labels = c("CD UKBB", "CD FinnGen","UC UKBB"),
 #            annotate = c(5e-9,5e-12,1e-15),
@@ -55,7 +55,7 @@ knitr::include_graphics('figures/manhattan_multi.jpg')
 ## ----echo=FALSE, out.width='100%'---------------------------------------------
 knitr::include_graphics('figures/manhattan_multi_ntop.jpg')
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB),
 #            legend_labels = c("CD UKBB", "CD FinnGen","UC UKBB"),
 #            annotate = c(5e-9,5e-12,1e-15),
@@ -72,7 +72,7 @@ knitr::include_graphics('figures/manhattan_multi_ntop.jpg')
 ## ----echo=FALSE, out.width='100%'---------------------------------------------
 knitr::include_graphics('figures/manhattan_multi_ntop_tidy.jpg')
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB),
 #            legend_labels = c("CD UKBB", "CD FinnGen","UC UKBB"),
 #            annotate = c(5e-9,5e-12,1e-15),
@@ -90,7 +90,7 @@ knitr::include_graphics('figures/manhattan_multi_ntop_tidy.jpg')
 ## ----echo=FALSE, out.width='100%'---------------------------------------------
 knitr::include_graphics('figures/manhattan_multi_ntop_tidy_grey.jpg')
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB),
 #            legend_labels = c("CD UKBB", "CD FinnGen","UC UKBB"),
 #            annotate_with_vline  = c(5e-9,5e-100,1e-100),

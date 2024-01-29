@@ -172,7 +172,15 @@ By default *topr* uses the human genome assembly for annotation. As of from vers
 
 Required columns in the gene annotation file are the following: <code>chrom,gene_start_gene_end,gene_symbol,biotype,exon_chromstart</code> and <code>exon_chromend</code>
 
-An example on how to use *topr* using the mouse genome:
+To see an example, view the inbuilt human genome annotation file (hg38) from the <code>enshuman</code> package:
+
+``` r
+head(n=2, enshuman::hg38)
+```
+
+Note that there is no *"chr"* prefix in front of the chromosome name.
+
+##### Example using the mouse genome
 
 Start by downloading and unzipping the **mouse gtf** file. From within the terminal this can be done as follows:
 
@@ -187,10 +195,30 @@ Next convert the file into the format required by topr
 perl mk_annotation_file.pl Mus_musculus.GRCm39.111.gtf > Mus_musculus.GRCm39.111.tsv
 ```
 
-In R do:
+Then from within your R editor do:
 ``` r
 mus_musculus <- read.delim("Mus_musculus.GRCm39.111.tsv", sep="\t",header=T)
 ```
+
+Then optionally to save the data in a more compact .rda format:
+
+``` r
+save(mus_musculus, file="mus_musculus.rda", compress='xz')
+#and then to load from the .rda file, do:
+load("mus_musculus.rda")
+```
+
+Then to use the mouse build with *topr*, assign <code>mus_musculus</code> to the build argument in *topr's* functions.  
+
+Examples (note that CD_UKBB are human association results, and only used here as a proof of concept): 
+``` r
+manhattan(CD_UKBB, annotate=1e-14, build=mus_musculus)
+regionplot(CD_UKBB, gene="Cps1", build=mus_musculus)
+CD_UKBB %>% get_lead_snps() %>% annotate_with_nearest_gene(build=mus_musculus)
+get_gene_coords("Cps1", build=mus_musculus)
+```
+
+
 
 #### How to color specific peaks on the Manhattan plot
 <hr>

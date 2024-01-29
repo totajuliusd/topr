@@ -4,8 +4,10 @@ author: "Thorhildur Juliusdottir"
 output: html_notebook
 ---
 
-\VignetteEngine{knitr::knitr}
-\VignetteIndexEntry{Intro into manhattan}
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Intro into manhattan}
+
+This needs updating! 
 
 ```{r, include=FALSE}
 library(topr)

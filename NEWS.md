@@ -1,9 +1,8 @@
-
 # 2.0.0
+* Allowing for different gene annotation files from any species to be used
 * Argument chr_ticknames added to the Manhattan function to control x-axix labels
 * Improved handling of p-values below 1e-324 
 * Inclusion of Y and MT in build hg38
-* More species..... https://www.ncbi.nlm.nih.gov/datasets/gene/GCF_000001635.27/
 * argument to set colour for diagonal line in qqtopr
 
 # 1.1.10

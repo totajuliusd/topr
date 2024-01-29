@@ -7,6 +7,8 @@ output: html_notebook
 %\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{Intro into manhattan}
 
+This needs updating! 
+
 ```{r, include=FALSE}
 library(topr)
 library(dplyr)
@@ -16,13 +18,14 @@ library(knitr)
 
 ## manhattan
 
-Displays GWAS results over the entire genome. The manhattan() function returns a **ggplot** object.
+Displays GWAS results over the entire genome.
 
-Get an overview of the in-built Crohn's GWAS disease results (<code>CD_UKBB</code>):
+Get an overview of the in-built Crohn's GWAS results (<code>CD_UKBB</code>):
 
 ```{r, eval=FALSE}
 manhattan(CD_UKBB)
 ```
+
 
 
 ```{r echo=FALSE, out.width='100%'}
