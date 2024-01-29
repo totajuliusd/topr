@@ -261,5 +261,5 @@ get_best_snp_per_MB <- function(df, thresh=5e-09,region_size=1000000,protein_cod
 
 deprecated_argument_msg <- function(arg, custom=NULL) {
   deparse(substitute(arg)) %>%
-    paste("argument deprecated", if (!is.null(custom)) paste("-", custom))
+    paste("argument is deprecated", if (!is.null(custom)) paste("-", custom)) %>% print()
 }
