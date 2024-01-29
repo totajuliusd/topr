@@ -34,9 +34,6 @@ get_genes_in_region <- function(chr=chr, xmin=xmin,xmax=xmax,protein_coding_only
   }else{
     genes <- get_exons(chr,xmin,xmax,protein_coding_only = protein_coding_only, build=build)
   }
-  if("biotype.x" %in% colnames(genes)){
-    genes <- genes %>% rename(biotype=biotype.x)
-  }
   return(genes)
 }
 
