@@ -1,3 +1,11 @@
+
+# 2.0.0
+* Argument chr_ticknames added to the Manhattan function to control x-axix labels
+* Improved handling of p-values below 1e-324 
+* Inclusion of Y and MT in build hg38
+* More species..... https://www.ncbi.nlm.nih.gov/datasets/gene/GCF_000001635.27/
+* argument to set colour for diagonal line in qqtopr
+
 # 1.1.10
 * Argument get_chr_lengths_from_data added to the Manhattan function so the number of chromosomes and chromosome lengths can be extracted from the input data.
 * The Manhattan plot displays as many chromosomes as are in the input data.

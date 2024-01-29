@@ -155,24 +155,18 @@ annotate_with_nearest_gene <- function(variants, protein_coding_only=FALSE, buil
     for(i in seq_along(variants$POS)){
       if(length(variants$POS) > 1000){
         if(i %% 1000==0) {
-          # Print on the screen some message
           print(paste(i," variants annotated", sep=""))
         }
       }
       nearest_gene <- NULL
       variant <- variants[i,]
       chr <- gsub("chr", "", variant$CHROM)
-      chr <- paste("chr",chr,sep="")
-      if(build == "38"){
-        genes_on_chr <- toprdata::ENSGENES %>% dplyr::filter(chrom == chr) %>% dplyr::arrange(gene_start)
-      }else if(build == "37"){
-        genes_on_chr <- toprdata::ENSGENES_37 %>% dplyr::filter(chrom == chr) %>% dplyr::arrange(gene_start)
-      }else{warning(paste("Build [",build,"] not found!!!!!!  Using build 38 GRCh38 instead ", sep=""))
-        genes_on_chr <- toprdata::ENSGENES %>% dplyr::filter(chrom == chr) %>% dplyr::arrange(gene_start)
-      }
+      genes_on_chr <- get_db(build) %>% dplyr::filter(chrom == chr) %>% dplyr::arrange(gene_start)
+      
       if(protein_coding_only){
         genes_on_chr <- genes_on_chr %>% dplyr::filter(biotype == "protein_coding")
       }
+
       within_gene <-  genes_on_chr %>% dplyr::filter(gene_end >= variant$POS & gene_start <= variant$POS)
       if(length(within_gene$gene_symbol) > 0 ){  #TODO: order the genes by their biotype, and pull out the top one
         if(length(within_gene) == 1){ nearest_gene <- within_gene$gene_symbol }

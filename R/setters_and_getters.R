@@ -131,43 +131,67 @@ set_log10p <- function(dat, ntop){
   return(dat)
 }
 
-## Getters
+get_db <- function(build){
+   if(is.character(build) || is.numeric(build)){
+    if(tolower(build) %in% c("38","hg38","grch38"))
+      db <- hg38
+    else if(tolower(build) %in% c("37","hg37","grch37"))
+      db <- hg37
+    else{
+      ext_db <- get(build)
+      if(class(ext_db) == "data.frame"){
+         db <- ext_db
+      }
+      else if(class(ext_db) == "list"){
+        warning(paste("The provided build is a list. It has to be either a number, string or a data frame!\n Using the default build enshuman::hg38 instead" ))
+        db <- hg38
+      }
+      else{
+        warning(paste("Could not find a build called [",build,"] to use for annotation. \n Using the default build GRCh38 (build=38) instead. ", sep=""))
+        db <- hg38
+      }
+    }
+  }
+  else if(is.data.frame(build)){
+       db <- build 
+  }
+  else if(class(build) == "list"){
+    warning(paste("The provided build is a list. It has to be either a number, string or a data frame! \n Using the default build GRCh38 (build=38) instead."))
+    db <- hg38
+    }
+  else{
+    warning(paste("The build is not in the correct format. It has to be either a number,string or a data frame!\nUsing the default build GRCh38 (build=38) instead. ", sep=""))
+    db <- hg38
+  }
+  return(db)    
+}
+
 
 get_genes <- function(chr,xmin=0,xmax=NULL,protein_coding_only=FALSE, build=38){
-  chr <- gsub("chr", "", chr)
-  chr <- paste("chr",chr,sep="")
   if(is.null(xmax)){
     xmax <- chr_lengths[chr_lengths$V1 == chr,]$V2
   }
-  if(chr == "chr23"){ chr="chrX"}
+  chr <- gsub("chr", "", chr)
   if(chr == "23"){ chr="X"}
-  if(build == "38")
-    genes <- toprdata::ENSGENES %>% dplyr::filter(chrom==chr)  %>% dplyr::filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax | gene_start == xmin | gene_end == xmax)
-  else if(build == "37")
-    genes <- toprdata::ENSGENES_37 %>% dplyr::filter(chrom==chr)  %>% dplyr::filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax | gene_start == xmin | gene_end == xmax)
-  else
-    print("The requested build does not exist. Available genome builds are: 37 and 38")
+  
+  genes <-  get_db(build=build) %>% dplyr::filter(chrom==chr) %>% dplyr::select(-exon_chromstart,-exon_chromstart) %>% dplyr::filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax | gene_start == xmin | gene_end == xmax)
+
   if(protein_coding_only)  
       genes <- genes %>% dplyr::filter(biotype=="protein_coding")
-  return(genes)
+   return(genes)
 }
 
 get_exons <- function(chr,xmin=0,xmax=NULL,protein_coding_only=FALSE, build=38){
-  genes <- get_genes(chr,xmin,xmax, build=build)
-
-  if(protein_coding_only){
-    if(build == "38")
-      exons <- merge(toprdata::ENSEXONS, genes %>% dplyr::select(gene_symbol,biotype,chrom,gene_start,gene_end) %>% dplyr::filter(biotype=="protein_coding"), by=c("gene_symbol","chrom","gene_start","gene_end"))
-    else if(build == "37")
-      exons <- merge(toprdata::ENSEXONS_37, genes %>% dplyr::select(gene_symbol,biotype,chrom,gene_start,gene_end) %>% dplyr::filter(biotype=="protein_coding"), by=c("gene_symbol","chrom","gene_start","gene_end"))
+  if(is.null(xmax)){
+    xmax <- chr_lengths[chr_lengths$V1 == chr,]$V2
   }
-  else{
-    if(build == "38")
-      exons <- merge(toprdata::ENSEXONS, genes %>% dplyr::select(gene_symbol,biotype,chrom,gene_start,gene_end), by=c("gene_symbol","chrom","gene_start","gene_end"))
-    else if(build == "37")
-      exons <- merge(toprdata::ENSEXONS_37, genes %>% dplyr::select(gene_symbol,biotype,chrom,gene_start,gene_end), by=c("gene_symbol","chrom","gene_start","gene_end"))
-  }
-  #rename chromstart exon_chromstart | rename chromend exon_chromend)",sep=""))
+  chr <- gsub("chr", "", chr)
+  if(chr == "23"){ chr="X"}
+  
+  exons <- get_db(build=build)  %>% dplyr::filter(chrom==chr)  %>% dplyr::filter(gene_start>xmin & gene_start<xmax | gene_end > xmin & gene_end < xmax | gene_start < xmin & gene_end>xmax | gene_start == xmin | gene_end == xmax)
+  
+  if(protein_coding_only)  
+    exons <- exons %>% dplyr::filter(biotype=="protein_coding")
   return(exons)
 }
 
@@ -306,7 +330,7 @@ get_ticknames <- function(df){
   return(list(names=ticknames, pos=tickpos))
 }
 
-get_ticks <- function(dat,chr_lengths_and_offsets ){
+get_ticks <- function(dat,chr_lengths_and_offsets){
   df <- dat[[1]]
   for(i in seq_along(dat)){ if(length(unique(dat[[i]]$CHROM))  > length(unique(df$CHROM))){ df <- dat[[i]] } }
   ticknames <- c(1:16, '',18, '',20, '',22, 'X')
@@ -454,15 +478,7 @@ get_lead_snps <- function(df, thresh=5e-08,region_size=1000000,protein_coding_on
 #' }
 #'
 get_genes_by_Gene_Symbol <- function(genes, chr=NULL, build=38){
-  if(build == "38"){
-    genes_df <- toprdata::ENSGENES %>% dplyr::filter(gene_symbol %in% genes)
-  }else if(build == "37"){ 
-    genes_df <- toprdata::ENSGENES_37 %>% dplyr::filter(gene_symbol %in% genes)
-  }else{
-    warning(paste("Build [",build,"] not found!!!!!!  Using build 38 GRCh38 instead ", sep=""))
-    genes_df <- toprdata::ENSGENES %>% dplyr::filter(gene_symbol %in% genes)
-  }
-  
+  genes_df <- get_db(build) %>% dplyr::filter(gene_symbol %in% genes) 
   if(! is.null(chr)){
     chr <- gsub('chr','',chr)
     genes_df <- genes_df %>% dplyr::filter(chrom == paste("chr",chr,sep=""))
@@ -493,22 +509,14 @@ get_genes_by_Gene_Symbol <- function(genes, chr=NULL, build=38){
 #'
 
 get_gene_coords  <- function(gene_name,chr=NULL, build=38){
+  gene <- get_db(build) %>% dplyr::filter(gene_symbol == gene_name) %>% dplyr::select(-exon_chromstart,-exon_chromend)
   if(! is.null(chr)){
     chr <- gsub("chr", "", chr)
     chr <- paste("chr",chr,sep="")
-    if(build=="38")
-      gene <- toprdata::ENSGENES %>% dplyr::filter(chrom == chr) %>% dplyr::filter(gene_symbol == gene_name)
-    else if(build=="37")
-      gene <- toprdata::ENSGENES_37 %>% dplyr::filter(chrom == chr) %>% dplyr::filter(gene_symbol == gene_name)
-  }
-  else{
-    if(build=="38")
-      gene <- toprdata::ENSGENES %>% dplyr::filter(gene_symbol == gene_name)
-    else if(build=="37")
-     gene <- toprdata::ENSGENES_37 %>% dplyr::filter(gene_symbol == gene_name)
+    gene <- gene  %>% dplyr::filter(chrom == chr) 
   }
   if(is.null(gene)){
-    print(paste("Could not find a gene with the gene name: [", gene_name, "]", sep=""))
+    print(paste("Could not find a gene with the gene name: [", gene_name, "] in build ",build, sep=""))
   }
   return(gene)
 }

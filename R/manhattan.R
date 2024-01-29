@@ -62,7 +62,7 @@
 #' @param label_family A string or a vector of strings. Label font name (default ggrepel argument is "")
 #' @param gene_label_fontface  Gene label font “plain”, “bold”, “italic”, “bold.italic” (ggrepel argument)
 #' @param gene_label_family Gene label font name (default ggrepel argument is "")
-#' @param build A number representing the genome build. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).
+#' @param build A number representing the genome build or a data frame. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).
 #' @param verbose A logical scalar (default: NULL). Set to FALSE to suppress printed messages 
 #' @param label_alpha An number or vector of numbers to set the transparency of the plot labels (default: \code{label_alpha=1})
 #' @param shades_line_alpha The transparency (alpha) of the lines around the rectangles (shades)
@@ -76,7 +76,7 @@
 #' @param xaxis_label A string. The label for the x-axis (default: Chromosome)
 #' @param use_shades A logical scalar (default: FALSE). Use shades/rectangles to distinguish between chromosomes
 #' @param even_no_chr_lightness Lightness value for even numbered chromosomes. A number or vector of numbers between 0 and 1 (default: 0.8). If set to 0.5, the same color as shown for odd numbered chromosomes is displayed. A value below 0.5 will result in a darker color displayed for even numbered chromosomes, whereas a value above 0.5 results in a lighter color.
-#' @param get_chr_lengths_from_data A logical scalar (default: FALSE). If set to TRUE, instead of using the inbuilt chromosome lengths, use chromosome lengths based on the max position for each chromosome in the input dataset/s.
+#' @param get_chr_lengths_from_data A logical scalar (default: TRUE). If set to FALSE, use the inbuilt chromosome lengths (from hg38), insted of chromosome lengths based on the max position for each chromosome in the input dataset/s.
 #' 
 #'
 #'
@@ -103,7 +103,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
                   segment.color="black",segment.linetype="dashed",max.overlaps=10,label_fontface="plain",label_family="",
                   gene_label_fontface="plain",gene_label_family="",build=38,verbose=NULL,label_alpha=1,shades_line_alpha=1,vline=NULL,
                   vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5,region=NULL, theme_grey=FALSE, xaxis_label="Chromosome",
-                  use_shades=FALSE, even_no_chr_lightness=0.8, get_chr_lengths_from_data=FALSE){
+                  use_shades=FALSE, even_no_chr_lightness=0.8, get_chr_lengths_from_data=TRUE){
     
     top_snps <- NULL
     genes_df <- NULL
@@ -185,7 +185,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
      }
     if(is.null(chr)){
       ticks <- get_ticks(dat,chr_lengths_and_offsets)
-    
+     
       if(use_shades)
         shades <- get_shades(chr_lengths_and_offsets,dat,ntop=ntop,include_chrX = incl_chrX,ymin=ymin,ymax=ymax)
       
@@ -193,7 +193,6 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     }else{
       main_plot <- main_plot + scale_y_continuous(expand=c(.02,.02))  + scale_x_continuous(expand=c(.01,.01),labels = scales::comma)
     }
-   
   main_plot <- set_axis_labels(main_plot,xaxis_label = xaxis_label)
   main_plot <- main_plot %>% set_plot_text_sizes(axis_text_size=axis_text_size,axis_title_size = axis_title_size, 
                                                  legend_text_size=legend_text_size, legend_title_size=legend_title_size,scale=scale)

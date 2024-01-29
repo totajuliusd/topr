@@ -165,6 +165,33 @@ effectplot(list(CD_UKBB, CD_FINNGEN), annotate = 1e-08)
 
 <br>
 
+#### How to use *topr* with other species than human
+<hr>
+
+By default *topr* uses the human genome assembly for annotation. As of from version xxxx. topr can be used with different gene annotations as long as they are provided by the user in a specific format. 
+
+Required columns in the gene annotation file are the following: <code>chrom,gene_start_gene_end,gene_symbol,biotype,exon_chromstart</code> and <code>exon_chromend</code>
+
+An example on how to use *topr* using the mouse genome:
+
+Start by downloading and unzipping the **mouse gtf** file. From within the terminal this can be done as follows:
+
+``` r
+wget https://ftp.ensembl.org/pub/current/gtf/mus_musculus/Mus_musculus.GRCm39.111.gtf.gz
+gunzip Mus_musculus.GRCm39.111.gtf.gz
+```
+
+Next convert the file into the format required by topr
+
+``` r
+perl mk_annotation_file.pl Mus_musculus.GRCm39.111.gtf > Mus_musculus.GRCm39.111.tsv
+```
+
+In R do:
+``` r
+mus_musculus <- read.delim("Mus_musculus.GRCm39.111.tsv", sep="\t",header=T)
+```
+
 #### How to color specific peaks on the Manhattan plot
 <hr>
 

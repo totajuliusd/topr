@@ -13,6 +13,10 @@ dat_check <- function(dat, verbose=TRUE,locuszoomplot=FALSE){
 dat_chr_check <- function(dat){
   for(i in seq_along(dat)){
     df <- as.data.frame(dat[[i]])
+    # chrs <- get_chrs_from_data(list(CD_UKBB))
+    # numeric_chrs <- chrs[grepl('^-?[0-9.]+$', chrs)]
+    # non_numeric_chrs <- chrs[!grepl('^-?[0-9.]+$', chrs)]
+    
     #remove chr from CHROM if its there, and set chrX to 23
     df <- df %>% dplyr::mutate(CHROM=gsub('chr','',CHROM))
     df[df$CHROM=='X', 'CHROM'] <- "23"
