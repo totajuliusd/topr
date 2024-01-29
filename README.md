@@ -72,6 +72,9 @@ See the <a href="doc/manhattan.html">Manhattan vignette</a> for more detailed ex
 
 See the <a href="vignettes/manhattan.html">Manhattan vignette</a> for more detailed examples of how to use the manhattan plot function.
 
+[The main vignette](vignettes/manhattan.html)
+
+[The main vignette](vignettes/manhattan.nb.html)
 
 View the whole genome association results on a Manhattan plot:
 
