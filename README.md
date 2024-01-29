@@ -70,6 +70,9 @@ Basic usage of *topr's* key functions is as follows.
 
 See the <a href="doc/manhattan.html">Manhattan vignette</a> for more detailed examples of how to use the manhattan plot function.
 
+See the <a href="vignettes/manhattan.html">Manhattan vignette</a> for more detailed examples of how to use the manhattan plot function.
+
+
 View the whole genome association results on a Manhattan plot:
 
 ``` r
