@@ -180,7 +180,6 @@ head(n=2, enshuman::hg38)
 
 Note that there is no *"chr"* prefix in front of the chromosome name.
 <br>
-<br>
 
 ##### Example using the mouse genome
 
@@ -199,7 +198,8 @@ python mk_annotation_file.py Mus_musculus.GRCm39.111.gtf > Mus_musculus.GRCm39.1
 <br>
 <details>
   <summary><i>Click here to see what the mk_annotation_file.py looks like</i></summary>
-``` r
+
+```r{eval=F}
 #!/usr/bin/env python                                                                                                                                                                    
 
 import sys
@@ -264,7 +264,6 @@ for gene, data in genes.items():
     print("\t".join([data["chr"], data["gene_start"], data["gene_end"], gene, data["biotype"], exon_starts, exon_ends]))
 
 ```
-
 </details>
 
 <br>
