@@ -68,13 +68,7 @@ Basic usage of *topr's* key functions is as follows.
 #### Manhattan
 <hr>
 
-See the <a href="doc/manhattan.html">Manhattan vignette</a> for more detailed examples of how to use the manhattan plot function.
-
-See the <a href="vignettes/manhattan.html">Manhattan vignette</a> for more detailed examples of how to use the manhattan plot function.
-
-[The main vignette](vignettes/manhattan.html)
-
-[The main vignette](vignettes/manhattan.nb.html)
+See the <a href="https://totajuliusd.github.io/topr/articles/manhattan.html">Manhattan vignette</a> for more detailed examples of how to use the manhattan plot function.
 
 View the whole genome association results on a Manhattan plot:
 
@@ -174,7 +168,7 @@ effectplot(list(CD_UKBB, CD_FINNGEN), annotate = 1e-08)
 #### How to use *topr* with other species than human
 <hr>
 
-By default *topr* uses the human genome assembly for annotation. As of from version xxxx. topr can be used with different gene annotations as long as they are provided by the user in a specific format. 
+By default *topr* uses the human genome assembly for annotation. As of from version 2.0.0. topr can be used with different gene annotations as long as they are provided by the user in a specific format. 
 
 Required columns in the gene annotation file are the following: <code>chrom,gene_start_gene_end,gene_symbol,biotype,exon_chromstart</code> and <code>exon_chromend</code>
 
@@ -185,6 +179,8 @@ head(n=2, enshuman::hg38)
 ```
 
 Note that there is no *"chr"* prefix in front of the chromosome name.
+<br>
+<br>
 
 ##### Example using the mouse genome
 
@@ -198,33 +194,106 @@ gunzip Mus_musculus.GRCm39.111.gtf.gz
 Next convert the file into the format required by topr
 
 ``` r
-perl mk_annotation_file.pl Mus_musculus.GRCm39.111.gtf > Mus_musculus.GRCm39.111.tsv
+python mk_annotation_file.py Mus_musculus.GRCm39.111.gtf > Mus_musculus.GRCm39.111.tsv
 ```
+<br>
+<details>
+  <summary><i>Click here to see what the mk_annotation_file.py looks like</i></summary>
+``` r
+#!/usr/bin/env python                                                                                                                                                                    
+
+import sys
+import re
+
+if len(sys.argv) != 2:
+    print("Usage: {} <file>".format(sys.argv[0]))
+    sys.exit(1)
+
+file_name = sys.argv[1]
+
+try:
+    with open(file_name, 'r') as fh:
+        genes = {}
+        for line in fh:
+            if not line.startswith('#'):
+                columns = line.strip().split('\t')
+                chrom, start, end = columns[0], columns[3], columns[4]
+
+                if columns[2] == 'exon':
+                    gene_name = None
+                    match = re.search(r'gene_name\s+"(\S+)"', columns[8])
+                    if match:
+                        gene_name = match.group(1)
+
+                    if gene_name in genes:
+                        if "exon_chromstart" in genes[gene_name]:
+                            genes[gene_name]["exon_chromstart"].append(start)
+                        else:
+                            genes[gene_name]["exon_chromstart"] = [start]
+
+                        if "exon_chromend" in genes[gene_name]:
+                            genes[gene_name]["exon_chromend"].append(end)
+                        else:
+                            genes[gene_name]["exon_chromend"] = [end]
+
+                elif columns[2] == 'gene':
+                    gene_name, gene_type = None, None
+                    match = re.search(r'gene_name\s+"(\S+)".+gene_biotype\s+"(\S+)"', columns[8])
+                    if match:
+                        gene_name, gene_type = match.group(1), match.group(2)
+
+                    if gene_name not in genes:
+                        genes[gene_name] = {
+                            "gene_start": start,
+                            "gene_end": end,
+                            "chr": chrom,
+                            "biotype": gene_type
+                        }
+
+except FileNotFoundError:
+    print("File not found: {}".format(file_name))
+    sys.exit(1)
+
+# Print the output                                                                                                                                                                       
+print("\t".join(["chrom", "gene_start", "gene_end", "gene_symbol", "biotype", "exon_chromstart", "exon_chromend"]))
+for gene, data in genes.items():
+    if not gene:
+        continue
+    exon_starts = ",".join(data.get("exon_chromstart", []))
+    exon_ends = ",".join(data.get("exon_chromend", []))
+    print("\t".join([data["chr"], data["gene_start"], data["gene_end"], gene, data["biotype"], exon_starts, exon_ends]))
+
+```
+
+</details>
+
+<br>
 
 Then from within your R editor do:
 ``` r
-mus_musculus <- read.delim("Mus_musculus.GRCm39.111.tsv", sep="\t",header=T)
+mm39 <- read.delim("Mus_musculus.GRCm39.111.tsv", sep="\t",header=T)
 ```
 
 Then optionally to save the data in a more compact .rda format:
 
 ``` r
-save(mus_musculus, file="mus_musculus.rda", compress='xz')
+save(mm39, file="mus_musculus.rda", compress='xz')
 #and then to load from the .rda file, do:
 load("mus_musculus.rda")
 ```
 
-Then to use the mouse build with *topr*, assign <code>mus_musculus</code> to the build argument in *topr's* functions.  
+Then to use the mouse build with *topr*, assign <code>mum39</code> to the build argument in *topr's* functions.  
 
 Examples (note that CD_UKBB are human association results, and only used here as a proof of concept): 
+
 ``` r
-manhattan(CD_UKBB, annotate=1e-14, build=mus_musculus)
-regionplot(CD_UKBB, gene="Cps1", build=mus_musculus)
-CD_UKBB %>% get_lead_snps() %>% annotate_with_nearest_gene(build=mus_musculus)
-get_gene_coords("Cps1", build=mus_musculus)
+manhattan(CD_UKBB, annotate=1e-14, build=mm39)
+regionplot(CD_UKBB, gene="Cps1", build=mm39)
+CD_UKBB %>% get_lead_snps() %>% annotate_with_nearest_gene(build=mm39)
+get_gene_coords("Cps1", build=mm39)
 ```
 
-
+<br>
 
 #### How to color specific peaks on the Manhattan plot
 <hr>
