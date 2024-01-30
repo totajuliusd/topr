@@ -17,6 +17,14 @@ dat_chr_check <- function(dat){
     # numeric_chrs <- chrs[grepl('^-?[0-9.]+$', chrs)]
     # non_numeric_chrs <- chrs[!grepl('^-?[0-9.]+$', chrs)]
     
+   # players <- c("bob", "tom", "tim", "tony", "tiny", "hubert", "herbert")
+   # rankings <- c(0.2027, 0.2187, 0.0378, 0.3334, 0.0161, 0.0555, 0.1357)
+    #league <- setNames(as.list(rankings), players)
+    # Ten access the value by either
+    #league$bob
+    #or 
+    #tmp <- "bob"; league[tmp]
+    
     #remove chr from CHROM if its there, and set chrX to 23
     df <- df %>% dplyr::mutate(CHROM=gsub('chr','',CHROM))
     df[df$CHROM=='X', 'CHROM'] <- "23"

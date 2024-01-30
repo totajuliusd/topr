@@ -1,5 +1,5 @@
 # 2.0.0
-* Allowing for different gene annotation files from any species to be used
+* topr can now be used with any species and the gene annotation file can be provided by the user
 * Argument chr_ticknames added to the Manhattan function to control x-axix labels
 * Improved handling of p-values below 1e-324 
 * Inclusion of Y and MT in build hg38
