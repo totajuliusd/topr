@@ -172,7 +172,7 @@ By default *topr* uses the human genome assembly for annotation. As of from vers
 
 Required columns in the gene annotation file are the following: <code>chrom,gene_start_gene_end,gene_symbol,biotype,exon_chromstart</code> and <code>exon_chromend</code>
 
-To see an example, view the inbuilt human genome annotation file (hg38) from the <code>enshuman</code> package:
+To see an example of a gene annotation file, view the inbuilt human genome annotation file (hg38) from the <code>enshuman</code> package which comes with topr v.2.0.0:
 
 ``` r
 head(n=2, enshuman::hg38)
