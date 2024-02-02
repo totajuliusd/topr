@@ -48,7 +48,7 @@ regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alp
                        rsids_with_vline=NULL, annotate_with_vline=NULL,show_gene_legend=TRUE, unit_main=7, unit_gene=2, unit_overview=1.25, verbose=NULL,
                        gene_color=NULL,segment.size=0.2,segment.color="black",segment.linetype="solid", max.overlaps=10, unit_ratios=NULL, 
                        extract_plots=FALSE,label_fontface="plain",label_family="",gene_label_fontface="plain",gene_label_family="",build=38,
-                       label_alpha=1, vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5){
+                       label_alpha=1, vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5, log_trans_p=TRUE){
   # three plots, overview_plot, main_plot and gene_plot
   #only include overview plot if df region is larger than the region between xmin and xmax
   if (!missing(show_exons)) 
@@ -66,7 +66,13 @@ regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alp
     stop("Regional argument is missing (either gene, variant, region or the 3 arguments (chr,xmin,xmax) has to be provided as input to this function")
   }
   else{
-    dat <- dat_check(df,verbose=verbose,locuszoomplot=locuszoomplot) %>% set_log10p(ntop)  %>% set_size_shape_alpha(size, shape, alpha, locuszoomplot = locuszoomplot)
+    dat <- dat_check(df,verbose=verbose,locuszoomplot=locuszoomplot) %>% set_size_shape_alpha(size, shape, alpha, locuszoomplot = locuszoomplot)
+    if(log_trans_p) 
+      dat <- dat %>% set_log10p(ntop)
+    else{
+      print("Not log transforming the P values since log_trans_p is set to FALSE! ")
+      dat <- dat %>% add_log10p_wo_trans(ntop)
+    }
    if(! locuszoomplot){
       dat <- dat %>% set_color(color)
     }

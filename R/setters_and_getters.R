@@ -44,7 +44,7 @@ set_color <- function(dat,color,shades_alpha=0.5, use_shades=T, chr_lightness=0.
         }
         else{                  
           even_chr_color <- lightness(color[i], get_chr_lightness(chr_lightness,i) )
-          dat[[i]]$color <- ifelse((dat[[i]]$CHROM %% 2) == 0, even_chr_color , color[i]) 
+          dat[[i]]$color <- ifelse((as.numeric(dat[[i]]$CHROM) %% 2) == 0, even_chr_color , color[i]) 
         }
       }
       else
@@ -130,6 +130,21 @@ set_log10p <- function(dat, ntop){
   }
   return(dat)
 }
+
+add_log10p_wo_trans <- function(dat, ntop){
+  for(i in seq_along(dat)){
+    df <- dat[[i]]
+    if(ntop > length(dat)){ ntop <- length(dat)}
+    if(i <= ntop){
+      dat[[i]] <- df %>% dplyr::mutate(log10p=P)
+      
+    }else{
+      dat[[i]] <- df %>% dplyr::mutate(log10p=P)
+    }
+  }
+  return(dat)
+}
+
 
 get_db <- function(build){
    if(is.character(build) || is.numeric(build)){
@@ -290,9 +305,9 @@ get_ymin <- function(dat){
   return(ymin)
 }
 
-get_chr_lengths_and_offsets <- function(include_chrX=FALSE, dat, get_chr_lengths_from_data){
+get_chr_lengths_and_offsets <- function(dat, get_chr_lengths_from_data){
   if(get_chr_lengths_from_data){
-    chrs <- get_chrs_from_data(dat)
+    chrs <- get_chrs_from_data(dat) %>% as.numeric()
     chrs2plot <- get_max_value_by_chr_from_data(dat, chrs)
   }
   else{
@@ -330,31 +345,40 @@ get_ticknames <- function(df){
   return(list(names=ticknames, pos=tickpos))
 }
 
-get_ticks <- function(dat,chr_lengths_and_offsets){
+get_ticks <- function(dat,chr_lengths_and_offsets,chr_ticknames,chr_map, show_all_chr_ticks=FALSE, hide_chrticks_from_pos=17, hide_chrticks_to_pos=NULL, hide_every_nth_chrtick=2){
   df <- dat[[1]]
   for(i in seq_along(dat)){ if(length(unique(dat[[i]]$CHROM))  > length(unique(df$CHROM))){ df <- dat[[i]] } }
-  ticknames <- c(1:16, '',18, '',20, '',22, 'X')
+  ticknames=NULL
+  if(!is.null(chr_ticknames)){
+    if(length(names(chr_map)) == length(chr_ticknames))
+      ticknames=chr_ticknames
+    else
+      warning(paste0("The length of the provided chr_ticknames vector [",length(chr_ticknames),"] does not match the number of chromosomes in the dataset(s) [", length(chr_map), "]. Using the default chr_ticknames instead!!"))
+  }
+  if(is.null(chr_ticknames)){
+    chrs <- names(chr_map)
+    numeric_chrs <- chrs[grepl('^-?[0-9.]+$', chrs)] %>% as.numeric() %>% sort()
+    non_numeric_chrs <- chrs[!grepl('^-?[0-9.]+$', chrs)]
+    chr_order <- append(c(numeric_chrs), c(non_numeric_chrs))
+    if(is.null(hide_chrticks_to_pos))
+      hide_chrticks_to_pos <- length(numeric_chrs)
+    chr_ticknames <- chr_order
+  
+    if(length(numeric_chrs) > hide_chrticks_from_pos){
+      if(! show_all_chr_ticks){
+        hide_chr <- numeric_chrs[seq(hide_chrticks_from_pos, hide_chrticks_to_pos, hide_every_nth_chrtick)]
+        chr_ticknames[(chr_ticknames %in% hide_chr) == TRUE] <- ""
+      }
+      else{
+        chr_ticknames <- chr_order
+      }
+    }
+    ticknames <- chr_ticknames
+  }
  tickpos <-chr_lengths_and_offsets %>% dplyr::group_by(CHROM)%>%
     dplyr::summarize(pm=offset+(m/2))%>%
     dplyr::pull(pm)
   names(tickpos) <- NULL
-  if(length(tickpos) < length(ticknames)){
-    ticknames=c()
-    if(length(chr_lengths_and_offsets$CHROM) > 19){
-      for(i in 1:length(chr_lengths_and_offsets$CHROM)){
-        if(chr_lengths_and_offsets$CHROM[i] < 17)
-          ticknames <- c(ticknames, chr_lengths_and_offsets$CHROM[i])
-        else{
-          if(chr_lengths_and_offsets$CHROM[i] %% 2 == 0)
-            ticknames <- c(ticknames, chr_lengths_and_offsets$CHROM[i])
-          else
-            ticknames <- c(ticknames, '')
-        }
-      }
-    }
-    else
-      ticknames <- c(1:length(chr_lengths_and_offsets$CHROM))
-  }
   return(list(names=ticknames, pos=tickpos))
 }
 

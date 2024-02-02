@@ -76,9 +76,13 @@
 #' @param xaxis_label A string. The label for the x-axis (default: Chromosome)
 #' @param use_shades A logical scalar (default: FALSE). Use shades/rectangles to distinguish between chromosomes
 #' @param even_no_chr_lightness Lightness value for even numbered chromosomes. A number or vector of numbers between 0 and 1 (default: 0.8). If set to 0.5, the same color as shown for odd numbered chromosomes is displayed. A value below 0.5 will result in a darker color displayed for even numbered chromosomes, whereas a value above 0.5 results in a lighter color.
-#' @param get_chr_lengths_from_data A logical scalar (default: TRUE). If set to FALSE, use the inbuilt chromosome lengths (from hg38), insted of chromosome lengths based on the max position for each chromosome in the input dataset/s.
-#' 
-#'
+#' @param get_chr_lengths_from_data A logical scalar (default: TRUE). If set to FALSE, use the inbuilt chromosome lengths (from hg38), instead of chromosome lengths based on the max position for each chromosome in the input dataset/s.
+#' @param log_trans_p A logical scalar (default: TRUE). By default the p-values in the input datasets are log transformed using -log10. Set this argument to FALSE if the p-values in the datasets have already been log transformed. 
+#' @param chr_ticknames A vector containing the chromosome names displayed on the x-axis. If NULL, the following format is used: chr_ticknames <- c(1:16, '',18, '',20, '',22, 'X')
+#' @param show_all_chr_ticks A logical scalar (default : FALSE). Set to TRUE to show all the chromosome names on the ticks on the x-axis
+#' @param hide_chr_ticks_from_pos A number (default: 17). Hide every nth chromosome name on the x-axis FROM this position (chromosome number)
+#' @param hide_chr_ticks_to_pos A number (default: NULL). Hide every nth chromosome name on the x-axis TO this position (chromosome number). When NULL this variable will be set to the number of numeric chromosomes in the input dataset.
+#' @param hide_every_nth_chrtick A number (default: 2). Hide every nth chromosome tick on the x-axis (from the hide_chr_ticks_from_pos to the hide_chr_ticks_to_pos).
 #'
 #' @return ggplot object
 #' @export
@@ -103,15 +107,33 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
                   segment.color="black",segment.linetype="dashed",max.overlaps=10,label_fontface="plain",label_family="",
                   gene_label_fontface="plain",gene_label_family="",build=38,verbose=NULL,label_alpha=1,shades_line_alpha=1,vline=NULL,
                   vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5,region=NULL, theme_grey=FALSE, xaxis_label="Chromosome",
-                  use_shades=FALSE, even_no_chr_lightness=0.8, get_chr_lengths_from_data=TRUE){
+                  use_shades=FALSE, even_no_chr_lightness=0.8, get_chr_lengths_from_data=TRUE, log_trans_p=TRUE,
+                  chr_ticknames=NULL, show_all_chr_ticks=FALSE, hide_chrticks_from_pos=17, hide_chrticks_to_pos=NULL, hide_every_nth_chrtick=2){
     
     top_snps <- NULL
     genes_df <- NULL
+    chr_map <- NULL
     if(theme_grey)
       use_shades=T
-    dat <- dat_check(df, verbose=verbose)
-    dat <- dat %>% set_size_shape_alpha(size, shape, alpha) %>% set_color(color,shades_alpha,use_shades,even_no_chr_lightness,chr) %>% set_log10p(ntop)
-     
+    dat <- dat_check(df, verbose=verbose, log_trans_p) 
+    
+    if(! is.null(chr)){
+      dat <- dat %>% filter_on_chr(chr)
+      xaxis_label <- paste(xaxis_label, gsub("chr", "", chr), sep=" ")
+      if(! is.null(xmin) & ! is.null(xmax))
+        dat <- dat %>% filter_on_xmin_xmax(xmin,xmax)
+    }
+    else{
+      datl <- dat %>% convert_chrs_to_numeric() #convert chromosomes to numeric so they can be numerically sorted
+      dat <- datl$dat; chr_map <- datl$chr_map;
+    }
+    dat <- dat %>% set_size_shape_alpha(size, shape, alpha) %>% set_color(color,shades_alpha,use_shades,even_no_chr_lightness,chr) 
+    if(log_trans_p) 
+      dat <- dat %>% set_log10p(ntop)
+    else{
+      warning("Assuming p-values have already been log transformed since [log_trans_p] is set to FALSE and plotting the data as is (without log transforming the p-values)!  ")
+      dat <- dat %>% add_log10p_wo_trans(ntop)
+    }
     if(!use_shades & ! is.null(shades_color)){
       warning(paste0("Argument use_shades is set to FALSE by default. For the shades_color argument to have an effect, the use_shades argument has to be set to TRUE. Add the argument [use_shades=TRUE] and re-run."))
     }
@@ -134,29 +156,28 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     annotate <- annotate_with_vline
     annot_with_vline <- TRUE
   }
-    if(! is.null(chr)){
-      chr <- gsub('X','23',chr)
-      dat <- dat %>% filter_on_chr(chr)
-      xaxis_label <- paste(xaxis_label, gsub("chr", "", chr), sep=" ")
-      if(! is.null(xmin) & ! is.null(xmax)){
-        dat <- dat %>% filter_on_xmin_xmax(xmin,xmax)
-      }
-    }
+   
+  
   if(is.null(ymin)){
     ymin <- get_ymin(dat)
     if(!is.null(highlight_genes)){ 
       ymin <- ifelse(highlight_genes_ypos < ymin, highlight_genes_ypos, ymin) }
   }
+  if(is.null(ymax)){ 
+    ymax <- get_ymax(dat)
+    ymax_addon <- ymax *0.04
+    if(ymax_addon < 0.7) # to make sure there will be space for annotation
+      ymax_addon <- 0.7
+    ymax <- ymax+ymax_addon
+  }
 
-  if(is.null(ymax)){ ymax <- get_ymax(dat) *1.04}
     # get the annotation
     if(! is.null(annotate)){
       top_snps <- get_annotation(dat, region_size = region_size, annotate=annotate, protein_coding_only = protein_coding_only,nudge_x=nudge_x,nudge_y=nudge_y,
-                                 angle=angle,label_fontface=label_fontface,label_family=label_family, build=build, verbose = verbose, label_alpha=label_alpha)
+                                 angle=angle,label_fontface=label_fontface,label_family=label_family, build=build, verbose = verbose, label_alpha=label_alpha, chr_map=chr_map)
 
     }
-
-    #get the genes
+      #get the genes
     if (! is.null(highlight_genes)){
       if(is.data.frame(highlight_genes)){
         genes_df <- highlight_genes
@@ -168,7 +189,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     incl_chrX=T
     if(length(unique(dat[[1]]$CHROM))>1 & is.null(chr)){  #Manhattan plot
       incl_chrX <- include_chrX(dat)
-      chr_lengths_and_offsets <- get_chr_lengths_and_offsets(incl_chrX, dat, get_chr_lengths_from_data)
+      chr_lengths_and_offsets <- get_chr_lengths_and_offsets(dat, get_chr_lengths_from_data)
       offsets <- stats::setNames(chr_lengths_and_offsets$offset,chr_lengths_and_offsets$CHROM)
        if(! is.null(annotate)){  top_snps <- top_snps %>%  get_pos_with_offset(offsets) }
       if (! is.null(highlight_genes)){
@@ -184,8 +205,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
         main_plot <- main_plot %>% add_title(title=title, title_text_size = title_text_size,scale=scale)
      }
     if(is.null(chr)){
-      ticks <- get_ticks(dat,chr_lengths_and_offsets)
-     
+      ticks <- get_ticks(dat,chr_lengths_and_offsets,chr_ticknames,chr_map,show_all_chr_ticks, hide_chrticks_from_pos, hide_chrticks_to_pos, hide_every_nth_chrtick)
       if(use_shades)
         shades <- get_shades(chr_lengths_and_offsets,dat,ntop=ntop,include_chrX = incl_chrX,ymin=ymin,ymax=ymax)
       
@@ -206,12 +226,13 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
      if(using_ntop){
     main_plot <- main_plot %>%  add_zero_hline()
 }
-
   if (! is.null(annotate)){
     main_plot <- main_plot %>%  add_annotation(plot_labels = top_snps,annotate_with=annotate_with,angle=angle,label_size = label_size, 
                                                label_color=label_color, nudge_x=nudge_x, nudge_y=nudge_y, scale=scale, 
                                                segment.size=segment.size,segment.color=segment.color,segment.linetype=segment.linetype, max.overlaps=max.overlaps)
   }
+
+  
   if (! is.null(highlight_genes)){
     if(! is.null(gene_label_size)){
       label_size <- gene_label_size
@@ -233,6 +254,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     rsids_df <- get_rsids_from_df(dat,rsids)
     main_plot <-main_plot %>% add_rsids(rsids_df, rsids_color=rsids_color, nudge_x=nudge_x, nudge_y=nudge_y, label_size=label_size, angle=angle, label_color=label_color, scale=scale, with_vline = with_vline)
   }
+
   if(! is.null(vline)){
     v <- data.frame("x"=vline)
     v <- v %>% tidyr::separate("x", c("CHROM","POS"),":")
@@ -248,13 +270,13 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     }
     main_plot <- main_plot %>% add_vline(vlines, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
   }
-
-  main_plot <- main_plot %>% set_ymin_ymax(ymin,ymax)
-
-  if(!is.null(xmin) & !is.null(xmax) & ! is.null(chr)){
+   if(!is.null(ymax) & !is.null(ymin)){
+     main_plot <- main_plot %>% set_ymin_ymax(ymin,ymax)
+   }
+   if(!is.null(xmin) && !is.null(xmax) & ! is.null(chr)){
     main_plot <- main_plot %>% set_xmin_xmax(xmin,xmax)
   }
- 
+  
   main_plot <- change_axes(main_plot)
   return(main_plot)
   }

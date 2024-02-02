@@ -2,7 +2,7 @@
 #'
 #' Dataset retrieved from the UK biobank consisting of 2,799 crohn´s cases (K50) and 484,515 controls. The dataset has been filtered on variants with P <1e-03.
 #'
-#' @format A data frame  with 26,824 rows and 8 variables:
+#' @format A data frame  with 21,717 rows and 8 variables:
 #' \describe{
 #'   \item{CHROM}{Chromosome, written as for example chr1 or 1}
 #'   \item{POS}{genetic position of the variant}
@@ -20,7 +20,7 @@
 #'
 #' Dataset retrieved from the UK biobank including of 5,452 UC cases (K51) and 481,862 controls. The dataset has been filtered on variants with P<1e-03.
 #'
-#' @format A data frame  with 57,383 rows and 8 variables
+#' @format A data frame  with 45,012 rows and 8 variables
 #' \describe{
 #'   \item{CHROM}{Chromosome, written as for example chr1 or 1}
 #'   \item{POS}{genetic position of the variant}
@@ -39,7 +39,7 @@
 #' Dataset retrieved from the Finngen database (version 7) including 3147 crohn´s cases (K50) and 296,100 controls. The dataset has been filtered on variants with P <1e-03.
 #' FinnGen data are publicly available and were downloaded from https://finngen.fi.
 #'
-#' @format A data frame  with 41,095 rows and 8 variables:
+#' @format A data frame  with 32,303 rows and 8 variables:
 #' \describe{
 #'   \item{CHROM}{Chromosome, written as for example chr1 or 1}
 #'   \item{POS}{genetic position of the variant}
@@ -49,8 +49,6 @@
 #'   \item{BETA}{Variant effect}
 #'   \item{ID}{Variant identifier, e.g. rsid }
 #'   \item{AF}{Allele frequency}
-
-
 #' }
 #' @source  Crohn's K50 (K11_CROHNS), only including variants with P<1e-03
 "CD_FINNGEN"

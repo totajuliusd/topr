@@ -74,6 +74,7 @@ add_shades_and_ticks <- function(p1, shades,ticks,shades_color=NULL,shades_alpha
 add_annotation <- function(p1,plot_labels=NULL, nudge_x=0.01, nudge_y=0.01, label_size=3.5, angle=0,annotate_with="Gene_Symbol", label_color=NULL,scale=1, 
                            segment.size=0.2,segment.color="black",segment.linetype="solid",max.overlaps=10){
 
+  
   if(! is.null(label_color)){
      if(is.vector(label_color) & length(label_color) > 1){
       label_color <- label_color[1]; 
@@ -83,7 +84,6 @@ add_annotation <- function(p1,plot_labels=NULL, nudge_x=0.01, nudge_y=0.01, labe
   }
    if(! is.null(plot_labels)){
     if(is.null(label_color) & length(unique(plot_labels$color)) == 1){plot_labels$color="black"} 
-    
         p1 <- p1 + ggrepel::geom_text_repel(data=plot_labels, 
                                         aes(x=POS, y=log10p, label=(plot_labels %>% dplyr::pull(annotate_with)) ),
                                         nudge_x=plot_labels$nudge_x,nudge_y=ifelse(plot_labels$log10p>0, plot_labels$nudge_y, -plot_labels$nudge_y),

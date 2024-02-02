@@ -51,7 +51,7 @@ get_main_LD_snp <- function(dat, nudge_x=0.1,nudge_y=0.1,angle=0,label_fontface=
   return(top_snps)
 }
 get_annotation <- function(dat, annotate=5e-08, region_size=1000000,distinct_gene_labels=FALSE,protein_coding_only=FALSE, verbose=NULL,nudge_x=0.1,nudge_y=0.1,
-                           angle=0,label_fontface="plain",label_family="",build=38, label_alpha=1){
+                           angle=0,label_fontface="plain",label_family="",build=38, label_alpha=1, chr_map=NULL){
   if(is.data.frame(dat)){dat <- list(dat)}
   if("log10p" %in% colnames(dat[[1]])){
     label_cols <-  c("CHROM","POS","P","ID","Gene_Symbol","biotype", "log10p", "color","alpha","size","shape")
@@ -62,7 +62,7 @@ get_annotation <- function(dat, annotate=5e-08, region_size=1000000,distinct_gen
   plot_labels <-  data.frame(matrix(nrow = 0, ncol = length(label_cols)))
   colnames(plot_labels) <- label_cols
   #retrieve the top variants
-  
+
   for(i in seq_along(dat)){
     df <- as.data.frame(dat[[i]])
     if(is.vector(region_size)){
@@ -109,7 +109,7 @@ get_annotation <- function(dat, annotate=5e-08, region_size=1000000,distinct_gen
       tmp_labels$alpha <- alpha_tmp
       if(!"biotype" %in% tmp_labels){tmp_labels$biotype <- "unknown"}
       if(! "Gene_Symbol" %in% colnames(tmp_labels)){
-        tmp_labels <- annotate_with_nearest_gene(tmp_labels, protein_coding_only=protein_coding_only, build=build)
+        tmp_labels <- annotate_with_nearest_gene(tmp_labels, protein_coding_only=protein_coding_only, build=build, .chr_map=chr_map)
       }
       if("log10p" %in% colnames(dat[[1]])){
         tmp_labels <- tmp_labels %>% dplyr::select("CHROM","POS","P","ID","Gene_Symbol","biotype", "log10p", "color","alpha","size","shape","nudge_x","nudge_y","angle","fontface","family")
@@ -138,6 +138,7 @@ get_annotation <- function(dat, annotate=5e-08, region_size=1000000,distinct_gen
 #' @param variants a dataframe of variant positions (CHROM and POS)
 #' @param protein_coding_only Logical, if set to TRUE only annotate with protein coding genes (the default value is FALSE)
 #' @param build A number representing the genome build. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).
+#' @param .gene_map An internally used list which maps chromosome names to numbers.
 #' @return the input dataframe with Gene_Symbol as an additional column
 #' @export
 #'
@@ -147,7 +148,7 @@ get_annotation <- function(dat, annotate=5e-08, region_size=1000000,distinct_gen
 #' annotate_with_nearest_gene(variants)
 #' }
 #' 
-annotate_with_nearest_gene <- function(variants, protein_coding_only=FALSE, build=38){
+annotate_with_nearest_gene <- function(variants, protein_coding_only=FALSE, build=38, .chr_map=NULL){
   if("POS" %in% colnames(variants) & "CHROM" %in% colnames(variants)){
     if(length(variants$POS) > 1000){
       print(paste("The dataset includes [",length(variants$POS),"] variants. This may take a while...", sep=""))
@@ -161,6 +162,8 @@ annotate_with_nearest_gene <- function(variants, protein_coding_only=FALSE, buil
       nearest_gene <- NULL
       variant <- variants[i,]
       chr <- gsub("chr", "", variant$CHROM)
+      if(! is.null(.chr_map))
+         chr <- names(.chr_map[as.numeric(chr)])
       genes_on_chr <- get_db(build) %>% dplyr::filter(chrom == chr) %>% dplyr::arrange(gene_start)
       
       if(protein_coding_only){
