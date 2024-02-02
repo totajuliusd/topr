@@ -25,7 +25,7 @@ locuszoom <- function(df, annotate=NULL,ntop=3, xmin=0, size=2, shape=19, alpha=
                       rsids_with_vline=NULL, annotate_with_vline=NULL,sign_thresh_size=0.5,  unit_main=7, unit_gene=2,
                       gene_color=NULL,segment.size=0.2, segment.color="black",segment.linetype="solid",show_gene_legend=TRUE,max.overlaps=10,extract_plots=FALSE,
                       label_fontface="plain",label_family="",gene_label_fontface="plain",gene_label_family="", build=38,verbose=NULL,show_legend=TRUE,label_alpha=1,gene_label_size=NULL, 
-                      vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5){
+                      vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5,log_trans_p=TRUE){
   if (!missing(show_exons)) {
     deprecated_argument_msg(show_exons)
   }
@@ -67,7 +67,7 @@ locuszoom <- function(df, annotate=NULL,ntop=3, xmin=0, size=2, shape=19, alpha=
              gene_color=gene_color,segment.size=segment.size,segment.color=segment.color,segment.linetype=segment.linetype, show_gene_legend = show_gene_legend,
              max.overlaps=max.overlaps,extract_plots = extract_plots,label_fontface=label_fontface,label_family=label_family,gene_label_fontface=gene_label_fontface,
              gene_label_family=gene_label_family, build=build,verbose=verbose,show_legend = show_legend,label_alpha = label_alpha,gene_label_size = gene_label_size,
-             vline_color=vline_color,vline_linetype=vline_linetype, vline_alpha=vline_alpha,vline_size=vline_size)
+             vline_color=vline_color,vline_linetype=vline_linetype, vline_alpha=vline_alpha,vline_size=vline_size, log_trans_p = log_trans_p)
 }
 
 set_lz_colors <- function(dat){

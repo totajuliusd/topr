@@ -10,6 +10,7 @@
 #' @param n_variants An integer, total number of variants used in the study
 #' @param color A string or vector of strings setting the color's for the input datasets
 #' @param breaks A number setting the breaks for the axes
+#' @param diagnoal_line_color A string setting the color of the diagonal line on the plot
 #' @inheritParams manhattan
 #'
 #' @return ggplot
@@ -22,7 +23,7 @@
 #' 
 qqtopr <- function(dat, scale = 1, n_variants = 0, breaks = 15, title=NULL, color=get_topr_colors(),size=1,
                    legend_name="",legend_position="right", legend_labels=NULL,
-                   axis_text_size=11,axis_title_size=12, title_text_size=13,legend_title_size=12,legend_text_size=12,verbose=NULL) {
+                   axis_text_size=11,axis_title_size=12, title_text_size=13,legend_title_size=12,legend_text_size=12,verbose=NULL,diagonal_line_color= "#808080") {
    
    dat <- dat_check(dat,verbose=verbose) %>% set_color(color)
     nvars <- n_variants
@@ -60,7 +61,7 @@ qqtopr <- function(dat, scale = 1, n_variants = 0, breaks = 15, title=NULL, colo
       dat[[i]] <- df
     }
     df <- dat[[1]]
-    p1 <- ggplot2::ggplot(df, aes(exp, P)) + geom_smooth(aes(y = exp), method = "lm", se = F, color = "#808080", size = .5, fullrange = T)
+    p1 <- ggplot2::ggplot(df, aes(exp, P)) + geom_smooth(aes(y = exp), method = "lm", se = F, color = diagonal_line_color, size = .5, fullrange = T)
     p1 <- p1 + ggplot2::geom_point(size = size, aes(color=color[1])) + labs(title = title, x = "Theoretical", y = "Observed", color="Test", caption = caption) 
   
       # Remove panel borders and grid lines

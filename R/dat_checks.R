@@ -6,35 +6,39 @@ dat_check <- function(dat, verbose=TRUE,locuszoomplot=FALSE){
       warning(paste0("Dataset [",i, "] is empty with 0 rows. Please remove it from the input list and re-run!"))
     }
   }
-  dat <- dat_column_check_and_set(dat, verbose=verbose,locuszoomplot=locuszoomplot) %>% dat_chr_check()
+  dat <- dat_column_check_and_set(dat, verbose=verbose,locuszoomplot=locuszoomplot) %>% rm_chr_prefix_and_sort()
   return(dat)
 }
 
-dat_chr_check <- function(dat){
+rm_chr_prefix_and_sort <- function(dat){
   for(i in seq_along(dat)){
     df <- as.data.frame(dat[[i]])
-    # chrs <- get_chrs_from_data(list(CD_UKBB))
-    # numeric_chrs <- chrs[grepl('^-?[0-9.]+$', chrs)]
-    # non_numeric_chrs <- chrs[!grepl('^-?[0-9.]+$', chrs)]
-    
-   # players <- c("bob", "tom", "tim", "tony", "tiny", "hubert", "herbert")
-   # rankings <- c(0.2027, 0.2187, 0.0378, 0.3334, 0.0161, 0.0555, 0.1357)
-    #league <- setNames(as.list(rankings), players)
-    # Ten access the value by either
-    #league$bob
-    #or 
-    #tmp <- "bob"; league[tmp]
-    
-    #remove chr from CHROM if its there, and set chrX to 23
     df <- df %>% dplyr::mutate(CHROM=gsub('chr','',CHROM))
-    df[df$CHROM=='X', 'CHROM'] <- "23"
-    df$CHROM <-  as.integer(df$CHROM)
-    df <- df %>% dplyr::filter(CHROM<24)
     df$POS <- as.integer(df$POS)
     df <- df %>% dplyr::arrange(CHROM,POS)
     dat[[i]] <- df
   }
   return(dat)
+}
+
+
+convert_chrs_to_numeric <- function(dat){
+  for(i in seq_along(dat)){
+    df <- as.data.frame(dat[[i]])
+    chrs <- get_chrs_from_data(list(df))
+    numeric_chrs <- chrs[grepl('^-?[0-9.]+$', chrs)] %>% as.numeric() %>% sort()
+    non_numeric_chrs <- chrs[!grepl('^-?[0-9.]+$', chrs)]
+    chr_order <- append(c(numeric_chrs), c(non_numeric_chrs))
+    chr_number=c(1:length(chr_order))
+    chr_map <- setNames(as.list(chr_number), chr_order)
+    for(chr in chr_order){
+     df[df$CHROM==chr, 'CHROM'] <- as.numeric(unlist(unname(chr_map[chr])))
+    }
+    df$CRHOM <- as.integer(df$CHROM)
+    df <- df %>% dplyr::arrange(CHROM) #rearrange chr order
+    dat[[i]] <- df
+  }
+  return(list("dat"=dat, "chr_map"=chr_map))
 }
 
 convert_region_size <- function(region_size){
