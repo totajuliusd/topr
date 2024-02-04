@@ -5,7 +5,7 @@
 \alias{UC_UKBB}
 \title{UKBB Ulcerative colitis (ICD 10 code K51)}
 \format{
-A data frame  with 57,383 rows and 8 variables
+A data frame  with 45,012 rows and 8 variables
 \describe{
 \item{CHROM}{Chromosome, written as for example chr1 or 1}
 \item{POS}{genetic position of the variant}

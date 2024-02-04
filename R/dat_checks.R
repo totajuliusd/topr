@@ -22,22 +22,28 @@ rm_chr_prefix_and_sort <- function(dat){
 }
 
 
-convert_chrs_to_numeric <- function(dat){
-  for(i in seq_along(dat)){
-    df <- as.data.frame(dat[[i]])
-    chrs <- get_chrs_from_data(list(df))
+convert_chrs_to_numeric <- function(dat, get_chr_lengths_from_data){
+    chrs <- NULL
+    if(get_chr_lengths_from_data)
+      chrs <- get_chrs_from_data(dat)
+    else{
+      chrs <- chr_lengths$V1[2:24] 
+      chrs <- gsub("chr", "", chrs)
+    }
     numeric_chrs <- chrs[grepl('^-?[0-9.]+$', chrs)] %>% as.numeric() %>% sort()
     non_numeric_chrs <- chrs[!grepl('^-?[0-9.]+$', chrs)]
     chr_order <- append(c(numeric_chrs), c(non_numeric_chrs))
     chr_number=c(1:length(chr_order))
-    chr_map <- setNames(as.list(chr_number), chr_order)
-    for(chr in chr_order){
-     df[df$CHROM==chr, 'CHROM'] <- as.numeric(unlist(unname(chr_map[chr])))
+    chr_map <- stats::setNames(as.list(chr_number), chr_order)
+   for(i in seq_along(dat)){
+     df <- dat[[i]]
+     for(chr in chr_order){
+      df[df$CHROM==chr, 'CHROM'] <- as.numeric(unlist(unname(chr_map[chr])))
     }
     df$CRHOM <- as.integer(df$CHROM)
-    df <- df %>% dplyr::arrange(CHROM) #rearrange chr order
+    df <- df %>% dplyr::arrange(CHROM) 
     dat[[i]] <- df
-  }
+   }
   return(list("dat"=dat, "chr_map"=chr_map))
 }
 

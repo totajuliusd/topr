@@ -75,7 +75,13 @@ manhattan(
   xaxis_label = "Chromosome",
   use_shades = FALSE,
   even_no_chr_lightness = 0.8,
-  get_chr_lengths_from_data = FALSE
+  get_chr_lengths_from_data = TRUE,
+  log_trans_p = TRUE,
+  chr_ticknames = NULL,
+  show_all_chrticks = FALSE,
+  hide_chrticks_from_pos = 17,
+  hide_chrticks_to_pos = NULL,
+  hide_every_nth_chrtick = 2
 )
 }
 \arguments{
@@ -187,7 +193,7 @@ manhattan(
 
 \item{gene_label_family}{Gene label font name (default ggrepel argument is "")}
 
-\item{build}{A number representing the genome build. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).}
+\item{build}{A number representing the genome build or a data frame. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).}
 
 \item{verbose}{A logical scalar (default: NULL). Set to FALSE to suppress printed messages}
 
@@ -215,7 +221,19 @@ manhattan(
 
 \item{even_no_chr_lightness}{Lightness value for even numbered chromosomes. A number or vector of numbers between 0 and 1 (default: 0.8). If set to 0.5, the same color as shown for odd numbered chromosomes is displayed. A value below 0.5 will result in a darker color displayed for even numbered chromosomes, whereas a value above 0.5 results in a lighter color.}
 
-\item{get_chr_lengths_from_data}{A logical scalar (default: FALSE). If set to TRUE, instead of using the inbuilt chromosome lengths, use chromosome lengths based on the max position for each chromosome in the input dataset/s.}
+\item{get_chr_lengths_from_data}{A logical scalar (default: TRUE). If set to FALSE, use the inbuilt chromosome lengths (from hg38), instead of chromosome lengths based on the max position for each chromosome in the input dataset/s.}
+
+\item{log_trans_p}{A logical scalar (default: TRUE). By default the p-values in the input datasets are log transformed using -log10. Set this argument to FALSE if the p-values in the datasets have already been log transformed.}
+
+\item{chr_ticknames}{A vector containing the chromosome names displayed on the x-axis. If NULL, the following format is used: chr_ticknames <- c(1:16, '',18, '',20, '',22, 'X')}
+
+\item{show_all_chrticks}{A logical scalar (default : FALSE). Set to TRUE to show all the chromosome names on the ticks on the x-axis}
+
+\item{hide_chrticks_from_pos}{A number (default: 17). Hide every nth chromosome name on the x-axis FROM this position (chromosome number)}
+
+\item{hide_chrticks_to_pos}{A number (default: NULL). Hide every nth chromosome name on the x-axis TO this position (chromosome number). When NULL this variable will be set to the number of numeric chromosomes in the input dataset.}
+
+\item{hide_every_nth_chrtick}{A number (default: 2). Hide every nth chromosome tick on the x-axis (from the hide_chr_ticks_from_pos to the hide_chr_ticks_to_pos).}
 }
 \value{
 ggplot object

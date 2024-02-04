@@ -28,7 +28,7 @@ get_genes_in_region(
 
 \item{show_genes}{A logical scalar, show genes instead of exons (default show_genes=FALSE)}
 
-\item{build}{A number representing the genome build. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).}
+\item{build}{A number representing the genome build or a data frame. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).}
 
 \item{region}{A string representing the genetic region (e.g chr16:50693587-50734041)}
 }

@@ -20,7 +20,7 @@ regionplot(
   title_text_size = 13,
   show_genes = NULL,
   show_overview = TRUE,
-  show_exons = FALSE,
+  show_exons = NULL,
   max_genes = 200,
   sign_thresh = 5e-08,
   sign_thresh_color = "red",
@@ -79,7 +79,8 @@ regionplot(
   vline_color = "grey",
   vline_linetype = "dashed",
   vline_alpha = 1,
-  vline_size = 0.5
+  vline_size = 0.5,
+  log_trans_p = TRUE
 )
 }
 \arguments{
@@ -217,7 +218,7 @@ regionplot(
 
 \item{gene_label_family}{Gene label font name (default ggrepel argument is "")}
 
-\item{build}{A number representing the genome build. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).}
+\item{build}{A number representing the genome build or a data frame. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).}
 
 \item{label_alpha}{An number or vector of numbers to set the transparency of the plot labels (default: \code{label_alpha=1})}
 
@@ -228,6 +229,8 @@ regionplot(
 \item{vline_alpha}{A number. The alpha of added vertical line/s (default : 1)}
 
 \item{vline_size}{A number.The size of added vertical line/s (default : 0.5)}
+
+\item{log_trans_p}{A logical scalar (default: TRUE). By default the p-values in the input datasets are log transformed using -log10. Set this argument to FALSE if the p-values in the datasets have already been log transformed.}
 }
 \value{
 plots within ggplotGrobs, arranged with egg::gtable_frame

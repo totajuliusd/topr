@@ -1,9 +1,10 @@
 # 2.0.0
-* topr can now be used with any species and the gene annotation file can be provided by the user
-* Argument chr_ticknames added to the Manhattan function to control x-axix labels
-* Improved handling of p-values below 1e-324 
+* topr can now be used with any species
+* argument added to set the color of the diagonal line in qqtopr
+* Argument chr_ticknames, show_all_chrticks, hide_chrticks_from_pos, hide_chrticks_to_pos and hide_every_nth_chrtick added to the Manhattan function to control x-axis labels
+* The log_trans_p argument was added for input datasets that have already been log-transformed
 * Inclusion of Y and MT in build hg38
-* argument to set colour for diagonal line in qqtopr
+
 
 # 1.1.10
 * Argument get_chr_lengths_from_data added to the Manhattan function so the number of chromosomes and chromosome lengths can be extracted from the input data.

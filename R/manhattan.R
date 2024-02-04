@@ -79,9 +79,9 @@
 #' @param get_chr_lengths_from_data A logical scalar (default: TRUE). If set to FALSE, use the inbuilt chromosome lengths (from hg38), instead of chromosome lengths based on the max position for each chromosome in the input dataset/s.
 #' @param log_trans_p A logical scalar (default: TRUE). By default the p-values in the input datasets are log transformed using -log10. Set this argument to FALSE if the p-values in the datasets have already been log transformed. 
 #' @param chr_ticknames A vector containing the chromosome names displayed on the x-axis. If NULL, the following format is used: chr_ticknames <- c(1:16, '',18, '',20, '',22, 'X')
-#' @param show_all_chr_ticks A logical scalar (default : FALSE). Set to TRUE to show all the chromosome names on the ticks on the x-axis
-#' @param hide_chr_ticks_from_pos A number (default: 17). Hide every nth chromosome name on the x-axis FROM this position (chromosome number)
-#' @param hide_chr_ticks_to_pos A number (default: NULL). Hide every nth chromosome name on the x-axis TO this position (chromosome number). When NULL this variable will be set to the number of numeric chromosomes in the input dataset.
+#' @param show_all_chrticks A logical scalar (default : FALSE). Set to TRUE to show all the chromosome names on the ticks on the x-axis
+#' @param hide_chrticks_from_pos A number (default: 17). Hide every nth chromosome name on the x-axis FROM this position (chromosome number)
+#' @param hide_chrticks_to_pos A number (default: NULL). Hide every nth chromosome name on the x-axis TO this position (chromosome number). When NULL this variable will be set to the number of numeric chromosomes in the input dataset.
 #' @param hide_every_nth_chrtick A number (default: 2). Hide every nth chromosome tick on the x-axis (from the hide_chr_ticks_from_pos to the hide_chr_ticks_to_pos).
 #'
 #' @return ggplot object
@@ -108,11 +108,12 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
                   gene_label_fontface="plain",gene_label_family="",build=38,verbose=NULL,label_alpha=1,shades_line_alpha=1,vline=NULL,
                   vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5,region=NULL, theme_grey=FALSE, xaxis_label="Chromosome",
                   use_shades=FALSE, even_no_chr_lightness=0.8, get_chr_lengths_from_data=TRUE, log_trans_p=TRUE,
-                  chr_ticknames=NULL, show_all_chr_ticks=FALSE, hide_chrticks_from_pos=17, hide_chrticks_to_pos=NULL, hide_every_nth_chrtick=2){
+                  chr_ticknames=NULL, show_all_chrticks=FALSE, hide_chrticks_from_pos=17, hide_chrticks_to_pos=NULL, hide_every_nth_chrtick=2){
     
     top_snps <- NULL
     genes_df <- NULL
     chr_map <- NULL
+   
     if(theme_grey)
       use_shades=T
     dat <- dat_check(df, verbose=verbose, log_trans_p) 
@@ -124,7 +125,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
         dat <- dat %>% filter_on_xmin_xmax(xmin,xmax)
     }
     else{
-      datl <- dat %>% convert_chrs_to_numeric() #convert chromosomes to numeric so they can be numerically sorted
+      datl <- dat %>% convert_chrs_to_numeric(get_chr_lengths_from_data) #convert chromosomes to numeric so they can be numerically sorted
       dat <- datl$dat; chr_map <- datl$chr_map;
     }
     dat <- dat %>% set_size_shape_alpha(size, shape, alpha) %>% set_color(color,shades_alpha,use_shades,even_no_chr_lightness,chr) 
@@ -191,7 +192,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
       incl_chrX <- include_chrX(dat)
       chr_lengths_and_offsets <- get_chr_lengths_and_offsets(dat, get_chr_lengths_from_data)
       offsets <- stats::setNames(chr_lengths_and_offsets$offset,chr_lengths_and_offsets$CHROM)
-       if(! is.null(annotate)){  top_snps <- top_snps %>%  get_pos_with_offset(offsets) }
+      if(! is.null(annotate)){  top_snps <- top_snps %>%  get_pos_with_offset(offsets) }
       if (! is.null(highlight_genes)){
         genes_df$CHROM <- gsub("chr", "", genes_df$CHROM)
         genes_df <- genes_df  %>% get_pos_with_offset(offsets)
@@ -205,7 +206,8 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
         main_plot <- main_plot %>% add_title(title=title, title_text_size = title_text_size,scale=scale)
      }
     if(is.null(chr)){
-      ticks <- get_ticks(dat,chr_lengths_and_offsets,chr_ticknames,chr_map,show_all_chr_ticks, hide_chrticks_from_pos, hide_chrticks_to_pos, hide_every_nth_chrtick)
+
+      ticks <- get_ticks(dat,chr_lengths_and_offsets,chr_ticknames,chr_map,show_all_chrticks, hide_chrticks_from_pos, hide_chrticks_to_pos, hide_every_nth_chrtick,get_chr_lengths_from_data)
       if(use_shades)
         shades <- get_shades(chr_lengths_and_offsets,dat,ntop=ntop,include_chrX = incl_chrX,ymin=ymin,ymax=ymax)
       

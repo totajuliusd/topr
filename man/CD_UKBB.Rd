@@ -5,7 +5,7 @@
 \alias{CD_UKBB}
 \title{UKBB Crohns disease (ICD 10 code K50)}
 \format{
-A data frame  with 26,824 rows and 8 variables:
+A data frame  with 21,717 rows and 8 variables:
 \describe{
 \item{CHROM}{Chromosome, written as for example chr1 or 1}
 \item{POS}{genetic position of the variant}

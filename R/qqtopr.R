@@ -10,7 +10,7 @@
 #' @param n_variants An integer, total number of variants used in the study
 #' @param color A string or vector of strings setting the color's for the input datasets
 #' @param breaks A number setting the breaks for the axes
-#' @param diagnoal_line_color A string setting the color of the diagonal line on the plot
+#' @param diagonal_line_color A string setting the color of the diagonal line on the plot
 #' @inheritParams manhattan
 #'
 #' @return ggplot

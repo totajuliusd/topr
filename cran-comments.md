@@ -4,17 +4,16 @@
 
 There were no ERRORs or WARNINGs. 
 
+## revdepcheck results
+
+We checked 0 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 0 new problems
+ * We failed to check 0 packages
 
 ## R CMD check_rhub results
 
-0 errors ✔ | 0 warnings ✔ | 4 notes ✖
-
-> checking CRAN incoming feasibility ... [11s] NOTE
-
-> * checking examples ... NOTE
-Examples with CPU (user + system) or elapsed time > 5s
-     user system elapsed
-topr 4.84   0.26    5.16
+0 errors ✔ | 0 warnings ✔ | 2 notes ✖
 
 ❯ checking for detritus in the temp directory ... NOTE
   Found the following files/directories:
@@ -26,4 +25,4 @@ I got the note lastMiKteXExeption for previous releases of topr too, and still d
   Found the following files/directories:
     ''NULL''
     
-I havent had this note before and do not understand what the NULL directory or file is.
+The same applies to this note.

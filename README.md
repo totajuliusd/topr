@@ -1,8 +1,56 @@
 
+
+[Note!!! *topr* v.2.0.0 be used with any species and any number of chromosomes!!]{style="background-color: #FFFF00"} 
+<br>
+See https://github.com/totajuliusd/topr?tab=readme-ov-file#how-to-use-topr-with-other-species-than-human
+
 # *topr*: an R package for viewing and annotating genetic association results
+
 
 <img src="man/figures/manhattan_wide_1080_high.gif" alt="topr GIF" width="100%">
 
+<details>
+  <summary><i>Click here to see the commands used in the .gif above</i></summary>
+
+``` r
+library(topr)
+
+# Single GWAS manhattan plots
+# Start by taking a look at one of topr's inbuilt datasets
+CD_UKBB %>% head()
+manhattan(CD_UKBB)
+manhattan(CD_UKBB, annotate=5e-9)
+CD_UKBB %>% get_lead_snps()
+CD_UKBB %>% get_lead_snps() %>% annotate_with_nearest_gene()
+manhattan(CD_UKBB, annotate=1e-9, highlight_genes=c("FTO","THADA"))
+manhattan(CD_UKBB, annotate=1e-9, highlight_genes=c("FTO","THADA"), color="darkred")
+
+# Multi GWAS manhattan/miami plots
+CD_FINNGEN %>% head()
+manhattan(list(CD_UKBB, CD_FINNGEN))
+manhattan(list(CD_UKBB, CD_FINNGEN), legend_labels=c("UKBB","FINNGEN"))
+manhattan(list(CD_UKBB, CD_FINNGEN), legend_labels=c("UKBB","FINNGEN"), ntop=1)
+
+
+# Add the third GWAS result... 
+UC_UKBB %>% head()
+manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB))
+manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB), legend_labels=c("CD UKBB","CD FINNGEN", "UC UKBB"))
+# display the first input dataset on the top plot (ntop = 1)
+manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB), legend_labels=c("CD UKBB","CD FINNGEN", "UC UKBB"), ntop=1)
+# display the first TWO input datasets on the top plot (ntop = 2)
+manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB), legend_labels=c("CD UKBB","CD FINNGEN", "UC UKBB"), ntop=2)
+manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB), legend_labels=c("CD UKBB","CD FINNGEN", "UC UKBB"), ntop=2, annotate=1e-12)
+#apply different annotation thresholds to the three datasets ( annotate = c(5e-9,1e-12,1e-15) )
+manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB), legend_labels=c("CD UKBB","CD FINNGEN", "UC UKBB"), ntop=2, annotate=c(5e-9,1e-12,1e-15))
+
+# Make the plot look prettier by resetting they scales of the x and y  axes, changing the angle of the annotation text (angle = 90), moving it up a bit (nudge_y = 12) and slightly reducing the size of all text (scale = 0.7)
+manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB), legend_labels=c("CD UKBB","CD FINNGEN", "UC UKBB"), ntop=2, annotate=c(5e-9,1e-12,1e-15), ymax=65, ymin=-55, nudge_y=12,angle=90, scale=0.7)
+# The same plot as above in the old topr grey theme (theme_grey = T)
+manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB), legend_labels=c("CD UKBB","CD FINNGEN", "UC UKBB"), ntop=2, annotate=c(5e-9,1e-12,1e-15), ymax=65, ymin=-55, nudge_y=12,angle=90, scale=0.7, theme_grey = T)
+```
+
+</details>
 ## Citation
 
 Please cite the following paper if you use *topr* in a publication:
@@ -190,7 +238,7 @@ wget https://ftp.ensembl.org/pub/current/gtf/mus_musculus/Mus_musculus.GRCm39.11
 gunzip Mus_musculus.GRCm39.111.gtf.gz
 ```
 
-Next convert the file into the format required by topr
+Next convert the file into the format required by topr. This can for example be done using the <code>mk_annotation_file.py</code> script (the content of the script is shown below the command).
 
 ``` r
 python mk_annotation_file.py Mus_musculus.GRCm39.111.gtf > Mus_musculus.GRCm39.111.tsv

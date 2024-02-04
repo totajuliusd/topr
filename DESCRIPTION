@@ -32,7 +32,6 @@ Imports:
     magrittr (>= 1.5),
     utils,
     tidyr,
-    toprdata,
+    enshuman,
 Depends: 
     R (>= 3.5.0)
-VignetteBuilder: knitr

@@ -5,7 +5,7 @@
 \alias{CD_FINNGEN}
 \title{Finngen r7 Crohn‘s disease (K11_CROHNS)}
 \format{
-A data frame  with 41,095 rows and 8 variables:
+A data frame  with 32,303 rows and 8 variables:
 \describe{
 \item{CHROM}{Chromosome, written as for example chr1 or 1}
 \item{POS}{genetic position of the variant}
