@@ -149,34 +149,34 @@ add_log10p_wo_trans <- function(dat, ntop){
 get_db <- function(build){
    if(is.character(build) || is.numeric(build)){
     if(tolower(build) %in% c("38","hg38","grch38"))
-      db <- hg38
+      db <- enshuman::hg38
     else if(tolower(build) %in% c("37","hg37","grch37"))
-      db <- hg37
+      db <- enshuman::hg37
     else{
       ext_db <- get(build)
-      if(class(ext_db) == "data.frame"){
+      if(is.data.frame(class(ext_db))){
          db <- ext_db
       }
-      else if(class(ext_db) == "list"){
+      else if(is.list(class(ext_db))){
         warning(paste("The provided build is a list. It has to be either a number, string or a data frame!\n Using the default build enshuman::hg38 instead" ))
-        db <- hg38
+        db <- enshuman::hg38
       }
       else{
         warning(paste("Could not find a build called [",build,"] to use for annotation. \n Using the default build GRCh38 (build=38) instead. ", sep=""))
-        db <- hg38
+        db <- enshuman::hg38
       }
     }
   }
   else if(is.data.frame(build)){
        db <- build 
   }
-  else if(class(build) == "list"){
+  else if(is.list(class(build))){
     warning(paste("The provided build is a list. It has to be either a number, string or a data frame! \n Using the default build GRCh38 (build=38) instead."))
-    db <- hg38
+    db <- enshuman::hg38
     }
   else{
     warning(paste("The build is not in the correct format. It has to be either a number,string or a data frame!\nUsing the default build GRCh38 (build=38) instead. ", sep=""))
-    db <- hg38
+    db <- enshuman::hg38
   }
   return(db)    
 }
@@ -317,7 +317,7 @@ get_chr_lengths_and_offsets <- function(dat, get_chr_lengths_from_data){
     chr_lengths[chr_lengths$CHROM=="X",'CHROM'] <- "23"
     chr_lengths[chr_lengths$CHROM=="Y",'CHROM'] <- "24"
     chr_lengths$CHROM <- as.integer(chr_lengths$CHROM)
-    chrs <- get_chrs_from_data(dat)
+    chrs <- c(1:23)
     chrs2plot <- chr_lengths %>% filter(CHROM %in% chrs)
   }
   chr_lengths_and_offsets <- chrs2plot %>% dplyr::group_by(CHROM) %>% dplyr::summarize(m=V2) %>% dplyr::mutate(offset=cumsum(as.numeric(lag(m, default=0))))
@@ -325,37 +325,18 @@ get_chr_lengths_and_offsets <- function(dat, get_chr_lengths_from_data){
 }
 
 
-
-get_ticknames <- function(df){
-  no_chrs <- ifelse("chrX" %in% df$CHROM || "X" %in% df$CHROM || "chr23" %in% df$CHROM || "23" %in% df$CHROM, 23, 22)
-  include_chrX <- T
-  if(no_chrs == 23){
-    ticknames <- c(1:16, '',18, '',20, '',22, 'X')
-  }else{
-    ticknames <- c(1:16, '',18, '',20, '',22)
-    include_chrX <- F
-  }
-  chr_lengts_and_offsets <- get_chr_lengths_and_offsets(include_chrX)
-  tickpos <-chr_lengts_and_offsets %>% dplyr::group_by(CHROM)%>%
-                  dplyr::summarize(pm=offset+(m/2))%>%
-    #    dplyr::summarize(pm=mean(POS))
-                                dplyr::pull(pm)
-
-  names(tickpos) <- NULL
-  return(list(names=ticknames, pos=tickpos))
-}
-
-get_ticks <- function(dat,chr_lengths_and_offsets,chr_ticknames,chr_map, show_all_chr_ticks=FALSE, hide_chrticks_from_pos=17, hide_chrticks_to_pos=NULL, hide_every_nth_chrtick=2){
+get_ticks <- function(dat,chr_lengths_and_offsets,chr_ticknames,chr_map, show_all_chrticks=FALSE, hide_chrticks_from_pos=17, hide_chrticks_to_pos=NULL, hide_every_nth_chrtick=2, get_chr_lengths_from_data=T){
   df <- dat[[1]]
   for(i in seq_along(dat)){ if(length(unique(dat[[i]]$CHROM))  > length(unique(df$CHROM))){ df <- dat[[i]] } }
   ticknames=NULL
-  if(!is.null(chr_ticknames)){
+   if(!is.null(chr_ticknames)){
     if(length(names(chr_map)) == length(chr_ticknames))
       ticknames=chr_ticknames
     else
       warning(paste0("The length of the provided chr_ticknames vector [",length(chr_ticknames),"] does not match the number of chromosomes in the dataset(s) [", length(chr_map), "]. Using the default chr_ticknames instead!!"))
   }
   if(is.null(chr_ticknames)){
+    if(get_chr_lengths_from_data){
     chrs <- names(chr_map)
     numeric_chrs <- chrs[grepl('^-?[0-9.]+$', chrs)] %>% as.numeric() %>% sort()
     non_numeric_chrs <- chrs[!grepl('^-?[0-9.]+$', chrs)]
@@ -365,7 +346,7 @@ get_ticks <- function(dat,chr_lengths_and_offsets,chr_ticknames,chr_map, show_al
     chr_ticknames <- chr_order
   
     if(length(numeric_chrs) > hide_chrticks_from_pos){
-      if(! show_all_chr_ticks){
+      if(! show_all_chrticks){
         hide_chr <- numeric_chrs[seq(hide_chrticks_from_pos, hide_chrticks_to_pos, hide_every_nth_chrtick)]
         chr_ticknames[(chr_ticknames %in% hide_chr) == TRUE] <- ""
       }
@@ -374,6 +355,10 @@ get_ticks <- function(dat,chr_lengths_and_offsets,chr_ticknames,chr_map, show_al
       }
     }
     ticknames <- chr_ticknames
+    }
+    else{
+      ticknames <- c(1:16, '',18, '',20, '',22, 'X')
+    }
   }
  tickpos <-chr_lengths_and_offsets %>% dplyr::group_by(CHROM)%>%
     dplyr::summarize(pm=offset+(m/2))%>%

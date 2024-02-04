@@ -27,3 +27,5 @@ lastMiKTeXException
 ^CRAN-SUBMISSION$
 ^doc$
 ^Meta$
+^vignettes$
+^revdep$

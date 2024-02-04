@@ -20,7 +20,8 @@ qqtopr(
   title_text_size = 13,
   legend_title_size = 12,
   legend_text_size = 12,
-  verbose = NULL
+  verbose = NULL,
+  diagonal_line_color = "#808080"
 )
 }
 \arguments{
@@ -55,6 +56,8 @@ qqtopr(
 \item{legend_text_size}{A number, size of the legend text}
 
 \item{verbose}{A logical scalar (default: NULL). Set to FALSE to suppress printed messages}
+
+\item{diagonal_line_color}{A string setting the color of the diagonal line on the plot}
 }
 \value{
 ggplot

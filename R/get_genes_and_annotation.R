@@ -138,7 +138,7 @@ get_annotation <- function(dat, annotate=5e-08, region_size=1000000,distinct_gen
 #' @param variants a dataframe of variant positions (CHROM and POS)
 #' @param protein_coding_only Logical, if set to TRUE only annotate with protein coding genes (the default value is FALSE)
 #' @param build A number representing the genome build. Set to 37 to change to build (GRCh37). The default is build 38 (GRCh38).
-#' @param .gene_map An internally used list which maps chromosome names to numbers.
+#' @param .chr_map An internally used list which maps chromosome names to numbers.
 #' @return the input dataframe with Gene_Symbol as an additional column
 #' @export
 #'

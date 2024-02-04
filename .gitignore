@@ -4,6 +4,7 @@
 .idea/
 *.DS_STORE
 local/
+revdep/
 
 ### R ###
 # History files
