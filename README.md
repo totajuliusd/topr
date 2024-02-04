@@ -1,6 +1,6 @@
 
 
-[Note!!! *topr* v.2.0.0 be used with any species and any number of chromosomes!!]{style="background-color: #FFFF00"} 
+Note!!! *topr* v.2.0.0 be used with any species and any number of chromosomes!!
 <br>
 See https://github.com/totajuliusd/topr?tab=readme-ov-file#how-to-use-topr-with-other-species-than-human
 
