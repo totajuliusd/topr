@@ -51,6 +51,8 @@ manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB), legend_labels=c("CD UKBB","CD FINN
 ```
 
 </details>
+
+
 ## Citation
 
 Please cite the following paper if you use *topr* in a publication:
