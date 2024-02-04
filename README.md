@@ -1,7 +1,8 @@
 
 
-Note!!! *topr* v.2.0.0 be used with any species and any number of chromosomes!!
+Note!!! *topr* v.2.0.0 can be used with any species and any number of chromosomes!!
 <br>
+
 See https://github.com/totajuliusd/topr?tab=readme-ov-file#how-to-use-topr-with-other-species-than-human
 
 # *topr*: an R package for viewing and annotating genetic association results
