@@ -3,7 +3,7 @@
 * argument added to set the color of the diagonal line in qqtopr
 * Argument chr_ticknames, show_all_chrticks, hide_chrticks_from_pos, hide_chrticks_to_pos and hide_every_nth_chrtick added to the Manhattan function to control x-axis labels
 * The log_trans_p argument was added for input datasets that have already been log-transformed
-* Inclusion of Y and MT in build hg38
+* Inclusion of chromosomes Y and MT in build hg38 
 
 
 # 1.1.10
