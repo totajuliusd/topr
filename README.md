@@ -1,5 +1,8 @@
 
 <meta name='keywords' content='manhattan, GWAS, regionplot, association'/>
+<meta name="description" content="topr: an R package for viewing and annotating genetic association results - totajuliusd/topr - manhattan">
+<meta name="google-site-verification" content="_ICeIANgZe9dAS_kx47d5sUluL3fRoT2k9-D7Bek9l4" />
+
 
 Note!!! *topr* v.2.0.0 can be used with any species and any number of chromosomes!!
 <br>
