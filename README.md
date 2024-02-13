@@ -1,4 +1,5 @@
 
+<meta name='keywords' content='manhattan, GWAS, regionplot, association'/>
 
 Note!!! *topr* v.2.0.0 can be used with any species and any number of chromosomes!!
 <br>
@@ -332,7 +333,7 @@ save(mm39, file="mus_musculus.rda", compress='xz')
 load("mus_musculus.rda")
 ```
 
-Then to use the mouse build with *topr*, assign <code>mum39</code> to the build argument in *topr's* functions.  
+Then to use the mouse build with *topr*, assign <code>mm39</code> to the build argument in *topr's* functions.  
 
 Examples (note that CD_UKBB are human association results, and only used here as a proof of concept): 
 

@@ -1,3 +1,6 @@
+# 2.0.2
+* Fix the annotation when log_trans_p is used
+
 # 2.0.0
 * topr can now be used with any species
 * argument added to set the color of the diagonal line in qqtopr
