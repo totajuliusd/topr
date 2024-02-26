@@ -86,3 +86,10 @@ lightness = function(col, light=0.5) {
   
 }
 
+format_P = function(P,digits=2,sdigits=1){
+  return(ifelse(P<0.01,
+                formatC(P, digits=sdigits, format="e"),
+                formatC(P, digits=digits, format="g")))
+}
+
+

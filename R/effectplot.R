@@ -190,6 +190,7 @@ match_by_pos <- function(df1, df2, verbose=NULL, show_full_output=FALSE){
 #' @param verbose Logical, (default: FALSE). Assign to TRUE to get information on which alleles are matched and which are not.
 #' @param show_full_output A logical scalar (default:FALSE). Assign to TRUE to show the full output from this function
 #' @param build A string, genome build, choose between builds 37 (GRCh37) and 38 (GRCh38) (default is 38)
+#' @param format A string, representing either wide or long format (default : "wide"). By default a snpset created from two dataframes is returned in a wide format.
 #' @inheritParams get_lead_snps
 #' 
 #' 
@@ -203,7 +204,7 @@ match_by_pos <- function(df1, df2, verbose=NULL, show_full_output=FALSE){
 #' }
 #'
 
-get_snpset <- function(df1, df2, thresh=5e-08, protein_coding_only=TRUE, region_size=1000000, verbose=NULL, show_full_output=FALSE, build=38){
+get_snpset <- function(df1, df2, thresh=5e-08, protein_coding_only=TRUE, region_size=1000000, verbose=NULL, show_full_output=FALSE, build=38, format="wide"){
   snpset <- NULL
   
   if(is.list(df1) & length(df1)==2){

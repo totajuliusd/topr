@@ -103,9 +103,9 @@ dat_column_check_and_set <- function(dat, verbose=TRUE,locuszoomplot=FALSE){
      zero_pvals <- dplyr::filter(df, P <= .Machine$double.xmin )
     caption <- ""
     if (nrow(zero_pvals) > 0) {
-      exclusion_list <- with(zero_pvals, paste(CHROM, POS, REF, ALT, sep = ":", collapse = ", "))
+      exclusion_list <- with(zero_pvals, paste(CHROM, POS, sep = ":", collapse = ", "))
       exclusion_list <- stringr::str_trunc(exclusion_list, width = 100)
-      caption <- stringr::str_glue("{nrow(zero_pvals)} zero-value p-value{if(nrow(zero_pvals) > 1) 's' else ''} found in the input dataset and removed from plot: {exclusion_list}")
+      caption <- stringr::str_glue("{nrow(zero_pvals)} zero-value p-value{if(nrow(zero_pvals) > 1) 's' else ''} (P<",format_P(.Machine$double.xmin)," (.Machine$double.xmin)) found in the input dastaset and excluded from the plot: {exclusion_list}")
       if(is.null(verbose) || verbose==TRUE ){ print(caption) }
     }
     df <- df %>% dplyr::filter(P > .Machine$double.xmin) 

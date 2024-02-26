@@ -92,9 +92,10 @@ library(topr)
 
 *topr* is written in the R programming language and utilises the ggplot2 and ggrepel R graphics libraries for plotting.
 
-*topr's* two main plotting functions are <code>manhattan()</code> and <code>regionplot()</code>. 
+*topr's* two main plotting functions are <code>manhattan()</code> and <code>regionplot()</code>. See <a href="https://totajuliusd.github.io/topr_manual/">topr plotting functions</a> for more details.
 
 The manhattan() function returns a **ggplot object**. The regionplot() function draws three ggplotGrobs aligned using egg::gtable_frame, however it can be called with the <code>extract_plots</code> argument set to TRUE to return a list of three **ggplot objects** instead.
+
 
 
 ### Example input datasets 
@@ -123,7 +124,7 @@ Basic usage of *topr's* key functions is as follows.
 #### Manhattan
 <hr>
 
-See the <a href="https://totajuliusd.github.io/topr/articles/manhattan.html">Manhattan vignette</a> for more detailed examples of how to use the manhattan plot function.
+See the <a href="https://totajuliusd.github.io/topr_manual/manhattan.html">manhattan</a> for more detailed examples of how to use the manhattan plot function.
 
 View the whole genome association results on a Manhattan plot:
 
@@ -147,7 +148,7 @@ manhattan(list(CD_UKBB, CD_FINNGEN), legend_labels = c("UKBB", FinnGen"))
 
 #### Regionplot
 <hr>
-See the <a href="https:///totajuliusd.github.io/topr/articles/regionplot.html">Regionplot vignette</a> for more detailed examples of how to use the regionplot function.
+See the <a href="https://totajuliusd.github.io/topr_manual/regionplot.html">regionplot</a> for more detailed examples of how to use the regionplot function.
 
 Further zoom-in on a genetic region by gene name (*IL23R*):
 
