@@ -57,6 +57,7 @@ manhattan(list(CD_UKBB, CD_FINNGEN, UC_UKBB), legend_labels=c("CD UKBB","CD FINN
 
 </details>
 
+For more examples see the <a href="https://totajuliusd.github.io/topr_manual/">topr webpage</a>. 
 
 ## Citation
 
@@ -100,7 +101,7 @@ The manhattan() function returns a **ggplot object**. The regionplot() function 
 
 ### Example input datasets 
 
-*See the <a href="https://totajuliusd.github.io/topr/articles/input_datasets.html">Input datasets vignette</a> for more detailed information.*
+*See <a href="https://totajuliusd.github.io/topr/articles/input_datasets.html">Input datasets</a> for more detailed information.*
 
 Input datasets must include least three columns (<code>CHROM, POS</code> and <code>P</code>), where naming of the columns is flexible (i.e the chr label can be either chr or chrom and is case insensitive).
 
@@ -124,7 +125,7 @@ Basic usage of *topr's* key functions is as follows.
 #### Manhattan
 <hr>
 
-See the <a href="https://totajuliusd.github.io/topr_manual/manhattan.html">manhattan</a> for more detailed examples of how to use the manhattan plot function.
+See <a href="https://totajuliusd.github.io/topr_manual/manhattan.html">manhattan</a> for more detailed examples of how to use the manhattan plot function.
 
 View the whole genome association results on a Manhattan plot:
 
@@ -148,7 +149,7 @@ manhattan(list(CD_UKBB, CD_FINNGEN), legend_labels = c("UKBB", FinnGen"))
 
 #### Regionplot
 <hr>
-See the <a href="https://totajuliusd.github.io/topr_manual/regionplot.html">regionplot</a> for more detailed examples of how to use the regionplot function.
+See <a href="https://totajuliusd.github.io/topr_manual/regionplot.html">regionplot</a> for more detailed examples of how to use the regionplot function.
 
 Further zoom-in on a genetic region by gene name (*IL23R*):
 
