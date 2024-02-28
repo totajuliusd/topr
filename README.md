@@ -93,7 +93,7 @@ library(topr)
 
 *topr* is written in the R programming language and utilises the ggplot2 and ggrepel R graphics libraries for plotting.
 
-*topr's* two main plot functions are <code>manhattan()</code> and <code>regionplot()</code>. See <a href="https://totajuliusd.github.io/topr_manual/">topr plot functions</a> for more details on all of *topr's* plot functions.
+*topr's* two main plot functions are <code>manhattan()</code> and <code>regionplot()</code>. See the <a href="https://totajuliusd.github.io/topr_manual/">topr webpage</a> for more details on all of *topr's* plot functions.
 
 The manhattan() function returns a **ggplot object**. The regionplot() function draws three ggplotGrobs aligned using egg::gtable_frame, however it can be called with the <code>extract_plots</code> argument set to TRUE to return a list of three **ggplot objects** instead.
 
