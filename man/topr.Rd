@@ -2,6 +2,7 @@
 % Please edit documentation in R/topr.R
 \docType{package}
 \name{topr}
+\alias{topr-package}
 \alias{topr}
 \title{topr}
 \description{
@@ -23,5 +24,22 @@ manhattan(CD_UKBB)
 
 # Create a regional plot
 regionplot(CD_UKBB, gene="IL23R")
+
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/totajuliusd/topr}
+  \item Report bugs at \url{https://github.com/totajuliusd/topr/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Thorhildur Juliusdottir \email{totajuliusd@gmail.com} [copyright holder]
+
+Authors:
+\itemize{
+  \item Andri Stefansson \email{andrimarstefansson@gmail.com}
+}
 
 }
