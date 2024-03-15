@@ -202,7 +202,8 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     
     main_plot <- get_base_plot(dat,color=color,legend_labels = legend_labels,legend_name=legend_name, legend_position = legend_position, 
                                legend_nrow = legend_nrow, show_legend = show_legend,scale=scale,verbose=verbose)
-     if(! is.null(title)){
+  
+        if(! is.null(title)){
         main_plot <- main_plot %>% add_title(title=title, title_text_size = title_text_size,scale=scale)
      }
     if(is.null(chr)){
@@ -215,11 +216,13 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     }else{
       main_plot <- main_plot + scale_y_continuous(expand=c(.02,.02))  + scale_x_continuous(expand=c(.01,.01),labels = scales::comma)
     }
+ 
   main_plot <- set_axis_labels(main_plot,xaxis_label = xaxis_label)
   main_plot <- main_plot %>% set_plot_text_sizes(axis_text_size=axis_text_size,axis_title_size = axis_title_size, 
                                                  legend_text_size=legend_text_size, legend_title_size=legend_title_size,scale=scale)
 
-  #add the significance threshold/s
+
+   #add the significance threshold/s
   if(!is.null(sign_thresh)){
   main_plot <- main_plot %>% add_sign_thresh(sign_thresh = sign_thresh, sign_thresh_color = sign_thresh_color, using_ntop = using_ntop, 
                                              sign_thresh_linetype = sign_thresh_linetype, sign_thresh_size = sign_thresh_size,scale=scale) %>%

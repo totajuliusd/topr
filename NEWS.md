@@ -1,10 +1,6 @@
 # 2.0.1
 * REF and ALT error message fixed when there are p-values below .Machine$double.xmin in the input dataset
-* Fix the annotation when log_trans_p is used
-* Add link to the R graph gallery. ggplot2 allows to build almost any type of chart. The R graph gallery focuses on it so almost every section there starts with ggplot2 examples.
-* toprggforestplot
-* get_snpset extension
-* SE added to snpset along with choice between wide and long format
+* The limits= argument added in the scale_color_manual ggplot2 function for it to work as expected with ggplot2 v3.5
 
 # 2.0.0
 * topr can now be used with any species

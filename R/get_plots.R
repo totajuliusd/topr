@@ -33,7 +33,7 @@ get_base_plot <- function(dat, color=get_topr_colors(), show_legend=TRUE, legend
     }
   }
   else if(show_legend){
-    p1 <- p1+scale_color_identity(guide = "legend", name=legend_name,  color[seq_along(dat)], labels=legend_labels)+
+    p1 <- p1+scale_color_identity(guide = "legend", name=legend_name,  limits=color[seq_along(dat)], labels=legend_labels)+
       theme(legend.position = legend_position)
   }
   if(! is.null(legend_nrow)){
