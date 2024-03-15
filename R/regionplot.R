@@ -147,6 +147,7 @@ regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alp
       main_plot <- main_plot %>% add_vline(top_snps$POS, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
     }
   }
+
   if(locuszoomplot){
     #annotate the top variant
     if(is.null(rsids) & is.null(rsids_with_vline)){
@@ -161,13 +162,18 @@ regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alp
       }
     }
   }
+  
   main_plot <- main_plot %>% add_vline(vline, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
   main_plot <- main_plot + scale_y_continuous(expand=c(.02,.02)) + scale_x_continuous(expand=c(.01,.01))
 
 if(!is.null(sign_thresh)){
- main_plot <- main_plot %>% add_sign_thresh(sign_thresh = sign_thresh, sign_thresh_color = sign_thresh_color, using_ntop = using_ntop,sign_thresh_linetype = sign_thresh_linetype, sign_thresh_size = sign_thresh_size, scale=scale) %>%
+ main_plot <- main_plot %>% add_sign_thresh(sign_thresh = sign_thresh, sign_thresh_color = sign_thresh_color, 
+                                            using_ntop = using_ntop,sign_thresh_linetype = sign_thresh_linetype, sign_thresh_size = sign_thresh_size, scale=scale)
+ 
+  main_plot <- main_plot %>%
     add_sign_thresh_labels(sign_thresh = sign_thresh, sign_thresh_color = sign_thresh_color, xmin=xmin,sign_thresh_label_size = sign_thresh_label_size,scale=scale)
 }
+  
     with_vline <- FALSE
   if(! is.null(rsids_with_vline)){
     rsids <- rsids_with_vline

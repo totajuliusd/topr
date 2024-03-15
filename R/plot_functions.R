@@ -125,7 +125,7 @@ add_annot <- function(p1, angle=0, annotate_with="Gene_Symbol",top_snps=NULL){
 
 
 add_sign_thresh <- function(p1, sign_thresh=1e-09,sign_thresh_color="red", using_ntop=FALSE, sign_thresh_linetype="dashed", sign_thresh_size=0.5, scale=1){
-  #add significance threholds to the plot
+  #add significance thresholds to the plot
   if(is.vector(sign_thresh)){
     for(i in seq_along(sign_thresh)){
       color <- "red"
