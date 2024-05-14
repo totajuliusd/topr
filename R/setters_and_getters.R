@@ -432,16 +432,18 @@ get_lead_snps <- function(df, thresh=5e-08,region_size=1000000,protein_coding_on
     df <- df %>% dplyr::filter(biotype == "protein_coding")
   }
   if(nrow(df) > 0){
-    df$tmp <- NA
-    if(max(df$POS)-min(df$POS) <= region_size){
-      df$tmp<- 1
-    }else{
-      for(row in seq_len(nrow(df))){
-        df$tmp <- base::round(df$POS/region_size)
-      }
-    }
-    lead_snps <- df %>% dplyr::group_by(CHROM,tmp) %>% dplyr::arrange(P) %>% distinct(P, .keep_all=T) %>% dplyr::filter(P == min(P))
-    variants <- dplyr::ungroup(lead_snps)%>% dplyr::distinct(CHROM,POS, .keep_all = T)
+  	lead_snps <- do.call(rbind,
+  		lapply(split(df, df$CHROM), function (df_by_chr) {
+  			res <- data.frame()
+  			df_by_chr <- dplyr::arrange(df_by_chr, P)
+  			while (nrow(df_by_chr) > 0) {
+  				lead_snp <- dplyr::slice(df_by_chr, 1)
+  				res <- dplyr::bind_rows(res, lead_snp)
+  				df_by_chr <- dplyr::filter(df_by_chr, abs(POS - lead_snp$POS) > region_size / 2)
+  			}
+  			res
+  		}))
+    variants <- lead_snps %>% dplyr::distinct(CHROM, POS, .keep_all = T)
     variants$color <-  dat[[1]][1,"color"]
     if(! is.null(verbose)){
       if(verbose){
