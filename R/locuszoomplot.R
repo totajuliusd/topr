@@ -79,6 +79,7 @@ set_lz_colors <- function(dat){
     df$color <- ifelse(df$R2 < 0.8 & df$R2 > 0.6, "orange", df$color)
     df$color <- ifelse(df$R2 < 0.6 & df$R2 > 0.4, "green", df$color)
     df$color <- ifelse(df$R2 < 0.4 & df$R2 > 0.2, "turquoise", df$color)
+    df$color <- ifelse(is.na(df$R2), "darkgrey", df$color)
     dat[[i]] <- df
   }
   return(dat)
