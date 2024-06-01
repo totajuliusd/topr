@@ -23,8 +23,13 @@ get_base_plot <- function(dat, color=get_topr_colors(), show_legend=TRUE, legend
   }
   if(locuszoomplot & show_legend){
     colors <-c("darkblue","turquoise","green","orange","red")
-    p1 <- p1+scale_color_identity(guide = "legend", name="R2",  breaks=colors, labels=c("R2 < 0.2", "0.2 < R2 < 0.4", "0.4 < R2 < 0.6","0.6 < R2 <0.8", "0.8 < R2"))
-  }
+    labels <- c("R2 < 0.2", "0.2 < R2 < 0.4", "0.4 < R2 < 0.6","0.6 < R2 <0.8", "0.8 < R2")
+    if(any(is.na(dat[[1]]$R2))){
+      colors <- c(colors, "darkgrey")
+      labels <- c(labels, "R2 = NA")
+    }
+    p1 <- p1+scale_color_identity(guide = "legend", name="R2",  limits=colors, labels=labels)
+      }
   else if(length(dat) == 1 || !show_legend ){ #  else if(length(dat) == 1 & is.null(legend_labels)) { #no need to use a legend when there is only one phenotype on display
      if(! is.null(legend_labels) & show_legend){
          p1 <- p1+scale_color_identity(guide = "legend", name=legend_name,  color[seq_along(dat)], labels=legend_labels)+theme(legend.position = legend_position)

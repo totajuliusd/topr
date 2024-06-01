@@ -81,6 +81,8 @@ set_size <- function(dat,size, locuszoomplot = locuszoomplot){
     }
     if(locuszoomplot & ("R2" %in% colnames(dat[[i]]))){
       dat[[i]]$size <- ifelse(dat[[i]]$R2 == 1, dat[[i]]$size*1.5, dat[[i]]$size)
+      #handle NA values for R2
+      dat[[i]]$size[is.na(dat[[i]]$size)] <- size
     }
   }
   return(dat)
@@ -112,6 +114,7 @@ set_shape <- function(dat,shape,locuszoomplot=F){
     }
     if(locuszoomplot & ("R2" %in% colnames(dat[[i]]))){
         dat[[i]]$shape <- ifelse(dat[[i]]$R2 == 1, 18, dat[[i]]$shape)
+        dat[[i]]$shape[is.na(dat[[i]]$shape)] <- shape
     }
   }
   return(dat)
