@@ -151,20 +151,23 @@ regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alp
   if(locuszoomplot){
     #annotate the top variant
     if(is.null(rsids) & is.null(rsids_with_vline)){
-      ld_snp <- get_main_LD_snp(dat, nudge_x=nudge_x, nudge_y=nudge_y, label_fontface=label_fontface, angle=angle, label_alpha=label_alpha)
+        ld_snp <- get_main_LD_snp(dat, nudge_x=nudge_x, nudge_y=nudge_y, label_fontface=label_fontface, angle=angle, label_alpha=label_alpha)
       if(is.null(annotate) & !is.null(ld_snp) & length(ld_snp$POS)> 0){
         main_plot <- main_plot %>%  add_annotation(plot_labels = ld_snp,annotate_with=annotate_with,angle=angle,label_size = label_size, nudge_y = nudge_y, nudge_x = nudge_x, 
                                                    label_color=label_color,scale=scale,segment.color=segment.color,segment.size=segment.size,
                                                    segment.linetype=segment.linetype,max.overlaps=max.overlaps)
         if(annot_with_vline){
-          main_plot <- main_plot %>% add_vline(ld_snp$POS, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
+          main_plot <- main_plot %>% add_vline(ld_snp$POS, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale, vline_color=vline_color)
         }
       }
     }
   }
   
+  
+  
   main_plot <- main_plot %>% add_vline(vline, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
   main_plot <- main_plot + scale_y_continuous(expand=c(.02,.02)) + scale_x_continuous(expand=c(.01,.01))
+
 
 if(!is.null(sign_thresh)){
  main_plot <- main_plot %>% add_sign_thresh(sign_thresh = sign_thresh, sign_thresh_color = sign_thresh_color, 
@@ -183,7 +186,8 @@ if(!is.null(sign_thresh)){
   if( ! is.null(rsids)){
     rsids_df <- get_rsids_from_df(dat,rsids)
     main_plot <-main_plot %>% add_rsids(rsids_df, rsids_color=rsids_color, nudge_x=nudge_x, nudge_y=nudge_y, label_size=label_size, angle=angle, label_color=label_color, scale=scale ,
-                                        with_vline = with_vline, label_fontface=label_fontface,label_family=label_family,segment.size=segment.size,segment.color=segment.color,segment.linetype=segment.linetype)
+                                        with_vline = with_vline, label_fontface=label_fontface,label_family=label_family,segment.size=segment.size,segment.color=segment.color,segment.linetype=segment.linetype, vline_color = vline_color)
+    
     
   }
 

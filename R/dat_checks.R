@@ -5,8 +5,25 @@ dat_check <- function(dat, verbose=TRUE,locuszoomplot=FALSE){
     if(nrow(dat[[i]])==0){
       warning(paste0("Dataset [",i, "] is empty with 0 rows. Please remove it from the input list and re-run!"))
     }
+    
   }
   dat <- dat_column_check_and_set(dat, verbose=verbose,locuszoomplot=locuszoomplot) %>% rm_chr_prefix_and_sort()
+  return(dat)
+}
+
+downsample <- function(dat, downsample_cutoff=0.05, downsample_prop=0.1){
+  for(i in seq_along(dat)){
+    df <- as.data.frame(dat[[i]])
+    if(max(df$P) > downsample_cutoff){
+      sig <- df |>
+      subset(P < downsample_cutoff)
+      notsig <- df |>
+      subset(P >= downsample_cutoff) |>
+      group_by(CHROM) |>
+      slice_sample(prop=downsample_prop)
+      dat[[i]]  <- bind_rows(sig, notsig)
+    }
+  }
   return(dat)
 }
 
@@ -83,7 +100,7 @@ dat_column_check_and_set <- function(dat, verbose=TRUE,locuszoomplot=FALSE){
    
     if(! "P" %in% colnames(df)){
       df <- df %>% 
-        dplyr::rename_with(~ rename_value(.x, "P"), matches(c("^pval$","^pvalue$","^p_value$","^p$"), ignore.case = TRUE)) 
+        dplyr::rename_with(~ rename_value(.x, "P"), matches(c("^pval$","^pvalue$","^p_value$","^p-value$","^p$"), ignore.case = TRUE)) 
     }
     if(! "ID" %in% colnames(df)){
       if("CHROM" %in% colnames(df)){
