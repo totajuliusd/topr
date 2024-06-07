@@ -83,6 +83,8 @@
 #' @param hide_chrticks_from_pos A number (default: 17). Hide every nth chromosome name on the x-axis FROM this position (chromosome number)
 #' @param hide_chrticks_to_pos A number (default: NULL). Hide every nth chromosome name on the x-axis TO this position (chromosome number). When NULL this variable will be set to the number of numeric chromosomes in the input dataset.
 #' @param hide_every_nth_chrtick A number (default: 2). Hide every nth chromosome tick on the x-axis (from the hide_chr_ticks_from_pos to the hide_chr_ticks_to_pos).
+#' @param downsample_cutoff A number (default: 0.05) used to downsample the input dataset prior to plotting. Only a proportion of the variants (10% by default) with P-values higher than the downsample_cutoff will be displayed on the plot. 
+#' @param downsample_prop A number (default: 0.1) used to downsample the input dataset prior to plotting. Sets the fraction of high p-value (default: P>0.05) markers to display on the plot. 
 #'
 #' @return ggplot object
 #' @export
@@ -108,7 +110,8 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
                   gene_label_fontface="plain",gene_label_family="",build=38,verbose=NULL,label_alpha=1,shades_line_alpha=1,vline=NULL,
                   vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5,region=NULL, theme_grey=FALSE, xaxis_label="Chromosome",
                   use_shades=FALSE, even_no_chr_lightness=0.8, get_chr_lengths_from_data=TRUE, log_trans_p=TRUE,
-                  chr_ticknames=NULL, show_all_chrticks=FALSE, hide_chrticks_from_pos=17, hide_chrticks_to_pos=NULL, hide_every_nth_chrtick=2){
+                  chr_ticknames=NULL, show_all_chrticks=FALSE, hide_chrticks_from_pos=17, hide_chrticks_to_pos=NULL, hide_every_nth_chrtick=2,
+                  downsample_cutoff=0.05, downsample_prop=0.1){
     
     top_snps <- NULL
     genes_df <- NULL
@@ -117,6 +120,8 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=get_topr_colors(
     if(theme_grey)
       use_shades=T
     dat <- dat_check(df, verbose=verbose, log_trans_p) 
+    if(downsample_prop < 1)
+      dat <- downsample(dat, downsample_cutoff, downsample_prop)
     
     if(! is.null(chr)){
       dat <- dat %>% filter_on_chr(chr)
