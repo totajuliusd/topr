@@ -190,7 +190,6 @@ if(!is.null(sign_thresh)){
     
     
   }
-
   if(is.null(ymin)){ ymin <- get_ymin(dat)* 0.99}
   if(is.null(ymax)){ ymax <- get_ymax(dat)* 1.04}
 
