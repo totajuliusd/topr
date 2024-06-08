@@ -1,3 +1,9 @@
+# 2.0.2
+* Parameters added for downsampling/thinning the dataset prior to plotting with manhattan
+* Locuszoom plot updated to include variants with missing R2 values
+* vline_color bug fix
+* improved get_lead_snp functionality
+
 # 2.0.1
 * REF and ALT error message fixed when there are p-values below .Machine$double.xmin in the input dataset
 * The limits= argument added in the scale_color_manual ggplot2 function for it to work as expected with ggplot2 v3.5

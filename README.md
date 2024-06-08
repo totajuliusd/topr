@@ -393,6 +393,43 @@ manhattan(list(CD_UKBB, known, novel), color=c("darkgrey","blue","red"), annotat
 ```
 <img src="man/figures/manhattan_colored_peaks2.png" alt="topr GIF" width="100%">
 
+#### Locuszoom example
+
+*Contribution from Kyle Scott (https://github.com/kscott-1)*
+
+Extract the snp of interest *rs7713270*, from the inbuilt CD_UKBB dataset.
+
+``` r
+lead_snp <- CD_UKBB %>% filter(ID == "rs7713270") 
+snp <- paste0(lead_snp$CHROM,":",lead_snp$POS)
+```
+
+##### Retrieve the R2 values with LDroxy
+
+Run <code>LDproxy</code> to get variants correlated with *rs7713270*. Use the European (EUR) 1000 Genomes Project population and genome build GRCh38. 
+
+Note! To be able to run <code>LDproxy</code>, you have to register and get a token (see https://ldlink.nih.gov/?tab=apiaccess).
+
+``` r
+SNP <- LDproxy(
+  snp = snp, pop = "EUR", r2d = "r2",
+  token = "NULL", genome_build = paste0("grch", "38")
+)
+LD.link <- SNP %>% 
+  mutate(CHROM = str_extract(Coord, "chr[^:]*")) %>%
+  mutate(POS = as.numeric(str_extract(Coord, "(?<=:)[0-9]*"))) %>%  
+  select(CHROM, POS, R2)
+```
+
+##### Plot with the locuszoom function
+
+Join the output from LDproxy with the CD_UKBB dataset to get the p-values for plotting.
+
+``` r
+snps.ld <- inner_join(CD_UKBB, LD.link, by = c("CHROM", "POS")) 
+locuszoom(snps.ld)
+```
+<img src="man/figures/locuszoom.png" alt="topr GIF" width="80%">
 
 #### Get help:
 
