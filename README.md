@@ -393,7 +393,10 @@ manhattan(list(CD_UKBB, known, novel), color=c("darkgrey","blue","red"), annotat
 ```
 <img src="man/figures/manhattan_colored_peaks2.png" alt="topr GIF" width="100%">
 
+<br>
+
 #### Locuszoom example
+<hr>
 
 *Contribution from Kyle Scott (https://github.com/kscott-1)*
 
