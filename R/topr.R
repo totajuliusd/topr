@@ -1,7 +1,6 @@
 #'  topr
 #'
 #' @description A package for viewing and annotating genetic association data
-#' @docType package
 #' @name topr
 #' @section topr functions:
 #' The main plotting functions are:
@@ -14,5 +13,5 @@
 #'
 #' # Create a regional plot
 #' regionplot(CD_UKBB, gene="IL23R")
-#' 
-NULL
+#' @docType package
+"_PACKAGE"
