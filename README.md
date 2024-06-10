@@ -398,6 +398,7 @@ manhattan(list(CD_UKBB, known, novel), color=c("darkgrey","blue","red"), annotat
 
 #### manhattanExtra
 <hr>
+
 *Contribution from Kyle Scott [kscott-1](https://github.com/kscott-1)*
 
 Create a Manhattan plot highlighting genome-wide significant and suggestive loci using the <code>manhattanExtra</code> function.
