@@ -393,6 +393,21 @@ manhattan(list(CD_UKBB, known, novel), color=c("darkgrey","blue","red"), annotat
 ```
 <img src="man/figures/manhattan_colored_peaks2.png" alt="topr GIF" width="100%">
 
+
+<br>
+
+#### manhattanExtra
+<hr>
+*Contribution from Kyle Scott [kscott-1](https://github.com/kscott-1)*
+
+Create a Manhattan plot highlighting genome-wide significant and suggestive loci using the <code>manhattanExtra</code> function.
+
+``` r
+manhattanExtra(UC_UKBB, flank_size = 1e6)
+```
+
+<img src="man/figures/manhattanExtra.png" alt="manhattanExtra" width="100%">
+
 <br>
 
 #### Locuszoom example

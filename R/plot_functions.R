@@ -192,7 +192,7 @@ get_rsids_from_df <- function(dat, rsids){
 
 
 add_rsids <- function(p1,rsids_df, rsids_color=NULL, nudge_x=0.01, nudge_y=0.01, label_size=3.5, angle=0,label_color=NULL, scale=1, with_vline=F, label_fontface="plain",label_family="",segment.size=0.2,
-                      segment.color="black",segment.linetype="solid", vline_color="grey"){
+                      segment.color="black",segment.linetype="solid", vline_color="grey", vline_size=1){
   if(!is.null(label_color)){
     rsids_df$color <- label_color
   }
@@ -202,7 +202,7 @@ add_rsids <- function(p1,rsids_df, rsids_color=NULL, nudge_x=0.01, nudge_y=0.01,
   p1 <- p1+ggrepel::geom_text_repel(data=rsids_df, aes(x=POS, y=log10p, label=ID,color=color), nudge_x=nudge_x, nudge_y=nudge_y, size=label_size*scale, 
                                     angle=angle,max.iter=10000,direction="both",fontface=label_fontface, family=label_family)
   if(with_vline){
-    p1 <- p1 %>% add_vline(rsids_df$POS, vline_color = vline_color)
+    p1 <- p1 %>% add_vline(rsids_df$POS, vline_color = vline_color, vline_size = vline_size)
   }
   return(p1)
 }
