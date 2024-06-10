@@ -2,7 +2,7 @@
 % Please edit documentation in R/manhattan.R
 \name{manhattanExtra}
 \alias{manhattanExtra}
-\title{Create a Manhattan plot highlighting significant and suggestive loci}
+\title{Create a Manhattan plot highlighting genome-wide significant and suggestive loci}
 \usage{
 manhattanExtra(
   df,
