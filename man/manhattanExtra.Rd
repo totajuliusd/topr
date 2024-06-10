@@ -9,7 +9,7 @@ manhattanExtra(
   genome_wide_thresh = 5e-08,
   suggestive_thresh = 1e-06,
   flank_size = 1e+06,
-  region_size = 1e+08,
+  region_size = 1e+07,
   sign_thresh_color = NULL,
   sign_thresh_label_size = NULL,
   show_legend = TRUE,
@@ -56,6 +56,8 @@ manhattanExtra(
 \item{legend_labels}{A string or vector of strings representing legend labels for the input datasets}
 
 \item{annotate}{A number (p-value). Display annotation for variants with p-values below this threshold}
+
+\item{...}{Additional arguments passed to other plotting functions.}
 }
 \value{
 ggplot object

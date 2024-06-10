@@ -293,7 +293,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=NULL,
 }
 
 
-#' Create a Manhattan plot highlighting significant and suggestive loci
+#' Create a Manhattan plot highlighting genome-wide significant and suggestive loci
 #'
 #' @description
 #'
@@ -308,6 +308,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=NULL,
 #' @param flank_size A number (default = 5000). The size of the flanking region for the significant and suggestitve snps.
 #' @param region_size An integer (default = 1000000) (or a string represented as 200kb or 2MB) indicating the window size for variant labeling. Increase this number for sparser annotation and decrease for denser annotation.
 #' @param ymax Integer, max of the y-axis, (default value: \code{ymax=(max(-log10(df$P)) + max(-log10(df$P)) * .2))}
+#' @param ... Additional arguments passed to other plotting functions.
 #' @inheritParams manhattan
 #' @return ggplot object
 #' 
@@ -320,7 +321,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=NULL,
 #' 
 
 
-manhattanExtra <- function(df,genome_wide_thresh=5e-08, suggestive_thresh=1e-06, flank_size=1e6, region_size=1e8, sign_thresh_color=NULL, sign_thresh_label_size=NULL, show_legend=TRUE,label_fontface=NULL,
+manhattanExtra <- function(df,genome_wide_thresh=5e-08, suggestive_thresh=1e-06, flank_size=1e6, region_size=1e7, sign_thresh_color=NULL, sign_thresh_label_size=NULL, show_legend=TRUE,label_fontface=NULL,
                            nudge_y=NULL, ymax=NULL, sign_thresh=NULL, label_color=NULL, color=NULL, legend_labels=NULL, annotate=NULL, ...){
  
    if(!is.data.frame(df) && is.list(df)){

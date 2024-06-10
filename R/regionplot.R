@@ -186,7 +186,8 @@ if(!is.null(sign_thresh)){
   if( ! is.null(rsids)){
     rsids_df <- get_rsids_from_df(dat,rsids)
     main_plot <-main_plot %>% add_rsids(rsids_df, rsids_color=rsids_color, nudge_x=nudge_x, nudge_y=nudge_y, label_size=label_size, angle=angle, label_color=label_color, scale=scale ,
-                                        with_vline = with_vline, label_fontface=label_fontface,label_family=label_family,segment.size=segment.size,segment.color=segment.color,segment.linetype=segment.linetype, vline_color = vline_color)
+                                        with_vline = with_vline, label_fontface=label_fontface,label_family=label_family,segment.size=segment.size,
+                                        segment.color=segment.color,segment.linetype=segment.linetype, vline_color = vline_color, vline_size=vline_size)
     
     
   }
