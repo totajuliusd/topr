@@ -157,7 +157,7 @@ regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alp
                                                    label_color=label_color,scale=scale,segment.color=segment.color,segment.size=segment.size,
                                                    segment.linetype=segment.linetype,max.overlaps=max.overlaps)
         if(annot_with_vline){
-          main_plot <- main_plot %>% add_vline(ld_snp$POS, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale, vline_color=vline_color)
+          main_plot <- main_plot %>% add_vline(ld_snp$POS, vline_color=vline_color, vline_linetype = vline_linetype, vline_alpha=vline_alpha, vline_size=vline_size,scale=scale)
         }
       }
     }

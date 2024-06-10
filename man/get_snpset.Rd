@@ -12,7 +12,8 @@ get_snpset(
   region_size = 1e+06,
   verbose = NULL,
   show_full_output = FALSE,
-  build = 38
+  build = 38,
+  format = "wide"
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ get_snpset(
 \item{show_full_output}{A logical scalar (default:FALSE). Assign to TRUE to show the full output from this function}
 
 \item{build}{A string, genome build, choose between builds 37 (GRCh37) and 38 (GRCh38) (default is 38)}
+
+\item{format}{A string, representing either wide or long format (default : "wide"). By default a snpset created from two dataframes is returned in a wide format.}
 }
 \value{
 Dataframe of overlapping snps (snpset)

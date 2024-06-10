@@ -398,7 +398,7 @@ manhattan(list(CD_UKBB, known, novel), color=c("darkgrey","blue","red"), annotat
 #### Locuszoom example
 <hr>
 
-*Contribution from Kyle Scott (https://github.com/kscott-1)*
+*Contribution from Kyle Scott [kscott-1](https://github.com/kscott-1)*
 
 Extract the snp of interest *rs7713270*, from the inbuilt CD_UKBB dataset.
 
