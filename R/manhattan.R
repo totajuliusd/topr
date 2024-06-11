@@ -330,7 +330,7 @@ manhattanExtra <- function(df,genome_wide_thresh=5e-08, suggestive_thresh=1e-06,
       df <- as.data.frame(df[1])
     }
   
-  top_signals <- get_sign_and_sugg_loci(df, genome_wide_thresh = genome_wide_thresh, suggestive_thresh = suggestive_thresh, flank_size = flank_size)
+  top_signals <- get_sign_and_sugg_loci(df, genome_wide_thresh = genome_wide_thresh, suggestive_thresh = suggestive_thresh, flank_size = flank_size, region_size = region_size)
   if(is.null(color))
     color <- c("grey80", "#0072B2","#D55E00")
   if(is.null(annotate))
