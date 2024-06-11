@@ -8,7 +8,7 @@ get_sign_and_sugg_loci(
   df,
   genome_wide_thresh = 5e-08,
   suggestive_thresh = 1e-06,
-  flank_size = 50000,
+  flank_size = 1e+06,
   region_size = 1e+06
 )
 }
@@ -19,9 +19,9 @@ get_sign_and_sugg_loci(
 
 \item{suggestive_thresh}{A number. P-value threshold for suggestive loci (1e-06 by default)}
 
-\item{flank_size}{A number (default = 5000). The size of the flanking region for the significant and suggestitve snps.}
+\item{flank_size}{A number (default = 1e6). The size of the flanking region for the significant and suggestitve snps.}
 
-\item{region_size}{An integer (default = 1000000) (or a string represented as 200kb or 2MB) indicating the window size for variant labeling. Increase this number for sparser annotation and decrease for denser annotation.}
+\item{region_size}{A number (default = 1e6). The size of the region for top snp search. Only one snp per region is returned.}
 }
 \value{
 List of genome wide and suggestive loci.
