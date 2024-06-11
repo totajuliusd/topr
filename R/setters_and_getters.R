@@ -394,8 +394,7 @@ get_pos_with_offset <- function(df,offsets){
 #' @param df Dataframe, GWAS summary statistics
 #' @param genome_wide_thresh A number. P-value threshold for genome wide significant loci (5e-08 by default)
 #' @param suggestive_thresh A number. P-value threshold for suggestive loci (1e-06 by default)
-#' @param flank_size A number (default = 5000). The size of the flanking region for the significant and suggestitve snps.
-#' @param region_size An integer (default = 1000000) (or a string represented as 200kb or 2MB) indicating the window size for variant labeling. Increase this number for sparser annotation and decrease for denser annotation.
+#' @param flank_size A number (default = 1e6). The size of the flanking region for the significant and suggestitve snps.
 #' @return List of genome wide and suggestive loci.
 #' @export
 #' @examples
@@ -404,10 +403,10 @@ get_pos_with_offset <- function(df,offsets){
 #' }
 #'
 
-get_sign_and_sugg_loci <- function(df, genome_wide_thresh = 5e-8, suggestive_thresh = 1e-6, flank_size = 5e4, region_size=1e6) {
+get_sign_and_sugg_loci <- function(df, genome_wide_thresh = 5e-8, suggestive_thresh = 1e-6, flank_size = 1e6) {
   genome_wide_snps <- data.frame()
   suggestive_snps <- data.frame()
-  leads <- df |> get_lead_snps(thresh = suggestive_thresh, region_size = region_size, verbose = FALSE)
+  leads <- df |> get_lead_snps(thresh = suggestive_thresh, region_size = flank_size, verbose = FALSE)
    if (nrow(leads) == 0) {
     return(list(genome_wide_snps = genome_wide_snps, suggestive_snps = suggestive_snps))
   }
