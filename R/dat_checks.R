@@ -22,6 +22,7 @@ downsample <- function(dat, downsample_cutoff=0.05, downsample_prop=0.1){
       group_by(CHROM) |>
       slice_sample(prop=downsample_prop)
       dat[[i]]  <- bind_rows(sig, notsig)
+      print(dim(dat[[i]]))
     }
   }
   return(dat)
