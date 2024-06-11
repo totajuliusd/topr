@@ -1,19 +1,111 @@
 ---
-title: "topr"
+title: "Getting started with topr"
 output: rmarkdown::html_vignette
-vignette: 
-  %\VignetteIndexEntry{topr}
+description: |
+  The topr package is a set of functions used to visualize, explore and annotate genetic association results.
+vignette: >
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Getting started with topr}
   %\VignetteEncoding{UTF-8}
+---
 
-
-```{r, include = FALSE}
+```{r ex_setup, include=FALSE}
 knitr::opts_chunk$set(
+  message = FALSE,
   collapse = TRUE,
   comment = "#>"
-)
+  )
+library(topr)
+library(magrittr)
+set.seed(0)
 ```
 
-```{r setup}
-library(topr)
+The topr package is a set of functions used to visualize, explore and annotate genetic association results. In particular, using only the chromosome, position and p-value of each variant in results dataframes, topr makes it easy to display gene annotations and multiple traits in a single manhattan plot. Other functionality includes regional plots & locus zoom plots.
+
+## Exploration with built-in data
+
+The package comes with 3 sample datasets, namely `CD_UKBB`, `CD_FINNGEN` & `UC_UKBB`.
+
+Let's look at the `CD_UKBB` dataset:
+
+```{r ex-head, echo=FALSE}
+head(CD_UKBB)
+```
+
+Note that while there are extra columns in the sample data, the only columns required for plotting are CHROM, POS and P.
+
+### Single dataset plotting
+
+```{r ex-manh, fig.width=12, fig.height=5}
+manhattan(CD_UKBB)
+```
+
+```{r ex-manh2, fig.width=12, fig.height=5}
+manhattan(CD_UKBB, annotate=5e-9)
+```
+
+```{r ex-region, fig.width=12, fig.height=8}
+regionplot(CD_UKBB, gene="IL23R")
+```
+
+### Multiple dataset plotting
+
+In addition to plotting a single dataset, topr can also plot multiple datasets in a single manhattan/region plot.
+
+```{r ex-multimanh, fig.width=12, fig.height=5}
+manhattan(list(CD_UKBB, CD_FINNGEN), legend_labels = c("UKBB", "FinnGen"))
+```
+
+```{r ex-multiregion, fig.width=12, fig.height=8}
+regionplot(list(CD_UKBB, CD_FINNGEN), gene="IL23R", legend_labels = c("UKBB", "FinnGen"))
+```
+
+### Other useful functions
+
+Extract lead/index variants from the GWAS dataset (CD_UKBB):
+
+```{r lead1}
+get_lead_snps(CD_UKBB) %>%
+  dplyr::arrange(P) %>%
+  head()
+```
+
+Annotate the lead/index variants with their nearest gene & biotype:
+
+```{r lead2}
+get_lead_snps(CD_UKBB) %>%
+  annotate_with_nearest_gene() %>%
+  dplyr::arrange(P) %>%
+  head()
+```
+
+Get genomic coordinates for a gene (topr uses genome build GRCh38.p13 by default):
+
+```{r gene-coords1}
+get_gene_coords("IL23R")
+```
+
+Get genomic coordinates for a gene using genome build GRCh37 instead.
+
+```{r gene-coords2}
+get_gene_coords("IL23R", build="37")
+```
+
+Get snps within a region:
+
+```{r snp-reg}
+get_snps_within_region(CD_UKBB, region="chr1:67138906-67259979") %>%
+  head()
+```
+
+Get the top variant on a chromosome:
+
+```{r top-snp}
+get_top_snp(CD_UKBB, chr="chr1")
+```
+
+Create a snpset by extracting the top/lead variants from the CD_UKBB dataset and overlapping variants (by position) in the CD_FINNGEN dataset.
+
+```{r snpset}
+get_snpset(CD_UKBB, CD_FINNGEN)
 ```

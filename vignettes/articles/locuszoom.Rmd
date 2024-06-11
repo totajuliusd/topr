@@ -1,0 +1,91 @@
+---
+title: "Locuszoom plot examples"
+output: rmarkdown::html_vignette
+description: |
+  The topr package is a set of functions used to visualize, explore and annotate genetic association results.
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Locuszoom plot examples}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r ex_setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+  )
+library(topr)
+library(magrittr)
+set.seed(0)
+```
+
+The `locuszoom` function allows us to entend the functionality of `regionplot` when LD R2 values are available. One of the sample datasets, `CD_UKBB` also has a version with R2 values for these examples, `R2_CD_UKBB`.
+
+```{r, echo=FALSE}
+head(R2_CD_UKBB)
+```
+
+```{r lz-simple, fig.width=12, fig.height=8}
+locuszoom(R2_CD_UKBB)
+```
+
+Annotate the variants with vertical lines highlighting their positions on the plot:
+
+```{r lz-vline, fig.width=12, fig.height=8}
+locuszoom(
+  R2_CD_UKBB, 
+  annotate_with_vline=1e-8
+)
+```
+
+Include a region size to show separate peaks:
+
+```{r lz-region, fig.width=12, fig.height=8}
+locuszoom(
+  R2_CD_UKBB,
+  annotate_with_vline=1e-8,
+  region_size=1e5
+)
+```
+
+### Obtaining LD R2 values for Locuszoom plot
+
+Not always will the R2 values be already included in your results data.
+
+Extract the snp of interest rs7713270, from the inbuilt CD_UKBB dataset.
+
+```{r, eval=FALSE}
+lead_snp <- CD_UKBB %>%
+  dplyr::filter(ID == "rs7713270") 
+snp <- paste0(lead_snp$CHROM,":",lead_snp$POS)
+```
+
+Retrieve the R2 values with `LDlinkR::LDproxy()`
+
+Run LDproxy to get variants correlated with rs7713270. Use the European (EUR) 1000 Genomes Project population and genome build GRCh38.
+
+Note! To be able to run LDproxy, you have to register and get a token (see https://ldlink.nih.gov/?tab=apiaccess).
+
+```{r, eval=FALSE}
+SNP <- LDlinkR::LDproxy(
+  snp = snp,
+  pop = "EUR",
+  r2d = "r2",
+  token = "NULL",
+  genome_build = paste0("grch", "38")
+)
+LD.link <- SNP %>% 
+  dplyr::mutate(CHROM = stringr::str_extract(Coord, "chr[^:]*")) %>%
+  dplyr::mutate(POS = as.numeric(stringr::str_extract(Coord, "(?<=:)[0-9]*"))) %>%  
+  dplyr::select(CHROM, POS, R2)
+```
+
+Plot with the locuszoom function
+
+Join the output from LDproxy with the CD_UKBB dataset to get the p-values for plotting.
+
+```{r, eval=FALSE}
+snps.ld <- dplyr::inner_join(CD_UKBB, LD.link, by = c("CHROM", "POS")) 
+locuszoom(snps.ld)
+```
