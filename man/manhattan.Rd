@@ -237,9 +237,9 @@ manhattan(
 
 \item{hide_every_nth_chrtick}{A number (default: 2). Hide every nth chromosome tick on the x-axis (from the hide_chr_ticks_from_pos to the hide_chr_ticks_to_pos).}
 
-\item{downsample_cutoff}{A number (default: 0.05) used to downsample the input dataset prior to plotting. Only a proportion of the variants (10\% by default) with P-values higher than the downsample_cutoff will be displayed on the plot.}
+\item{downsample_cutoff}{A number (default: 0.05) used to downsample the input dataset prior to plotting. Sets the fraction of high p-value (default: P>0.05) markers to display on the plot.}
 
-\item{downsample_prop}{A number (default: 0.1) used to downsample the input dataset prior to plotting. Sets the fraction of high p-value (default: P>0.05) markers to display on the plot.}
+\item{downsample_prop}{A number (default: 0.1) used to downsample the input dataset prior to plotting. Only a proportion of the variants (10\% by default) with P-values higher than the downsample_cutoff will be displayed on the plot.}
 }
 \value{
 ggplot object

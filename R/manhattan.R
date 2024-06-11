@@ -83,8 +83,8 @@
 #' @param hide_chrticks_from_pos A number (default: 17). Hide every nth chromosome name on the x-axis FROM this position (chromosome number)
 #' @param hide_chrticks_to_pos A number (default: NULL). Hide every nth chromosome name on the x-axis TO this position (chromosome number). When NULL this variable will be set to the number of numeric chromosomes in the input dataset.
 #' @param hide_every_nth_chrtick A number (default: 2). Hide every nth chromosome tick on the x-axis (from the hide_chr_ticks_from_pos to the hide_chr_ticks_to_pos).
-#' @param downsample_cutoff A number (default: 0.05) used to downsample the input dataset prior to plotting. Only a proportion of the variants (10% by default) with P-values higher than the downsample_cutoff will be displayed on the plot. 
-#' @param downsample_prop A number (default: 0.1) used to downsample the input dataset prior to plotting. Sets the fraction of high p-value (default: P>0.05) markers to display on the plot. 
+#' @param downsample_cutoff A number (default: 0.05) used to downsample the input dataset prior to plotting. Sets the fraction of high p-value (default: P>0.05) markers to display on the plot.
+#' @param downsample_prop A number (default: 0.1) used to downsample the input dataset prior to plotting. Only a proportion of the variants (10% by default) with P-values higher than the downsample_cutoff will be displayed on the plot.
 #'
 #' @return ggplot object
 #' @export
