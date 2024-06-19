@@ -21,6 +21,8 @@ man/figures/manhattan_wide_1080_high.gif
 man/figures/topr_v.1.1.0.gif
 man/figures/manhattan_colored_peaks2.png
 man/figures/manhattan_colored_peaks.png
+man/figures/manhattanExtra.png
+man/figures/locuszoom.png
 lastMiKTeXException
 .RDataTmp
 ^cran-comments.md
@@ -28,4 +30,4 @@ lastMiKTeXException
 ^doc$
 ^Meta$
 ^vignettes$
-^revdep$
+
