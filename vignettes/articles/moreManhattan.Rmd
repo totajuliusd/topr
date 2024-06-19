@@ -65,7 +65,7 @@ manhattan(
 )
 ```
 
-The same plot as above with gray shades/rectangles distinguishing between chromosomes intead (using `theme_grey=T`)
+The same plot as above with gray shades/rectangles distinguishing between chromosomes instead (using `theme_grey=T`)
 
 ```{r prettier-stacked-manh-gray, fig.width=12, fig.height=8}
 genes = c("IL23R","NOTCH4","NOD2","JAK2","TTC33")

@@ -28,7 +28,7 @@ There are no additional required arguments for this function, as shown below.
 manhattanExtra(CD_UKBB)
 ```
 
-The `manhattanExtra` function can be customized using some of its optional arguments, including `genome_wide_thresh`, `suggestive_thresh`, `flank_size` & `region_size`. The `flank_size` parameter is used to denote the size on either side of a top hit that will be included in the colored grouping for that hit. The `region_size` parameter is used for gene annotation and will determine how dense the labeling is. Larger numbers will have sparser annoations.
+The `manhattanExtra` function can be customized using some of its optional arguments, including `genome_wide_thresh`, `suggestive_thresh`, `flank_size` & `region_size`. The `flank_size` parameter is used to denote the size on either side of a top hit that will be included in the colored grouping for that hit. The `region_size` parameter is used for gene annotation and will determine how dense the labeling is. Larger numbers will have sparser annotations.
 
 Adjusting flank and region sizes -
 
