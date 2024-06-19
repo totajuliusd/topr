@@ -1,4 +1,4 @@
-# topr 2.0.2
+# topr 2.0.1
 * Parameters added for downsampling/thinning the dataset prior to plotting with manhattan
 * Locuszoom plot updated to include variants with missing R2 values
 * vline_color bug fix
