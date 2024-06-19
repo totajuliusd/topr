@@ -1,0 +1,98 @@
+---
+title: "More manhattan examples"
+output: rmarkdown::html_vignette
+description: |
+  The topr package is a set of functions used to visualize, explore and annotate genetic association results.
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{More manhattan examples}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r ex_setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+  )
+library(topr)
+library(magrittr)
+set.seed(0)
+```
+
+In addition to a genome-wide Manhattan plot, we can also display a single chromosome.
+
+```{r manh-chr, fig.width=12, fig.height=5}
+manhattan(CD_UKBB, annotate=5e-8, chr="chr1")
+```
+
+Display genes of interest at the bottom of the Manhattan plot to get a visual representation of their position relative to association peaks.
+
+```{r gene-highlight, fig.width=12, fig.height=5}
+genes = c("IL23R","NOTCH4","NOD2","JAK2","TTC33")
+manhattan(CD_UKBB, annotate=5e-8, highlight_genes=genes)
+```
+
+We can display multiple traits or multiple datasets on the same Manhattan plot. In the introduction, we saw how to overlap the results. We can also display the results vertically stacked. We use the `ntop` parameter to specify the number of datasets to display on the top half of the plot.
+
+```{r stacked-manh, fig.width=12, fig.height=5}
+genes = c("IL23R","NOTCH4","NOD2","JAK2","TTC33")
+manhattan(
+  list(CD_UKBB, CD_FINNGEN),
+  legend_labels=c("UKBB", "FinnGen"),
+  annotate=c(5e-8,5e-8),
+  ntop=1,
+  highlight_genes=genes,
+  highlight_genes_ypos=-1
+)
+```
+
+Make the plot prettier by giving more space to the labels by extending the yaxis (using ymax and ymin) and by changing the position and angle of the labels (using angle and the nudge_y arguments).
+
+```{r prettier-stacked-manh, fig.width=12, fig.height=8}
+genes = c("IL23R","NOTCH4","NOD2","JAK2","TTC33")
+manhattan(
+  list(CD_UKBB, CD_FINNGEN),
+  legend_labels=c("UKBB", "FinnGen"),
+  annotate=c(5e-8,5e-8),
+  ntop=1,
+  highlight_genes=genes,
+  highlight_genes_ypos=-1.5,
+  ymin=-70,
+  ymax=50,
+  nudge_y=12,
+  angle=90
+)
+```
+
+The same plot as above with gray shades/rectangles distinguishing between chromosomes intead (using `theme_grey=T`)
+
+```{r prettier-stacked-manh-gray, fig.width=12, fig.height=8}
+genes = c("IL23R","NOTCH4","NOD2","JAK2","TTC33")
+manhattan(
+	list(CD_UKBB, CD_FINNGEN),
+	legend_labels=c("UKBB", "FinnGen"),
+	annotate=c(5e-8,5e-8),
+	ntop=1,
+	highlight_genes=genes,
+	highlight_genes_ypos=-1.5,
+	ymin=-70,
+	ymax=50,
+	nudge_y=12,
+	angle=90,
+	theme_grey=T
+)
+```
+
+Use `annotate_with_vline` to highlight association peaks. Use different `alpha`, `size` and `shape` for the two datasets to try to differentiate a little better.
+
+```{r annotate-vline, fig.width=12, fig.height=5}
+manhattan(
+	list(CD_UKBB, CD_FINNGEN),
+	legend_labels=c("UKBB", "FinnGen"),
+	annotate_with_vline=c(5e-8,5e-8),
+	alpha=c(0.2, 0.1),
+	size=c(1, 1.25),
+	shape=c(6, 19)
+)
+```
