@@ -3,7 +3,8 @@ Title: Create Custom Plots for Viewing Genetic Association Results
 Version: 2.0.2
 Authors@R: c(
     person("Thorhildur", "Juliusdottir", role = c("cph","aut", "cre"),email = "totajuliusd@gmail.com"),
-    person("Andri", "Stefansson", role = "aut", email = "andrimarstefansson@gmail.com")
+    person("Andri", "Stefansson", role = "aut", email = "andrimarstefansson@gmail.com"),
+    person("Kyle","Scott", role="ctb", email="kms309@miami.edu")
     )
 URL: https://github.com/totajuliusd/topr
 BugReports: https://github.com/totajuliusd/topr/issues
