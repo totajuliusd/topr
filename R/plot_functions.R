@@ -45,7 +45,7 @@ add_genes2plot <- function(p1,genes,highlight_genes_color="green",highlight_gene
 }
 
 add_zero_hline <- function(p1){
-  return(p1 + geom_hline(yintercept = 0,size=0.2, color="grey54"))
+  return(p1 + geom_hline(yintercept = 0,linewidth=0.2, color="grey54"))
 }
 
 add_shades_and_ticks <- function(p1, shades,ticks,shades_color=NULL,shades_alpha=0.5, shades_line_alpha=1,theme_grey=F, use_shades=F){
@@ -110,7 +110,7 @@ add_zoom_rectangle <- function(p1,dat,xmin=NULL,xmax=NULL){
 add_vline <- function(p1, vline, vline_color="grey",vline_linetype="dashed", vline_alpha=1, vline_size=1, scale=1){
   if(!is.null(vline)){
     for(i in seq_along(vline)){
-      p1 <- p1+geom_vline(xintercept = as.numeric(vline[i]) , colour=vline_color, linetype=vline_linetype, alpha=vline_alpha, size=vline_size*scale)
+      p1 <- p1+geom_vline(xintercept = as.numeric(vline[i]) , colour=vline_color, linetype=vline_linetype, alpha=vline_alpha, linewidth=vline_size*scale)
     }
   }
   return(p1)
@@ -132,16 +132,16 @@ add_sign_thresh <- function(p1, sign_thresh=1e-09,sign_thresh_color="red", using
       if(!is.null(sign_thresh_color) & (length(sign_thresh) == length(sign_thresh_color))){
         color <- sign_thresh_color[i]
       }
-      p1 <- p1 + geom_hline(yintercept = -log10(as.numeric(sign_thresh[[i]])),size=sign_thresh_size*scale, color=color, linetype=sign_thresh_linetype)
+      p1 <- p1 + geom_hline(yintercept = -log10(as.numeric(sign_thresh[[i]])),linewidth=sign_thresh_size*scale, color=color, linetype=sign_thresh_linetype)
       if(using_ntop){
-        p1 <- p1 + geom_hline(yintercept = log10(as.numeric(sign_thresh[[i]])),size=sign_thresh_size*scale, color=color, linetype=sign_thresh_linetype)
+        p1 <- p1 + geom_hline(yintercept = log10(as.numeric(sign_thresh[[i]])),linewidth=sign_thresh_size*scale, color=color, linetype=sign_thresh_linetype)
       }
     }
   }
   else{
-    p1 <- p1+geom_hline(yintercept = -log10(as.numeric(sign_thresh[[i]])),size=sign_thresh_size*scale, colour="red", linetype=sign_thresh_linetype)
+    p1 <- p1+geom_hline(yintercept = -log10(as.numeric(sign_thresh[[i]])),linewidth=sign_thresh_size*scale, colour="red", linetype=sign_thresh_linetype)
     if(using_ntop){
-      p1 <- p1 + geom_hline(yintercept = log10(as.numeric(sign_thresh[[i]])),size=sign_thresh_size*scale, color=color, linetype=sign_thresh_linetype)
+      p1 <- p1 + geom_hline(yintercept = log10(as.numeric(sign_thresh[[i]])),linewidth=sign_thresh_size*scale, color=color, linetype=sign_thresh_linetype)
     }
   }
   return(p1)
