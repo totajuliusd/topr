@@ -14,7 +14,7 @@ Encoding: UTF-8
 LazyData: true
 LazyDataCompression: xz
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.3
 Suggests: 
     testthat (>= 3.0.0),
     knitr,
@@ -34,5 +34,6 @@ Imports:
     utils,
     tidyr,
     enshuman,
+    purrr
 Depends: 
     R (>= 3.5.0)

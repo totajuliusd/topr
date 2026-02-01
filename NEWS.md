@@ -1,3 +1,9 @@
+# topr 2.0.3
+* Added the `foresttopr()` function.
+* Fixed a ggplot2 deprecation warning by replacing the `size` aesthetic with `linewidth`.
+* Updated the default topr color palette accessed via `get_topr_colors()`.  
+  The previous palette can still be retrieved using `get_topr_old_colors()`.
+
 # topr 2.0.2
 * Parameters added for downsampling/thinning the dataset prior to plotting with manhattan
 * Locuszoom plot updated to include variants with missing R2 values

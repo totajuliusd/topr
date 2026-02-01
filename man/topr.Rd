@@ -41,4 +41,9 @@ Authors:
   \item Andri Stefansson \email{andrimarstefansson@gmail.com}
 }
 
+Other contributors:
+\itemize{
+  \item Kyle Scott \email{kms309@miami.edu} [contributor]
+}
+
 }

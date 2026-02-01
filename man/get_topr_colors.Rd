@@ -2,7 +2,7 @@
 % Please edit documentation in R/setters_and_getters.R
 \name{get_topr_colors}
 \alias{get_topr_colors}
-\title{Get the top hit from the dataframe}
+\title{Get the topr custom colors}
 \usage{
 get_topr_colors()
 }
@@ -10,8 +10,7 @@ get_topr_colors()
 Vector of colors used for plotting
 }
 \description{
-\code{get_topr_colors()} Get the top hit from the dataframe
-All other input parameters are optional
+\code{get_topr_colors()} Get topr custom colors
 }
 \examples{
 \dontrun{

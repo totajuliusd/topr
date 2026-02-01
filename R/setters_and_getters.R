@@ -632,12 +632,11 @@ get_top_snp <- function(df, chr=NULL){
 }
 
 
-#' Get the top hit from the dataframe
+#' Get the topr custom colors
 #'
 #' @description
 #'
-#' \code{get_topr_colors()} Get the top hit from the dataframe
-#' All other input parameters are optional
+#' \code{get_topr_colors()} Get topr custom colors
 #'
 #' @return Vector of colors used for plotting
 #' @export
@@ -647,9 +646,30 @@ get_top_snp <- function(df, chr=NULL){
 #' get_topr_colors()
 #' }
 #'
+
 get_topr_colors <- function(){
+   return(c("skyblue4","darkred","thistle4","#C9A227","#55A868","#8172B3","#937860","#DA8BC3","#8C8C8C","#CCB974","#B4DE2CFF","pink3","#95C8D9", "gold1","cadetblue")) #,topr::get_topr_old_colors()[-1]))
+}
+
+#' Get the topr custom colors from v. 2.0.2
+#'
+#' @description
+#'
+#' \code{get_topr_old_colors()} Get topr custom colors from v. 2.0.2
+#'
+#' @return Vector of colors used for plotting
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' get_topr_old_colors()
+#' }
+#'
+
+get_topr_old_colors <- function(){
   return(c("darkblue","#E69F00","#00AFBB","#999999","#FC4E07","darkorange1","darkgreen","blue","red","magenta","skyblue","grey40","grey60","yellow","black","purple","orange","pink","green","cyan"))
 }
+
 
 set_genes_pos_adj <- function(genes, offsets){
   #CHROM,POS,Gene_Symbol
