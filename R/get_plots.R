@@ -1,7 +1,7 @@
 
 
 get_base_plot <- function(dat, color=get_topr_colors(), show_legend=TRUE, legend_labels=NULL,scale=1,
-                          legend_name=NULL,overview_plot=FALSE,legend_position="right",locuszoomplot=FALSE, legend_nrow=NULL,verbose=NULL){
+                          legend_name=NULL,overview_plot=FALSE,legend_position="right",locuszoomplot=FALSE, legend_nrow=NULL,verbose=NULL, lz_color="darkblue"){
   p1 <- ggplot()+theme_bw() #+geom_point(data=dat[[1]]$gwas, aes(dat[[1]]$gwas$pos_adj, dat[[1]]$gwas$log10p),color=colors[1] alpha=0.7,size=1)+theme_bw()
   for(i in seq_along(dat)){
     if(overview_plot){
@@ -22,7 +22,7 @@ get_base_plot <- function(dat, color=get_topr_colors(), show_legend=TRUE, legend
     }
   }
   if(locuszoomplot & show_legend){
-    colors <-c("darkblue","turquoise","green","orange","red")
+    colors <- c(lz_color,"turquoise","green","orange","red")
     labels <- c("R2 < 0.2", "0.2 < R2 < 0.4", "0.4 < R2 < 0.6","0.6 < R2 <0.8", "0.8 < R2")
     if(any(is.na(dat[[1]]$R2))){
       colors <- c(colors, "darkgrey")

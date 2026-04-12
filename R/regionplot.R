@@ -27,6 +27,7 @@
 #' @param gene_color A string representing a color, can be used to change the color of the genes/exons on the geneplot
 #' @param unit_ratios A string of three numbers separated by ":", for the overview, main and gene plots height ratios e.g  1.25:7:2
 #' @param extract_plots Logical, FALSE by default. Set to TRUE to extract the three plots separately in a list
+#' @param lz_color A string, to set the base color in the locuszoom plot
 #' @inheritParams manhattan
 #'
 #' @return plots within ggplotGrobs, arranged with egg::gtable_frame
@@ -40,7 +41,7 @@
 
 regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alpha=1,label_size=4, annotate_with="ID",
                        color=get_topr_colors(), axis_text_size=11,axis_title_size=12,title_text_size=13, show_genes=NULL, show_overview=TRUE,
-                       show_exons=NULL,max_genes=200, sign_thresh=5e-08, sign_thresh_color="red", sign_thresh_label_size=3.5,
+                       show_exons=NULL,max_genes=200, sign_thresh=5e-08, sign_thresh_color="darkred", sign_thresh_label_size=3.5,
                        xmax=NULL,ymin=NULL,ymax=NULL,protein_coding_only=FALSE,region_size=1000000,gene_padding=100000,angle=0,legend_title_size=12,legend_text_size=11,
                        nudge_x=0.01,nudge_y=0.01, rsids=NULL, variant=NULL,rsids_color=NULL,legend_name="",legend_position="right",
                        chr=NULL,vline=NULL,show_gene_names=NULL,legend_labels=NULL,gene=NULL, title=NULL, label_color=NULL,locuszoomplot=FALSE,
@@ -48,7 +49,7 @@ regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alp
                        rsids_with_vline=NULL, annotate_with_vline=NULL,show_gene_legend=TRUE, unit_main=7, unit_gene=2, unit_overview=1.25, verbose=NULL,
                        gene_color=NULL,segment.size=0.2,segment.color="black",segment.linetype="solid", max.overlaps=10, unit_ratios=NULL, 
                        extract_plots=FALSE,label_fontface="plain",label_family="",gene_label_fontface="plain",gene_label_family="",build=38,
-                       label_alpha=1, vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5, log_trans_p=TRUE){
+                       label_alpha=1, vline_color="grey",vline_linetype="dashed", vline_alpha=1,vline_size=0.5, log_trans_p=TRUE,lz_color=NULL){
   # three plots, overview_plot, main_plot and gene_plot
   #only include overview plot if df region is larger than the region between xmin and xmax
   if (!missing(show_exons)) 
@@ -135,7 +136,7 @@ regionplot <- function(df, ntop=10, annotate=NULL, xmin=0, size=2, shape=19, alp
                                                       verbose=verbose,nudge_x=nudge_x,nudge_y=nudge_y,angle=angle,
                                                       label_fontface=label_fontface, label_family=label_family, build=build,label_alpha=label_alpha) }
   # get the main plot
-  main_plot <- get_base_plot(dat,color=color,legend_labels=legend_labels, show_legend = show_legend, legend_name = legend_name,legend_position = legend_position,locuszoomplot=locuszoomplot, legend_nrow=legend_nrow,scale=scale,verbose=verbose) %>%
+  main_plot <- get_base_plot(dat,color=color,legend_labels=legend_labels, show_legend = show_legend, legend_name = legend_name,legend_position = legend_position,locuszoomplot=locuszoomplot, legend_nrow=legend_nrow,scale=scale,verbose=verbose,lz_color=lz_color) %>%
     set_plot_text_sizes(axis_text_size=axis_text_size,axis_title_size = axis_title_size,legend_text_size=legend_text_size, legend_title_size=legend_title_size,scale=scale)
   
   main_plot <- main_plot+theme(axis.text.x=element_blank(), axis.title.x = element_blank(), axis.ticks.x=element_blank())

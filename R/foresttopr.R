@@ -191,20 +191,11 @@ detect_gene_col <- function(df, gene_col = NULL) {
 #'     \item{ucl}{Upper confidence interval bound.}
 #'   }
 #'
-#' @examples
-#' matched <- get_matching_genes(
-#'   dfs = list(CD_tmp, CD_FINNGEN),
-#'   labels = c("CD_UKBB", "CD_FINNGEN"),
-#'   gene_col = "ID",
-#'   label_col = "Gene_Symbol",
-#'   effect_type = "beta"
-#' )
 #'
 #' @seealso \code{\link{foresttopr}}
 #'
 #' @keywords internal
 
-# === match on gene (key) only ===
 get_matching_genes <- function(
     dfs,
     labels,
@@ -308,8 +299,6 @@ get_matching_genes <- function(
   dplyr::bind_rows(ref_out, others_out) %>%
     dplyr::mutate(p = suppressWarnings(as.numeric(p)))
 }
-
-
 # === match on SNP key (CHROM:POS) with allele flip handling ===
 
 #' Match association results across datasets by variant key
@@ -372,14 +361,6 @@ get_matching_genes <- function(
 #'     \item{ucl}{Upper confidence interval bound.}
 #'   }
 #'
-#' @examples
-#' matched <- get_matching_snps(
-#'   dfs = list(CD_tmp, CD_FINNGEN),
-#'   labels = c("CD_UKBB", "CD_FINNGEN"),
-#'   gene_col = "ID",
-#'   label_col = "Gene_Symbol",
-#'   effect_type = "beta"
-#' )
 #'
 #' @seealso \code{\link{foresttopr}}, \code{\link{get_matching_genes}}
 #'
@@ -398,11 +379,17 @@ get_matching_snps <- function(
   
   dfs_std <- lapply(dfs, standardize_effects, effect_type = effect_type)
   
+  label_ref <- if (!is.null(label_col) && label_col %in% names(dfs_std[[1]])) {
+    label_col
+  } else {
+    gene_col
+  }
+  
   # reference
   ref <- dfs_std[[1]] %>%
     dplyr::mutate(
       key = paste0(CHROM, ":", POS),
-      label = if (!is.null(label_col) && label_col %in% names(.)) .data[[label_col]] else .data[[gene_col]],
+      label = .data[[label_ref]],
       or = est_std,
       p  = p_std,
       se = se_std,
@@ -472,8 +459,6 @@ get_matching_snps <- function(
   dplyr::bind_rows(ref_out, others_out) %>%
     dplyr::mutate(p = suppressWarnings(as.numeric(p)))
 }
-
-
 # =========================
 # Forest plot function
 # =========================
@@ -580,17 +565,22 @@ get_matching_snps <- function(
 #'
 #' @examples
 #' foresttopr(
-#'   dat = list(CD_UKBB %>% arrange(P) %>% head(n=10) %>% annotate_with_nearest_gene(), CD_FINNGEN),
+#'   dat = list(
+#'     CD_UKBB |>
+#'       dplyr::arrange(P) |>
+#'       head(n = 10) |>
+#'       annotate_with_nearest_gene(),
+#'     CD_FINNGEN
+#'   ),
 #'   key_col = "ID",
 #'   label_col = "Gene_Symbol",
 #'   legend_labels = c("CD_UKBB", "CD_FINNGEN"),
 #'   effect_type = "beta"
 #' )
-#'
+#' 
 #' @seealso \code{\link[ggplot2]{ggplot}}
 #'
 #' @export
-
 
 foresttopr <- function(
     dat = NULL,
@@ -613,9 +603,9 @@ foresttopr <- function(
     ylabel_order = NULL,
     scale = 1,
     title = NULL,
-    title_text_size = 14,
+    title_text_size = 15,
     axis_text_size = 12,
-    axis_title_size = 13,
+    axis_title_size = 14,
     show_shape_legend = TRUE,
     show_color_legend = TRUE,
     legend_position = "right",
@@ -646,7 +636,7 @@ foresttopr <- function(
   legend_nrow <- as.integer(legend_nrow)
   
   if (is.null(xlabel)) {
-    xlabel <- if (effect_type == "or") "Odds ratio (95% CI)" else "Effect size (β, 95% CI)"
+    xlabel <- if (effect_type == "or") "Odds ratio (95% CI)" else "Effect size (beta, 95% CI)"
   }
   
   recycle_to_n <- function(x, n, nm) {
@@ -745,21 +735,42 @@ foresttopr <- function(
   
   # ---- plot ----
   p <- ggplot2::ggplot(df, ggplot2::aes(or, y_plot, color = set)) +
-    ggplot2::geom_rect(data = bands, inherit.aes = FALSE,
-                       ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
-                       fill = band_color, color = NA) +
-    ggplot2::geom_segment(data = bands, inherit.aes = FALSE,
-                          ggplot2::aes(x = xmin, xend = xmax, y = ymin, yend = ymin),
-                          color = band_border_color, linewidth = band_border_linewidth) +
-    ggplot2::geom_segment(data = bands, inherit.aes = FALSE,
-                          ggplot2::aes(x = xmin, xend = xmax, y = ymax, yend = ymax),
-                          color = band_border_color, linewidth = band_border_linewidth) +
-    ggplot2::scale_y_continuous(breaks = y_labs$y, labels = as.character(y_labs$y_lbl),
-                                expand = ggplot2::expansion(mult = c(0.01, 0.01))) +
-    ggplot2::geom_errorbar(ggplot2::aes(xmin = lcl,
-                                        xmax = ucl, 
-                                        group = interaction(y_lbl, set)),
-                           orientation = "y", width = 0, linewidth = 0.6)
+    ggplot2::geom_rect(
+      data = bands,
+      inherit.aes = FALSE,
+      ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+      fill = band_color,
+      color = NA
+    ) +
+    ggplot2::geom_segment(
+      data = bands,
+      inherit.aes = FALSE,
+      ggplot2::aes(x = xmin, xend = xmax, y = ymin, yend = ymin),
+      color = band_border_color,
+      linewidth = band_border_linewidth
+    ) +
+    ggplot2::geom_segment(
+      data = bands,
+      inherit.aes = FALSE,
+      ggplot2::aes(x = xmin, xend = xmax, y = ymax, yend = ymax),
+      color = band_border_color,
+      linewidth = band_border_linewidth
+    ) +
+    ggplot2::scale_y_continuous(
+      breaks = y_labs$y,
+      labels = as.character(y_labs$y_lbl),
+      expand = ggplot2::expansion(mult = c(0.01, 0.01))
+    ) +
+    ggplot2::geom_errorbar(
+      ggplot2::aes(
+        xmin = lcl,
+        xmax = ucl,
+        group = interaction(y_lbl, set)
+      ),
+      orientation = "y",
+      width = 0,
+      linewidth = 0.6
+    )
   
   # dashed reference lines: filter to finite + within xlim to avoid warnings
   vbreaks <- break_vals
@@ -784,16 +795,31 @@ foresttopr <- function(
   # points + shape scale
   if (!is.null(sign_thresh)) {
     p <- p +
-      ggplot2::geom_point(ggplot2::aes(shape = .sig, size = set, alpha = set,
-                                       group = interaction(y_lbl, set))) +
-      ggplot2::scale_shape_manual(values = sig_shapes, name = NULL,
-                                  breaks = c("sig", "ns"),
-                                  labels = c(paste0("P \u2264 ", sign_thresh),
-                                             paste0("P > ", sign_thresh)))
+      ggplot2::geom_point(
+        ggplot2::aes(
+          shape = .sig,
+          size = set,
+          alpha = set,
+          group = interaction(y_lbl, set)
+        )
+      ) +
+      ggplot2::scale_shape_manual(
+        values = sig_shapes,
+        name = NULL,
+        breaks = c("sig", "ns"),
+        labels = c(paste0("P <= ", sign_thresh),
+                   paste0("P > ", sign_thresh))
+      )
   } else {
     p <- p +
-      ggplot2::geom_point(ggplot2::aes(shape = set, size = set, alpha = set,
-                                       group = interaction(y_lbl, set))) +
+      ggplot2::geom_point(
+        ggplot2::aes(
+          shape = set,
+          size = set,
+          alpha = set,
+          group = interaction(y_lbl, set)
+        )
+      ) +
       ggplot2::scale_shape_manual(values = cohort_shapes, breaks = legend_labels,
                                   drop = FALSE, name = legend_name)
   }

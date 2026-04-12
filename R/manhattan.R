@@ -97,10 +97,14 @@
 #' manhattan(CD_UKBB)
 #' }
 
+
+
+
+
 manhattan <- function(df, ntop=4, title="",annotate=NULL, color=NULL,
-                   sign_thresh=5e-08,sign_thresh_color="red", sign_thresh_label_size=3.5, label_size=3.5, size=0.8,shape=19,alpha=1,
+                   sign_thresh=5e-08,sign_thresh_color="darkred", sign_thresh_label_size=3.5, label_size=3.5, size=0.8,shape=19,alpha=1,
                    highlight_genes_color="darkred",highlight_genes_ypos=1.5,axis_text_size=12,axis_title_size=14, title_text_size=15,
-                   legend_title_size=13,legend_text_size=12, protein_coding_only=TRUE,angle=0,
+                   legend_title_size=axis_text_size * 0.95,legend_text_size=axis_text_size * 0.85, protein_coding_only=TRUE,angle=0,
                    legend_labels=NULL,chr=NULL, annotate_with="Gene_Symbol",region_size=20000000,legend_name=NULL,
                    legend_position="bottom", nudge_x=0.1,nudge_y=0.7,xmin=NULL, xmax=NULL,ymin=NULL,ymax=NULL,
                    highlight_genes=NULL,label_color=NULL,legend_nrow=NULL,gene_label_size=NULL,gene_label_angle=0,
@@ -124,7 +128,6 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=NULL,
     dat <- dat_check(df, verbose=verbose, log_trans_p) 
     if(downsample_prop < 1)
       dat <- downsample(dat, downsample_cutoff, downsample_prop)
-    
     if(! is.null(chr)){
       dat <- dat %>% filter_on_chr(chr)
       xaxis_label <- paste(xaxis_label, gsub("chr", "", chr), sep=" ")
@@ -195,6 +198,7 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=NULL,
     }
     offsets=NULL
     incl_chrX=T
+   
     if(length(unique(dat[[1]]$CHROM))>1 & is.null(chr)){  #Manhattan plot
       incl_chrX <- include_chrX(dat)
       chr_lengths_and_offsets <- get_chr_lengths_and_offsets(dat, get_chr_lengths_from_data)
@@ -206,24 +210,20 @@ manhattan <- function(df, ntop=4, title="",annotate=NULL, color=NULL,
       }
       dat <- get_pos_with_offset4list(dat,offsets)
     }
-    
     main_plot <- get_base_plot(dat,color=color,legend_labels = legend_labels,legend_name=legend_name, legend_position = legend_position, 
                                legend_nrow = legend_nrow, show_legend = show_legend,scale=scale,verbose=verbose)
-  
         if(! is.null(title)){
         main_plot <- main_plot %>% add_title(title=title, title_text_size = title_text_size,scale=scale)
      }
     if(is.null(chr)){
-
       ticks <- get_ticks(dat,chr_lengths_and_offsets,chr_ticknames,chr_map,show_all_chrticks, hide_chrticks_from_pos, hide_chrticks_to_pos, hide_every_nth_chrtick,get_chr_lengths_from_data)
-      if(use_shades)
+       if(use_shades)
         shades <- get_shades(chr_lengths_and_offsets,dat,ntop=ntop,include_chrX = incl_chrX,ymin=ymin,ymax=ymax)
       
      main_plot <- main_plot %>% add_shades_and_ticks(shades,ticks,shades_color=shades_color,shades_alpha=shades_alpha,shades_line_alpha=shades_line_alpha, theme_grey=theme_grey, use_shades=use_shades)
     }else{
       main_plot <- main_plot + scale_y_continuous(expand=c(.02,.02))  + scale_x_continuous(expand=c(.01,.01),labels = scales::comma)
     }
- 
   main_plot <- set_axis_labels(main_plot,xaxis_label = xaxis_label)
   main_plot <- main_plot %>% set_plot_text_sizes(axis_text_size=axis_text_size,axis_title_size = axis_title_size, 
                                                  legend_text_size=legend_text_size, legend_title_size=legend_title_size,scale=scale)

@@ -8,7 +8,7 @@ foresttopr(
   dat = NULL,
   legend_labels = NULL,
   colors = NULL,
-  key_col = "gene",
+  key_col = "ID",
   label_col = NULL,
   effect_type = c("OR", "beta"),
   xlim = NULL,
@@ -25,9 +25,9 @@ foresttopr(
   ylabel_order = NULL,
   scale = 1,
   title = NULL,
-  title_text_size = 14,
+  title_text_size = 15,
   axis_text_size = 12,
-  axis_title_size = 13,
+  axis_title_size = 14,
   show_shape_legend = TRUE,
   show_color_legend = TRUE,
   legend_position = "right",
@@ -140,7 +140,13 @@ standard errors, or p-values when necessary.
 }
 \examples{
 foresttopr(
-  dat = list(CD_UKBB \%>\% arrange(P) \%>\% head(n=10) \%>\% annotate_with_nearest_gene(), CD_FINNGEN),
+  dat = list(
+    CD_UKBB |>
+      dplyr::arrange(P) |>
+      head(n = 10) |>
+      annotate_with_nearest_gene(),
+    CD_FINNGEN
+  ),
   key_col = "ID",
   label_col = "Gene_Symbol",
   legend_labels = c("CD_UKBB", "CD_FINNGEN"),

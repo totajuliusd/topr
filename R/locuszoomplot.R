@@ -54,10 +54,10 @@ locuszoom <- function(df, annotate=NULL,ntop=3, xmin=0, size=2, shape=19, alpha=
     xmin <- xmin - 100
     xmax <- xmax + 100
   }
-  df <- set_lz_colors(dat)
+  df <- set_lz_colors(dat, color)
 
   regionplot(df, ntop=ntop, annotate=annotate, xmin=xmin, size=size, shape=shape, alpha=alpha,label_size=label_size, annotate_with=annotate_with,
-             color=color, axis_text_size=axis_text_size,axis_title_size=axis_title_size,title_text_size=title_text_size, show_genes=show_genes, show_overview=show_overview,
+             color=NULL, axis_text_size=axis_text_size,axis_title_size=axis_title_size,title_text_size=title_text_size, show_genes=show_genes, show_overview=show_overview,
              max_genes=max_genes, sign_thresh=sign_thresh, sign_thresh_color=sign_thresh_color, sign_thresh_label_size=sign_thresh_label_size,
              xmax=xmax,ymin=ymin,ymax=ymax,protein_coding_only=protein_coding_only,region_size=region_size,gene_padding=gene_padding,angle=angle,legend_title_size=legend_title_size,legend_text_size=legend_text_size,
              nudge_x=nudge_x,nudge_y=nudge_y, rsids=rsids, variant=variant,rsids_color=rsids_color,legend_name=legend_name,legend_position=legend_position,
@@ -67,13 +67,16 @@ locuszoom <- function(df, annotate=NULL,ntop=3, xmin=0, size=2, shape=19, alpha=
              gene_color=gene_color,segment.size=segment.size,segment.color=segment.color,segment.linetype=segment.linetype, show_gene_legend = show_gene_legend,
              max.overlaps=max.overlaps,extract_plots = extract_plots,label_fontface=label_fontface,label_family=label_family,gene_label_fontface=gene_label_fontface,
              gene_label_family=gene_label_family, build=build,verbose=verbose,show_legend = show_legend,label_alpha = label_alpha,gene_label_size = gene_label_size,
-             vline_color=vline_color,vline_linetype=vline_linetype, vline_alpha=vline_alpha,vline_size=vline_size, log_trans_p = log_trans_p)
+             vline_color=vline_color,vline_linetype=vline_linetype, vline_alpha=vline_alpha,vline_size=vline_size, log_trans_p = log_trans_p, lz_color=color)
 }
 
-set_lz_colors <- function(dat){
+set_lz_colors <- function(dat, color){
+  if(is.null(color)){
+    color <- "darkblue"
+  }
   for(i in seq_along(dat)){
     df <- dat[[i]]
-    df$color <- "darkblue"
+    df$color <- color
     df$color <- ifelse(df$R2 == 1, "purple", df$color)
     df$color <- ifelse(df$R2 != 1 & df$R2 > 0.8, "red", df$color)
     df$color <- ifelse(df$R2 < 0.8 & df$R2 > 0.6, "orange", df$color)
@@ -82,6 +85,6 @@ set_lz_colors <- function(dat){
     df$color <- ifelse(is.na(df$R2), "darkgrey", df$color)
     dat[[i]] <- df
   }
-  return(dat)
+  return(df)
 }
 

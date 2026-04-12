@@ -159,12 +159,19 @@ add_sign_thresh_labels <- function(p1, sign_thresh=1e-09,sign_thresh_color="red"
     if(!is.null(sign_thresh_color) & (length(sign_thresh) == length(sign_thresh_color))){
       color <- sign_thresh_color[i]
     }
+    
     tmpdf <- rbind(tmpdf, data.frame(color=color, label=sign_thresh[[i]],ypos=-log10(sign_thresh[[i]])* 1.02,xpos=xmin))
 
   }
-  p1 <- p1+ggrepel::geom_text_repel(data=tmpdf, aes(x=xpos, y=ypos, label=label),color=color, nudge_y=0.02,size=sign_thresh_label_size*scale,
-                                 max.iter=10000,direction="y")
-
+  p1 <- p1 + ggrepel::geom_text_repel(
+    data = tmpdf,
+    aes(x = xpos, y = ypos, label = label, color = color),
+    nudge_y = 0.02,
+    size = sign_thresh_label_size * scale,
+    max.iter = 10000,
+    direction = "y",
+    show.legend = FALSE
+  )
 
   return(p1)
 }

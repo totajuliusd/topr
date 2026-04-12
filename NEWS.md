@@ -3,6 +3,7 @@
 * Fixed a ggplot2 deprecation warning by replacing the `size` aesthetic with `linewidth`.
 * Updated the default topr color palette accessed via `get_topr_colors()`.  
   The previous palette can still be retrieved using `get_topr_old_colors()`.
+* Added support for setting the base color in locuszoom plots.
 
 # topr 2.0.2
 * Parameters added for downsampling/thinning the dataset prior to plotting with manhattan

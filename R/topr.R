@@ -14,4 +14,6 @@
 #' # Create a regional plot
 #' regionplot(CD_UKBB, gene="IL23R")
 #' @docType package
+#' @importFrom rlang .data
+#' @importFrom stats setNames
 "_PACKAGE"

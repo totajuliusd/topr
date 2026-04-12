@@ -11,20 +11,29 @@ dat_check <- function(dat, verbose=TRUE,locuszoomplot=FALSE){
   return(dat)
 }
 
-downsample <- function(dat, downsample_cutoff=0.05, downsample_prop=0.1){
-  for(i in seq_along(dat)){
+downsample <- function(dat, downsample_cutoff = 0.05, downsample_prop = 0.1) {
+  for (i in seq_along(dat)) {
     df <- as.data.frame(dat[[i]])
-    if(max(df$P) > downsample_cutoff){
+    if (nrow(df) == 0) {
+      next
+    }
+    if (max(df$P, na.rm = TRUE) > downsample_cutoff) {
       sig <- df |>
-      subset(P < downsample_cutoff)
+        subset(P < downsample_cutoff)
       notsig <- df |>
-      subset(P >= downsample_cutoff) |>
-      group_by(CHROM) |>
-      slice_sample(prop=downsample_prop)
-      dat[[i]]  <- bind_rows(sig, notsig)
+        subset(P >= downsample_cutoff) |>
+        dplyr::group_by(CHROM) |>
+        dplyr::group_modify(function(.x, .y) {
+          n_keep <- max(1, floor(nrow(.x) * downsample_prop))
+          .x |>
+            dplyr::slice_sample(n = min(n_keep, nrow(.x)))
+        }) |>
+        dplyr::ungroup()
+      
+      dat[[i]] <- dplyr::bind_rows(sig, notsig)
     }
   }
-  return(dat)
+   dat
 }
 
 rm_chr_prefix_and_sort <- function(dat){

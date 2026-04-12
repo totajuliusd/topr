@@ -72,16 +72,6 @@ standard errors, or p-values, depending on availability.
 
 The returned table contains one row per matched variant per dataset.
 }
-\examples{
-matched <- get_matching_snps(
-  dfs = list(CD_tmp, CD_FINNGEN),
-  labels = c("CD_UKBB", "CD_FINNGEN"),
-  gene_col = "ID",
-  label_col = "Gene_Symbol",
-  effect_type = "beta"
-)
-
-}
 \seealso{
 \code{\link{foresttopr}}, \code{\link{get_matching_genes}}
 }

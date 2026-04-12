@@ -23,7 +23,7 @@ regionplot(
   show_exons = NULL,
   max_genes = 200,
   sign_thresh = 5e-08,
-  sign_thresh_color = "red",
+  sign_thresh_color = "darkred",
   sign_thresh_label_size = 3.5,
   xmax = NULL,
   ymin = NULL,
@@ -80,7 +80,8 @@ regionplot(
   vline_linetype = "dashed",
   vline_alpha = 1,
   vline_size = 0.5,
-  log_trans_p = TRUE
+  log_trans_p = TRUE,
+  lz_color = NULL
 )
 }
 \arguments{
@@ -231,6 +232,8 @@ regionplot(
 \item{vline_size}{A number.The size of added vertical line/s (default : 0.5)}
 
 \item{log_trans_p}{A logical scalar (default: TRUE). By default the p-values in the input datasets are log transformed using -log10. Set this argument to FALSE if the p-values in the datasets have already been log transformed.}
+
+\item{lz_color}{A string, to set the base color in the locuszoom plot}
 }
 \value{
 plots within ggplotGrobs, arranged with egg::gtable_frame

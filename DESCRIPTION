@@ -1,6 +1,6 @@
 Package: topr
 Title: Create Custom Plots for Viewing Genetic Association Results
-Version: 2.0.2
+Version: 2.0.3
 Authors@R: c(
     person("Thorhildur", "Juliusdottir", role = c("cph","aut", "cre"),email = "totajuliusd@gmail.com"),
     person("Andri", "Stefansson", role = "aut", email = "andrimarstefansson@gmail.com"),
@@ -28,12 +28,13 @@ Imports:
     scales (>= 1.1.1),
     ggrepel,
     egg,
-    grid,
     gridExtra,
     magrittr (>= 1.5),
     utils,
     tidyr,
     enshuman,
-    purrr
+    purrr,
+    rlang,
+    tibble
 Depends: 
-    R (>= 3.5.0)
+    R (>= 4.1.0)
