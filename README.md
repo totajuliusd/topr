@@ -3,13 +3,13 @@
 <meta name="description" content="topr: an R package for viewing and annotating genetic association results - totajuliusd/topr - manhattan">
 <meta name="google-site-verification" content="_ICeIANgZe9dAS_kx47d5sUluL3fRoT2k9-D7Bek9l4" />
 
+**New in v2.0.4:** Added `foresttopr()` for visualizing and comparing effect sizes (odds ratios or beta coefficients) across multiple datasets using forest plots.
 
 **Note:** `topr` can be used with any species and any number of chromosomes.
 <br>
 
 See https://github.com/totajuliusd/topr?tab=readme-ov-file#how-to-use-topr-with-other-species-than-human
 
-**New in v2.0.4:** Added `foresttopr()` for visualizing and comparing effect sizes (odds ratios or beta coefficients) across multiple datasets using forest plots.
 
 # *topr*: an R package for viewing and annotating genetic association results
 
