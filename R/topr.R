@@ -13,7 +13,6 @@
 #'
 #' # Create a regional plot
 #' regionplot(CD_UKBB, gene="IL23R")
-#' @name topr
 #' @keywords internal
 #' @importFrom stats setNames
 #' @importFrom utils globalVariables

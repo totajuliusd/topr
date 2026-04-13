@@ -1,3 +1,6 @@
+# topr 2.0.4
+* Fixed foresttopr y-axis label clipping for top rows.
+
 # topr 2.0.3
 * Added the `foresttopr()` function.
 * Fixed a ggplot2 deprecation warning by replacing the `size` aesthetic with `linewidth`.

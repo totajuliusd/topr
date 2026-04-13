@@ -1,6 +1,12 @@
-## R CMD check results
+This submission of topr (version 2.0.4) supersedes version 2.0.3, which had a bug in foresttopr() affecting display of the first y-axis label.
 
-0 errors ✓ | 0 warnings ✓ | 0 notes ✓
+Changes in this version:
+- Fixed the foresttopr() y-axis label clipping issue.
 
-There were no ERRORs or WARNINGs. 
+All checks pass cleanly:
+0 errors | 0 warnings | 1 note
+
+Thank you for your time and feedback.
+
+
 
