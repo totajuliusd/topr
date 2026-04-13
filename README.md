@@ -5,6 +5,8 @@
 
 **New in v2.0.4:** Added `foresttopr()` for visualizing and comparing effect sizes (odds ratios or beta coefficients) across multiple datasets using forest plots.
 
+See [foresttopr](https://totajuliusd.github.io/topr_manual/ggforesttopr.html) for examples and common use cases.
+
 **Note:** `topr` can be used with any species and any number of chromosomes.
 <br>
 
