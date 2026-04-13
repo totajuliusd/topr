@@ -1,3 +1,6 @@
+# topr 2.0.4
+* Fixed an issue in `foresttopr()` where the first y-axis label could be clipped or not displayed.
+
 # topr 2.0.3
 * Added the `foresttopr()` function.
 * Fixed a ggplot2 deprecation warning by replacing the `size` aesthetic with `linewidth`.
