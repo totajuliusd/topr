@@ -759,7 +759,7 @@ foresttopr <- function(
     ggplot2::scale_y_continuous(
       breaks = y_labs$y,
       labels = as.character(y_labs$y_lbl),
-      expand = ggplot2::expansion(mult = c(0.01, 0.01))
+      expand = ggplot2::expansion(mult = c(0.02, 0.08))
     ) +
     ggplot2::geom_errorbar(
       ggplot2::aes(

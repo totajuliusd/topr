@@ -13,7 +13,8 @@
 #'
 #' # Create a regional plot
 #' regionplot(CD_UKBB, gene="IL23R")
-#' @docType package
-#' @importFrom rlang .data
+#' @name topr
+#' @keywords internal
 #' @importFrom stats setNames
+#' @importFrom utils globalVariables
 "_PACKAGE"
